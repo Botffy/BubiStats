@@ -5,7 +5,7 @@ import 'buefy/dist/buefy.css'
 import Rides from "./BubiRides.vue";
 
 Vue.use(VueRouter)
-Vue.use(Buefy)
+Vue.use(Buefy, { defaultIconPack: 'fas' })
 
 const routes = [
   { path: '/rides', component: Rides }
