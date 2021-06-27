@@ -11,5 +11,5 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{json,js,ts,html}]
+[*.{json,js,ts,html,vue}]
 indent_size = 2

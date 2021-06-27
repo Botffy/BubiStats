@@ -1,18 +1,18 @@
 import Vue from "vue";
-import HelloComponent from "./HelloComponent.vue";
+import VueRouter, { RouteConfig } from 'vue-router';
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+import Rides from "./BubiRides.vue";
 
-console.log('hi')
-let v = new Vue({
-  el: "#app",
-  template: `
-    <div>
-      Name: <input v-model="name" type="text">
-      <hello-component :name="name" :initialEnthusiasm="5" />
-    </div>`,
-  data: {
-    name: "World"
-  },
-  components: {
-    HelloComponent
-  }
-})
+Vue.use(VueRouter)
+Vue.use(Buefy)
+
+const routes = [
+  { path: '/rides', component: Rides }
+]
+
+const router = new VueRouter({routes: routes})
+
+const v = new Vue({
+  router
+}).$mount('#app')
