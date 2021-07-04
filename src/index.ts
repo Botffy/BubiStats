@@ -11,6 +11,7 @@ import { Duration, DateTime } from "luxon"
 import { BubiData } from "./model";
 import StatPage from "./StatPage.vue";
 import InfoPage from "./InfoPage.vue";
+import PrivacyPage from "./Privacy.vue";
 import BubiRides from "./BubiRides.vue";
 
 const firebaseApp = firebase.initializeApp({
@@ -58,6 +59,7 @@ const bubiData: BubiData = {
 
 const router = new VueRouter({ routes: [
   { path: '/info', component: InfoPage },
+  { path: '/privacy', component: PrivacyPage },
   {
     path: '/*',
     component: StatPage,
