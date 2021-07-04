@@ -1,12 +1,11 @@
 import Vue from "vue";
-import VueRouter, { RouteConfig } from 'vue-router';
+import VueRouter from 'vue-router';
 import Buefy from 'buefy'
-import { ModalProgrammatic as Modal } from 'buefy'
 import 'buefy/dist/buefy.css'
 import { Duration, DateTime } from "luxon"
 import { Ride, BubiData } from "./model";
-import RidesPage from "./BubiRides.vue";
-import AddRoute from "./AddRoute.vue";
+import StatPage from "./StatPage.vue";
+import BubiRides from "./BubiRides.vue";
 
 Vue.use(VueRouter)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
@@ -37,14 +36,16 @@ const bubiData: BubiData = {
   ]
 }
 
-const routes = [
-  { path: '/rides', component: RidesPage, props: { rides: bubiData.rides } }
-]
-const router = new VueRouter({ routes: routes })
+const router = new VueRouter({ routes: [
+  {
+    path: '/*',
+    component: StatPage,
+    children: [
+      { path: '/rides', component: BubiRides, props: { rides: bubiData.rides } }
+    ]
+  }
+]})
 
 new Vue({
-  router,
-  components: {
-    'add-route': AddRoute
-  }
+  router
 }).$mount('#app')
