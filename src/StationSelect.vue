@@ -67,6 +67,7 @@ export default Vue.extend({
         this.$emit('error', 'Nincs ilyen állomás :(')
       } else if (matching.length == 1) {
         this.station = matching[0].displayName
+        this.selected = matching[0];
       } else {
         this.$emit('error', 'Több állomás passzol a megadott névhez. Melyikre gondoltál?')
       }
@@ -81,7 +82,7 @@ export default Vue.extend({
   },
   watch: {
     selected: function(val) {
-      this.$emit('error', null)
+      this.$emit('error', '')
       this.$emit('input', val)
     }
   }
