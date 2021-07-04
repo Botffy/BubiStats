@@ -10,7 +10,7 @@
 <body>
   <div id="app">
     <b-navbar class="is-warning">
-      <template #start>
+      <template #start  v-if='isLoggedIn'>
         <b-navbar-item tag="router-link" :to="{ path: '/rides' }">
           Bubiutak
         </b-navbar-item>
@@ -26,21 +26,23 @@
       </template>
 
       <template #end>
-        <b-navbar-dropdown label="Info">
-          <b-navbar-item href="#">
-            Halp
-          </b-navbar-item>
-          <b-navbar-item href="#">
-            Kapcsolat
+        <b-navbar-item tag="router-link" :to="{ path: '/info' }">
+          Info
+        </b-navbar-item>
+
+        <b-navbar-dropdown :label='user.email' v-if='isLoggedIn'>
+          <b-navbar-item tag="div" >
+            <div class="buttons has-text-right">
+              <a class="button is-primary" @click='logout'>
+                <strong>Kilépés</strong>
+              </a>
+            </div>
           </b-navbar-item>
         </b-navbar-dropdown>
-        <b-navbar-item tag="div">
+        <b-navbar-item tag="div" v-else>
           <div class="buttons">
-            <a class="button is-primary">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light">
-              Log in
+            <a class="button is-primary" @click='login'>
+              <strong>Belépés</strong>
             </a>
           </div>
         </b-navbar-item>

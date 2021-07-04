@@ -2,13 +2,33 @@ import Vue from "vue";
 import VueRouter from 'vue-router';
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
+
+import * as firebase from "firebase/app";
+import { getAnalytics } from 'firebase/analytics';
+import { getAuth, onAuthStateChanged, signInWithRedirect, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+
 import { Duration, DateTime } from "luxon"
-import { Ride, BubiData } from "./model";
+import { BubiData } from "./model";
 import StatPage from "./StatPage.vue";
+import InfoPage from "./InfoPage.vue";
 import BubiRides from "./BubiRides.vue";
+
+const firebaseApp = firebase.initializeApp({
+  apiKey: "AIzaSyBxbbNWjnS-2Cq1t9qGe5Fb8tb8_sG4bo0",
+  authDomain: "bubistats.firebaseapp.com",
+  projectId: "bubistats",
+  storageBucket: "bubistats.appspot.com",
+  messagingSenderId: "1067199753170",
+  appId: "1:1067199753170:web:4bbf892a8814fc699f360b",
+  measurementId: "G-4BWS5RENSM"
+})
+const analytics = getAnalytics()
 
 Vue.use(VueRouter)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
+
+const auth = getAuth(firebaseApp)
+auth.useDeviceLanguage()
 
 const bubiData: BubiData = {
   rides: [
@@ -37,6 +57,7 @@ const bubiData: BubiData = {
 }
 
 const router = new VueRouter({ routes: [
+  { path: '/info', component: InfoPage },
   {
     path: '/*',
     component: StatPage,
@@ -46,6 +67,39 @@ const router = new VueRouter({ routes: [
   }
 ]})
 
-new Vue({
-  router
-}).$mount('#app')
+const app = new Vue({
+  el: '#app',
+  router,
+  data() {
+    return {
+      user: auth.currentUser
+    }
+  },
+  methods: {
+    logout() {
+      signOut(auth).catch((error) => {
+        console.error(error)
+      })
+    },
+    login() {
+      const provider = new GoogleAuthProvider();
+
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          this.user = result.user
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  },
+  computed: {
+    isLoggedIn() {
+      return this.user;
+    }
+  }
+});
+
+onAuthStateChanged(auth, (user) => {
+  app.user = user;
+})
