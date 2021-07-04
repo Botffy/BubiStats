@@ -1,10 +1,12 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from 'vue-router';
 import Buefy from 'buefy'
+import { ModalProgrammatic as Modal } from 'buefy'
 import 'buefy/dist/buefy.css'
 import { Duration, DateTime } from "luxon"
 import { Ride, BubiData } from "./model";
 import RidesPage from "./BubiRides.vue";
+import AddRoute from "./AddRoute.vue";
 
 Vue.use(VueRouter)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
@@ -41,5 +43,8 @@ const routes = [
 const router = new VueRouter({ routes: routes })
 
 new Vue({
-  router
+  router,
+  components: {
+    'add-route': AddRoute
+  }
 }).$mount('#app')

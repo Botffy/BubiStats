@@ -1,9 +1,11 @@
 import stationData from './data/stations.json'
 
-const stationByCode: Map<string, Station> = stationData.reduce((map, station) =>
-  (map.set(station.code, station)),
-  new Map()
-);
+const stationByCode: Map<string, Station> = stationData
+  .sort((x, y) => x.name.localeCompare(y.name))
+  .reduce((map, station) =>
+    (map.set(station.code, station)),
+    new Map()
+  );
 
 type Station = {
   code: string,
