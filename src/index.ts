@@ -5,14 +5,15 @@ import 'buefy/dist/buefy.css'
 
 import * as firebase from "firebase/app";
 import { getAnalytics } from 'firebase/analytics';
-import { getAuth, onAuthStateChanged, signInWithRedirect, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-
-import { Duration, DateTime } from "luxon"
-import { BubiData } from "./model";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
 import StatPage from "./StatPage.vue";
 import InfoPage from "./InfoPage.vue";
 import PrivacyPage from "./Privacy.vue";
 import BubiRides from "./BubiRides.vue";
+
+Vue.use(VueRouter)
+Vue.use(Buefy, { defaultIconPack: 'fas' })
 
 const firebaseApp = firebase.initializeApp({
   apiKey: "AIzaSyBxbbNWjnS-2Cq1t9qGe5Fb8tb8_sG4bo0",
@@ -24,38 +25,11 @@ const firebaseApp = firebase.initializeApp({
   measurementId: "G-4BWS5RENSM"
 })
 const analytics = getAnalytics()
-
-Vue.use(VueRouter)
-Vue.use(Buefy, { defaultIconPack: 'fas' })
+const db = getFirestore()
+useFirestoreEmulator(db, 'localhost', 8080)
 
 const auth = getAuth(firebaseApp)
 auth.useDeviceLanguage()
-
-const bubiData: BubiData = {
-  rides: [
-    {
-      when: DateTime.fromISO("2021-06-25T22:18:42.000+02:00"),
-      bike: 860602,
-      from: "0303",
-      to: "0207",
-      duration: Duration.fromObject({ minutes: 12 })
-    },
-    {
-      when: DateTime.fromISO("2021-06-25T19:18:20.000+02:00"),
-      bike: 860101,
-      from: "0102",
-      to: "0306",
-      duration: Duration.fromObject({ minutes: 17 })
-    },
-    {
-      when: DateTime.fromISO("2021-06-24T13:01:00.000+02:00"),
-      bike: 860780,
-      from: "0102",
-      to: "0305",
-      duration: Duration.fromObject({ minutes: 16 })
-    }
-  ]
-}
 
 const router = new VueRouter({ routes: [
   { path: '/info', component: InfoPage },
@@ -63,11 +37,15 @@ const router = new VueRouter({ routes: [
   {
     path: '/*',
     component: StatPage,
+    props: true,
     children: [
-      { path: '/rides', component: BubiRides, props: { rides: bubiData.rides } }
+      { path: '/rides', component: BubiRides }
     ]
   }
 ]})
+
+const eventBus = new Vue()
+Vue.prototype.$eventBus = eventBus
 
 const app = new Vue({
   el: '#app',
@@ -98,6 +76,15 @@ const app = new Vue({
   computed: {
     isLoggedIn() {
       return this.user;
+    }
+  },
+  watch: {
+    async user() {
+      if (!this.user) {
+        this.$eventBus.$emit('logout')
+      } else {
+        this.$eventBus.$emit('login', { uid: this.user.uid })
+      }
     }
   }
 });

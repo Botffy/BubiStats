@@ -63,7 +63,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { DateTime } from 'luxon'
+import { DateTime, Duration } from 'luxon'
+import { addRide } from './ride-service'
 import StationSelect from "./StationSelect.vue"
 
 export default Vue.extend({
@@ -104,11 +105,25 @@ export default Vue.extend({
       return !Object.values(this.model).some(x => x === null || x === '')
     },
     onSubmit() {
-      console.log(this.model)
+      addRide(this.$root.$data.user.uid, {
+        when: DateTime.fromJSDate(this.model.when),
+        duration: Duration.fromObject({ minutes: this.model.minutes }),
+        bike: parseInt(this.model.bike),
+        from: this.model.fromStation.code,
+        to: this.model.toStation.code
+      });
     },
     onError(el: string, errorMessage: string) {
       this.errors[el] = errorMessage;
     }
+  },
+  created() {
+    this.$eventBus.$on('login', (ev: any) => {
+
+    })
+    this.$eventBus.$on('logout', (ev: any) => {
+
+    })
   }
 })
 </script>

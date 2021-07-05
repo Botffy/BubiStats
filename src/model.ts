@@ -8,8 +8,4 @@ type Ride = {
   bike: number
 }
 
-type BubiData = {
-  rides: Ride[]
-}
-
-export { Ride, BubiData }
+export { Ride }

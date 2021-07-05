@@ -6,7 +6,7 @@
           <add-ride></add-ride>
         </div>
         <div class="column">
-          <router-view></router-view>
+          <router-view :rides='this.rides'></router-view>
         </div>
       </div>
     </div>
@@ -18,11 +18,29 @@
 import Vue from 'vue'
 import AddRide from "./AddRide.vue";
 import InfoPage from "./InfoPage.vue"
+import { subscribe } from "./ride-service"
 
 export default Vue.extend({
+  data() {
+    return {
+      subscription: null,
+      rides: []
+    }
+  },
   components: {
     'info-page': InfoPage,
     'add-ride': AddRide
+  },
+  created() {
+    this.$eventBus.$on('login', (ev: any) => {
+      this.subscription = subscribe(ev.uid, (rides) => {
+        this.rides = rides
+      })
+    })
+    this.$eventBus.$on('logout', (ev: any) => {
+      this.subscription.unsubscribe()
+      this.rides = []
+    })
   }
 });
 </script>
