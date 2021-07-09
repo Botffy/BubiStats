@@ -5,7 +5,7 @@ import 'buefy/dist/buefy.css'
 
 import * as firebase from "firebase/app";
 import { getAnalytics } from 'firebase/analytics';
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, getAdditionalUserInfo } from "firebase/auth";
 import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
 import StatPage from "./StatPage.vue";
 import InfoPage from "./InfoPage.vue";
@@ -75,7 +75,10 @@ const app = new Vue({
   },
   computed: {
     isLoggedIn() {
-      return this.user;
+      return this.user != null;
+    },
+    getUser() {
+      return this.user.uid;
     }
   },
   watch: {

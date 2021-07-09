@@ -23,6 +23,7 @@ export class Subscription {
 }
 
 export const subscribe = (userId: string, callback: (rides: Ride[]) => void): Subscription => {
+  console.log("subscribing")
   const db = getFirestore()
 
   const userDocRef = doc(db, "users", userId)
@@ -58,8 +59,6 @@ export const addRide = (userId: string, ride: Ride): void => {
     from: ride.from,
     to: ride.to
   }
-
-  console.log(mapped)
 
   const userDocRef = doc(db, "users", userId)
   runTransaction(db, async (transaction) => {
