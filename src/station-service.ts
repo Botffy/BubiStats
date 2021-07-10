@@ -29,4 +29,4 @@ const stationName = (code: string): string => {
   return result.name;
 }
 
-export { Station, listStations, stationName }
+export { Station, getStationByCode, listStations, stationName }

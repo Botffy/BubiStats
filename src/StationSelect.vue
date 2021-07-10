@@ -50,6 +50,20 @@ export default Vue.extend({
     }
   },
   methods: {
+    setStation(val: Station) {
+      if (val == null) {
+        this.station = ''
+        this.selected = null
+        return
+      }
+
+      const matching = this.stations.filter((option: DisplayStation) => {
+        return option.code === val.code
+      });
+
+      this.station = matching[0].displayName
+      this.selected = matching[0];
+    },
     onBlur() {
       if (this.selected) {
         return
@@ -82,23 +96,15 @@ export default Vue.extend({
   },
   watch: {
     value: function(val: Station) {
-      if (val == null) {
-        this.station = ''
-        this.selected = null
-        return
-      }
-
-      const matching = this.stations.filter((option: DisplayStation) => {
-        return option.code === val.code
-      });
-
-      this.station = matching[0].displayName
-      this.selected = matching[0];
+      this.setStation(val)
     },
     selected: function(val) {
       this.$emit('error', '')
       this.$emit('input', val)
     }
+  },
+  created() {
+    this.setStation(this.value)
   }
 })
 

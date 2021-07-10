@@ -3,7 +3,9 @@
     <div class="container">
       <div class="columns">
         <div class='column is-3'>
-          <add-ride></add-ride>
+          <div class='box'>
+            <ride-form></ride-form>
+          </div>
         </div>
         <div class="column">
           <router-view :rides='this.rides'></router-view>
@@ -16,7 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import AddRide from "./AddRide.vue";
+import RideForm from "./RideForm.vue";
 import InfoPage from "./InfoPage.vue"
 import { subscribe } from "./ride-service"
 
@@ -29,7 +31,7 @@ export default Vue.extend({
   },
   components: {
     'info-page': InfoPage,
-    'add-ride': AddRide
+    'ride-form': RideForm
   },
   created() {
     if (this.$root.isLoggedIn) {
