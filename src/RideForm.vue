@@ -161,15 +161,32 @@ export default Vue.extend({
       return !Object.values(this.model).some(x => x === null || x === '')
     },
     addRide() {
+      const loading = this.$buefy.loading.open()
+
       const ride = toRide(this.model)
       addRide(this.$root.$data.user.uid, ride)
-      this.model = defaultRide()
-      this.$emit('added', ride)
+        .then(() => {
+          this.model = defaultRide()
+
+          this.$buefy.toast.open({
+            duration: 2000,
+            message: 'Az utat felvettük',
+            position: 'is-bottom',
+            type: 'is-success'
+          })
+
+          this.$emit('added', ride)
+          loading.close()
+        })
     },
     editRide() {
+      const loading = this.$buefy.loading.open()
       const ride = toRide(this.model)
       editRide(this.$root.$data.user.uid, this.originalRideTime, ride)
-      this.$emit('edited', this.originalRideTime, ride)
+        .then(() => {
+          this.$emit('edited', this.originalRideTime, ride)
+          loading.close()
+        })
     },
     onError(el: string, errorMessage: string) {
       this.errors[el] = errorMessage;

@@ -49,12 +49,12 @@ export const subscribe = (userId: string, callback: (rides: Ride[]) => void): Su
   return new Subscription(subscription);
 }
 
-export const editRide = (userId: string, originalTime: DateTime, updated: Ride): void => {
+export const editRide = (userId: string, originalTime: DateTime, updated: Ride): Promise<void> => {
   const db = getFirestore()
 
   const userDocRef = doc(db, "users", userId)
 
-  runTransaction(db, async (transaction) => {
+  return runTransaction(db, async (transaction) => {
     const userDoc = await transaction.get(userDocRef);
 
     if (!userDoc.exists()) {
@@ -77,10 +77,11 @@ export const editRide = (userId: string, originalTime: DateTime, updated: Ride):
     transaction.set(userDocRef, {
       rides: rides
     })
+    return Promise.resolve()
   })
 }
 
-export const addRide = (userId: string, ride: Ride): void => {
+export const addRide = (userId: string, ride: Ride): Promise<void> => {
   const db = getFirestore()
 
   const mapped: FirestoreRide = {
@@ -92,7 +93,7 @@ export const addRide = (userId: string, ride: Ride): void => {
   }
 
   const userDocRef = doc(db, "users", userId)
-  runTransaction(db, async (transaction) => {
+  return runTransaction(db, async (transaction) => {
     const userDoc = await transaction.get(userDocRef);
 
     let docValue;
@@ -109,15 +110,16 @@ export const addRide = (userId: string, ride: Ride): void => {
     }
 
     transaction.set(userDocRef, docValue);
+    return Promise.resolve()
   })
 }
 
-export const deleteRide = (userId: string, rideTime: DateTime): void => {
+export const deleteRide = (userId: string, rideTime: DateTime): Promise<void> => {
   const db = getFirestore()
 
   const userDocRef = doc(db, "users", userId)
 
-  runTransaction(db, async (transaction) => {
+  return runTransaction(db, async (transaction) => {
     const userDoc = await transaction.get(userDocRef);
 
     if (!userDoc.exists()) {
@@ -129,5 +131,6 @@ export const deleteRide = (userId: string, rideTime: DateTime): void => {
         return ride.when !== rideTime.toMillis()
       })
     })
+    return Promise.resolve()
   })
 }

@@ -125,6 +125,14 @@ export default Vue.extend({
         hasIcon: true,
         onConfirm: () => {
           deleteRide(this.$root.$data.user.uid, row.when)
+          .then(() => {
+            this.$buefy.toast.open({
+              duration: 2000,
+              message: 'Az utat töröltük',
+              position: 'is-bottom',
+              type: 'is-success'
+            })
+          })
         }
       })
     },
