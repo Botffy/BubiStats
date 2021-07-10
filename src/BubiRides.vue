@@ -28,9 +28,26 @@
       </b-table-column>
 
       <b-table-column v-slot="props">
-        <span class="icon is-clickable" v-on:click="editRide(props.row)">
-          <i class="fas fa-edit" />
-        </span>
+        <div class="buttons">
+        <b-tooltip type="is-info" label="Módosítás" :delay='500'>
+          <b-button
+            size="is-small"
+            type="is-info"
+            outlined
+            v-on:click="editRide(props.row)"
+            icon-left="fas fa-edit"
+          />
+        </b-tooltip>
+        <b-tooltip type='is-danger' label="Törlés" :delay='500'>
+          <b-button
+            size="is-small"
+            type="is-danger"
+            outlined
+            v-on:click="deleteRide(props.row)"
+            icon-left="fas fa-trash"
+          />
+        </b-tooltip>
+        </div>
       </b-table-column>
     </b-table>
 
@@ -72,6 +89,7 @@ import Vue from 'vue'
 import RideForm from "./RideForm.vue";
 import { DateTime } from 'luxon';
 import { Ride } from "./model"
+import { deleteRide } from "./ride-service"
 import { stationName } from './station-service'
 
 const formatTime = (time: DateTime): string => {
@@ -97,6 +115,19 @@ export default Vue.extend({
   methods: {
     stationName,
     formatTime,
+    deleteRide(row: any) {
+      this.$buefy.dialog.confirm({
+        title: 'Bubiút törlése',
+        message: 'Egész biztos, hogy törölni akarod?',
+        confirmText: 'Igen, biztos',
+        cancelText: 'Mégsem',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => {
+          deleteRide(this.$root.$data.user.uid, row.when)
+        }
+      })
+    },
     editRide(row: any) {
       this.editData = row
       this.isEditModalActive = true

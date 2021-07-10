@@ -78,7 +78,6 @@ export const editRide = (userId: string, originalTime: DateTime, updated: Ride):
       rides: rides
     })
   })
-
 }
 
 export const addRide = (userId: string, ride: Ride): void => {
@@ -110,5 +109,25 @@ export const addRide = (userId: string, ride: Ride): void => {
     }
 
     transaction.set(userDocRef, docValue);
+  })
+}
+
+export const deleteRide = (userId: string, rideTime: DateTime): void => {
+  const db = getFirestore()
+
+  const userDocRef = doc(db, "users", userId)
+
+  runTransaction(db, async (transaction) => {
+    const userDoc = await transaction.get(userDocRef);
+
+    if (!userDoc.exists()) {
+      return Promise.reject("User has no rides")
+    }
+
+    transaction.set(userDocRef, {
+      rides: userDoc.data().rides.filter((ride: FirestoreRide) => {
+        return ride.when !== rideTime.toMillis()
+      })
+    })
   })
 }
