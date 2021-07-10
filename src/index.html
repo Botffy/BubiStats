@@ -10,7 +10,7 @@
 <body>
   <div id="app">
     <b-navbar class="is-warning">
-      <template #start  v-if='isLoggedIn'>
+      <template #start v-if='isLoggedIn'>
         <b-navbar-item tag="router-link" :to="{ path: '/rides' }">
           Bubiutak
         </b-navbar-item>
@@ -25,7 +25,7 @@
         </b-navbar-item>
       </template>
 
-      <template #end>
+      <template #end v-if='!loading'>
         <b-navbar-item tag="router-link" :to="{ path: '/info' }">
           Info
         </b-navbar-item>
@@ -49,7 +49,7 @@
       </template>
     </b-navbar>
 
-    <router-view></router-view>
+    <router-view ref='mainview' v-if='!loading'></router-view>
   </div>
 </body>
 

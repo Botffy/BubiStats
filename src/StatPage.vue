@@ -35,13 +35,13 @@ export default Vue.extend({
   },
   created() {
     if (this.$root.isLoggedIn) {
-      this.subscription = subscribe(this.$root.user.uid, (rides) => {
+      this.subscription = subscribe((rides) => {
         this.rides = rides
       })
     }
 
     this.$eventBus.$on('login', (ev: any) => {
-      this.subscription = subscribe(ev.uid, (rides) => {
+      this.subscription = subscribe((rides) => {
         this.rides = rides
       })
     })

@@ -1,3 +1,4 @@
+import { getCurrentUserUid } from "./firebase";
 import { Unsubscribe } from "@firebase/util";
 import { getFirestore, doc, onSnapshot, runTransaction, useFirestoreEmulator } from "firebase/firestore";
 import { Duration, DateTime } from "luxon"
@@ -22,11 +23,10 @@ export class Subscription {
   }
 }
 
-export const subscribe = (userId: string, callback: (rides: Ride[]) => void): Subscription => {
-  console.log("subscribing")
+export const subscribe = (callback: (rides: Ride[]) => void): Subscription => {
   const db = getFirestore()
 
-  const userDocRef = doc(db, "users", userId)
+  const userDocRef = doc(db, "users", getCurrentUserUid())
   const subscription = onSnapshot(userDocRef, (doc) => {
     const data = doc.data()
     if (!data) {
@@ -49,10 +49,10 @@ export const subscribe = (userId: string, callback: (rides: Ride[]) => void): Su
   return new Subscription(subscription);
 }
 
-export const editRide = (userId: string, originalTime: DateTime, updated: Ride): Promise<void> => {
+export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {
   const db = getFirestore()
 
-  const userDocRef = doc(db, "users", userId)
+  const userDocRef = doc(db, "users", getCurrentUserUid())
 
   return runTransaction(db, async (transaction) => {
     const userDoc = await transaction.get(userDocRef);
@@ -81,7 +81,7 @@ export const editRide = (userId: string, originalTime: DateTime, updated: Ride):
   })
 }
 
-export const addRide = (userId: string, ride: Ride): Promise<void> => {
+export const addRide = (ride: Ride): Promise<void> => {
   const db = getFirestore()
 
   const mapped: FirestoreRide = {
@@ -92,7 +92,7 @@ export const addRide = (userId: string, ride: Ride): Promise<void> => {
     to: ride.to
   }
 
-  const userDocRef = doc(db, "users", userId)
+  const userDocRef = doc(db, "users", getCurrentUserUid())
   return runTransaction(db, async (transaction) => {
     const userDoc = await transaction.get(userDocRef);
 

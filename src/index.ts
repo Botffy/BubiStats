@@ -2,8 +2,7 @@ import Vue from "vue";
 import VueRouter from 'vue-router';
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
-
-import * as firebase from "firebase/app";
+import { getFirebaseApp, onUserChange } from "./firebase"
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, getAdditionalUserInfo } from "firebase/auth";
 import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
@@ -15,16 +14,8 @@ import BubiRides from "./BubiRides.vue";
 Vue.use(VueRouter)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
 
-const firebaseApp = firebase.initializeApp({
-  apiKey: "AIzaSyBxbbNWjnS-2Cq1t9qGe5Fb8tb8_sG4bo0",
-  authDomain: "bubistats.firebaseapp.com",
-  projectId: "bubistats",
-  storageBucket: "bubistats.appspot.com",
-  messagingSenderId: "1067199753170",
-  appId: "1:1067199753170:web:4bbf892a8814fc699f360b",
-  measurementId: "G-4BWS5RENSM"
-})
-const analytics = getAnalytics()
+const firebaseApp = getFirebaseApp()
+getAnalytics()
 const db = getFirestore()
 useFirestoreEmulator(db, 'localhost', 8080)
 
@@ -52,7 +43,9 @@ const app = new Vue({
   router,
   data() {
     return {
-      user: auth.currentUser
+      loadingScreen: null,
+      loading: null,
+      user: null
     }
   },
   methods: {
@@ -63,12 +56,13 @@ const app = new Vue({
     },
     login() {
       const provider = new GoogleAuthProvider();
-
+      this.loading = true
       signInWithPopup(auth, provider)
         .then((result) => {
           this.user = result.user
         })
         .catch((error) => {
+          this.loading = false
           console.error(error)
         })
     }
@@ -81,7 +75,21 @@ const app = new Vue({
       return this.user.uid;
     }
   },
+  created() {
+    this.loading = true
+    onAuthStateChanged(auth, (user) => {
+      this.user = user;
+      this.loading = false
+    })
+  },
   watch: {
+    loading() {
+      if (this.loading) {
+        this.loadingScreen = this.$buefy.loading.open()
+      } else {
+        this.loadingScreen.close()
+      }
+    },
     async user() {
       if (!this.user) {
         this.$eventBus.$emit('logout')
@@ -91,7 +99,3 @@ const app = new Vue({
     }
   }
 });
-
-onAuthStateChanged(auth, (user) => {
-  app.user = user;
-})

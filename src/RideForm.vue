@@ -164,7 +164,7 @@ export default Vue.extend({
       const loading = this.$buefy.loading.open()
 
       const ride = toRide(this.model)
-      addRide(this.$root.$data.user.uid, ride)
+      addRide(ride)
         .then(() => {
           this.model = defaultRide()
 
@@ -182,7 +182,7 @@ export default Vue.extend({
     editRide() {
       const loading = this.$buefy.loading.open()
       const ride = toRide(this.model)
-      editRide(this.$root.$data.user.uid, this.originalRideTime, ride)
+      editRide(this.originalRideTime, ride)
         .then(() => {
           this.$emit('edited', this.originalRideTime, ride)
           loading.close()
