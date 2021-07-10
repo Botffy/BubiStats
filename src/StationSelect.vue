@@ -81,6 +81,20 @@ export default Vue.extend({
     },
   },
   watch: {
+    value: function(val: Station) {
+      if (val == null) {
+        this.station = ''
+        this.selected = null
+        return
+      }
+
+      const matching = this.stations.filter((option: DisplayStation) => {
+        return option.code === val.code
+      });
+
+      this.station = matching[0].displayName
+      this.selected = matching[0];
+    },
     selected: function(val) {
       this.$emit('error', '')
       this.$emit('input', val)

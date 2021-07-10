@@ -112,18 +112,18 @@ export default Vue.extend({
         from: this.model.fromStation.code,
         to: this.model.toStation.code
       });
+
+      this.model = {
+        when: DateTime.now().minus({ minutes: 10 }).toJSDate(),
+        bike: null,
+        fromStation: null,
+        toStation: null,
+        minutes: 10,
+      }
     },
     onError(el: string, errorMessage: string) {
       this.errors[el] = errorMessage;
     }
   },
-  created() {
-    this.$eventBus.$on('login', (ev: any) => {
-
-    })
-    this.$eventBus.$on('logout', (ev: any) => {
-
-    })
-  }
 })
 </script>
