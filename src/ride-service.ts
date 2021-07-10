@@ -29,8 +29,8 @@ export const subscribe = (callback: (rides: Ride[]) => void): Subscription => {
   const userDocRef = doc(db, "users", getCurrentUserUid())
   const subscription = onSnapshot(userDocRef, (doc) => {
     const data = doc.data()
-    if (!data) {
-      console.log("user ride data does not exist")
+    if (!data || !data.rides) {
+      callback([])
       return
     }
 
@@ -60,7 +60,7 @@ export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> =
     if (!userDoc.exists()) {
       return Promise.reject("User has no rides")
     }
-    const rides = userDoc.data().rides;
+    const rides = userDoc.data().rides || [];
     const matchedRide: FirestoreRide = rides.find((ride: FirestoreRide) => {
       return ride.when === originalTime.toMillis()
     })
@@ -102,7 +102,7 @@ export const addRide = (ride: Ride): Promise<void> => {
         rides: [mapped]
       }
     } else {
-      const rides = userDoc.data().rides;
+      const rides = userDoc.data().rides || [];
       rides.push(mapped)
       docValue = {
         rides: rides
