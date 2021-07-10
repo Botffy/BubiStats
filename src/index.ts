@@ -10,6 +10,7 @@ import StatPage from "./StatPage.vue";
 import InfoPage from "./InfoPage.vue";
 import PrivacyPage from "./Privacy.vue";
 import BubiRides from "./BubiRides.vue";
+import Bikes from "./Bikes.vue"
 
 Vue.use(VueRouter)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
@@ -30,7 +31,8 @@ const router = new VueRouter({ routes: [
     component: StatPage,
     props: true,
     children: [
-      { path: '/rides', component: BubiRides }
+      { path: '/rides', component: BubiRides },
+      { path: '/bikes', component: Bikes }
     ]
   }
 ]})
