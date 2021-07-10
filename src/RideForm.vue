@@ -41,10 +41,24 @@
         v-on:error="onError('toStation', $event)"
       />
     </b-field>
+
     <b-field label='Perc' label-position='on-border'>
       <b-numberinput
-        :min='1'
+        expanded
+        min='1'
         v-model='model.minutes'
+        controls-position="compact"
+        controls-rounded
+      />
+    </b-field>
+    <b-field label='Másodperc' label-position='on-border'>
+      <b-numberinput
+        expanded
+        min='0'
+        max='59'
+        v-model='model.seconds'
+        controls-position="compact"
+        controls-rounded
       />
     </b-field>
 
@@ -86,7 +100,8 @@ type FormRide = {
   bike: string,
   fromStation: Station,
   toStation: Station,
-  minutes: number
+  minutes: number,
+  seconds: number
 }
 
 const defaultRide = (): FormRide => {
@@ -96,6 +111,7 @@ const defaultRide = (): FormRide => {
       fromStation: null,
       toStation: null,
       minutes: 10,
+      seconds: 0
   }
 }
 
@@ -105,14 +121,15 @@ const toFormRide = (ride: Ride): FormRide => {
     bike: ride.bike.toString(),
     fromStation:  getStationByCode(ride.from),
     toStation: getStationByCode(ride.to),
-    minutes: ride.duration.minutes
+    minutes: ride.duration.shiftTo('minutes', 'seconds').minutes,
+    seconds: ride.duration.shiftTo('minutes', 'seconds').seconds
   }
 }
 
 const toRide = (ride: FormRide): Ride => {
   return {
     when: DateTime.fromJSDate(ride.when),
-    duration: Duration.fromObject({ minutes: ride.minutes }),
+    duration: Duration.fromObject({ minutes: ride.minutes, seconds: ride.seconds }),
     bike: parseInt(ride.bike),
     from: ride.fromStation.code,
     to: ride.toStation.code

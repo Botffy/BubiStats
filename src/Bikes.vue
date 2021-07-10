@@ -54,7 +54,7 @@ const groupByBikes = (rides: Ride[]): BikeStat[] => {
 }
 
 const formatDuration = (duration: Duration): string => {
-  return duration.shiftTo('minutes').minutes + ' perc'
+  return Math.round(duration.shiftTo('minutes').minutes) + ' perc'
 }
 
 export default Vue.extend({

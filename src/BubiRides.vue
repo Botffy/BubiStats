@@ -24,7 +24,7 @@
       </b-table-column>
 
       <b-table-column field="duration" label="Idő" sortable v-slot="props">
-        {{ props.row.duration.minutes }} perc
+        {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
       </b-table-column>
 
       <b-table-column v-slot="props">

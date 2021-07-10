@@ -6,7 +6,7 @@ import { Ride } from './model'
 
 type FirestoreRide = {
   when: number,
-  min: number,
+  sec: number,
   from: string,
   to: string,
   bike: number
@@ -37,7 +37,7 @@ export const subscribe = (callback: (rides: Ride[]) => void): Subscription => {
     const rides: Ride[] = (data['rides'] as FirestoreRide[]).map((fs: FirestoreRide) => {
       return {
         when: DateTime.fromMillis(fs.when),
-        duration: Duration.fromObject({ minutes: fs.min }),
+        duration: Duration.fromMillis(fs.sec * 1000),
         bike: fs.bike,
         from: fs.from,
         to: fs.to
@@ -69,7 +69,7 @@ export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> =
       return Promise.reject("Edited ride not found")
     }
     matchedRide.when = updated.when.toMillis()
-    matchedRide.min = updated.duration.minutes,
+    matchedRide.sec = updated.duration.shiftTo('seconds').seconds,
     matchedRide.bike = updated.bike
     matchedRide.from = updated.from,
     matchedRide.to = updated.to
@@ -86,7 +86,7 @@ export const addRide = (ride: Ride): Promise<void> => {
 
   const mapped: FirestoreRide = {
     when: ride.when.toMillis(),
-    min: ride.duration.minutes,
+    sec: ride.duration.shiftTo('seconds').seconds,
     bike: ride.bike,
     from: ride.from,
     to: ride.to
