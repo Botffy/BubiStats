@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from 'vue-router';
+import HighchartsVue from 'highcharts-vue'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { getFirebaseApp, onUserChange } from "./firebase"
@@ -14,6 +15,7 @@ import Bikes from "./Bikes.vue"
 import FilterComponent from "./FilterComponent.vue"
 
 Vue.use(VueRouter)
+Vue.use(HighchartsVue)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
 
 const firebaseApp = getFirebaseApp()

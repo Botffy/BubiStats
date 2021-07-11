@@ -1,5 +1,14 @@
 <template>
   <section>
+    <div class='columns'>
+      <div class='column'>
+        <highcharts :options="bikeFrequencyChart" />
+      </div>
+      <div class='column'>
+        <highcharts :options="bikeTimeChart" />
+      </div>
+    </div>
+
     <b-table
       :data="ridesByBikes"
       :hoverable="true"
@@ -53,6 +62,22 @@ const groupByBikes = (rides: Ride[]): BikeStat[] => {
   }, new Map()).values())
 }
 
+const bikeFrequency = (bikeStats: BikeStat[]): number[][] => {
+  return Array.from(bikeStats.reduce((accumulator: Map<number, number>, stat: BikeStat): Map<number, number> => {
+    return accumulator.set(stat.rides, (accumulator.get(stat.rides) || 0) + 1)
+  }, new Map).entries()).sort()
+}
+
+const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => {
+  const slot = (stat: BikeStat) => Math.floor(stat.totalTime.shiftTo('minutes').minutes / slotSize)
+
+  return Array.from(bikeStats.reduce((accumulator: Map<number, number>, stat: BikeStat): Map<number, number> => {
+    return accumulator.set(slot(stat), (accumulator.get(slot(stat)) || 0) + 1)
+  }, new Map).entries()).map((val) => {
+    return [val[0]*5, val[1]]
+  }).sort()
+}
+
 const formatDuration = (duration: Duration): string => {
   return Math.round(duration.shiftTo('minutes').minutes) + ' perc'
 }
@@ -64,18 +89,53 @@ export default Vue.extend({
       required: true
     }
   },
-  data: function() {
-    return {
-      ridesByBikes: groupByBikes(this.rides)
+  computed: {
+    ridesByBikes() {
+      return groupByBikes(this.rides)
+    },
+    bikeFrequencyChart() {
+      return {
+        series: [{
+          type: 'column',
+          data: bikeFrequency(this.ridesByBikes),
+          name: 'Bicajok száma'
+        }],
+        yAxis: {
+          title: {
+            text: 'Bicajok'
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        title: {
+          text: 'Bicajok a velük megtett utak függvényében'
+        }
+      }
+    },
+    bikeTimeChart() {
+      return {
+        series: [{
+          type: 'column',
+          data: bikeByTime(this.ridesByBikes),
+          name: 'Bicajok száma'
+        }],
+        yAxis: {
+          title: {
+            text: 'Bicajok'
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        title: {
+          text: 'Bicajok a velük töltött idő függvényében'
+        }
+      }
     }
   },
   methods: {
     formatDuration
-  },
-  watch: {
-    rides() {
-      this.ridesByBikes = groupByBikes(this.rides)
-    }
   }
 })
 </script>
