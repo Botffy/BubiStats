@@ -13,6 +13,7 @@ import PrivacyPage from "./Privacy.vue";
 import BubiRides from "./BubiRides.vue";
 import Bikes from "./Bikes.vue"
 import FilterComponent from "./FilterComponent.vue"
+import StationsPage from "./Stations.vue"
 
 Vue.use(VueRouter)
 Vue.use(HighchartsVue)
@@ -35,7 +36,8 @@ const router = new VueRouter({ routes: [
     props: true,
     children: [
       { path: '/rides', component: BubiRides },
-      { path: '/bikes', component: Bikes }
+      { path: '/bikes', component: Bikes },
+      { path: '/stations', component: StationsPage }
     ]
   }
 ]})
