@@ -19,11 +19,14 @@
       <b-table-column field="bike" label="Bicaj" sortable v-slot="props">
         {{ props.row.bike }}
       </b-table-column>
-      <b-table-column field="rides" label="Utak" sortable v-slot="props">
+      <b-table-column field="rides" label="Utak" sortable v-slot="props" numeric>
         {{ props.row.rides }}
       </b-table-column>
-      <b-table-column field="totalTime" label="Idő" sortable v-slot="props">
-        {{ formatDuration(props.row.totalTime) }}
+      <b-table-column field="totalTime" label="Idő" sortable v-slot="props" numeric>
+        {{ rideMinutes(props.row) }} perc
+      </b-table-column>
+      <b-table-column label="Átlag idő" sortable :custom-sort="sortAverage" v-slot="props" numeric>
+        {{ averageRideMinutes(props.row) }} perc
       </b-table-column>
     </b-table>
   </section>
@@ -76,10 +79,6 @@ const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => 
   }, new Map).entries()).map((val) => {
     return [val[0]*5, val[1]]
   }).sort()
-}
-
-const formatDuration = (duration: Duration): string => {
-  return Math.round(duration.shiftTo('minutes').minutes) + ' perc'
 }
 
 export default Vue.extend({
@@ -135,7 +134,15 @@ export default Vue.extend({
     }
   },
   methods: {
-    formatDuration
+    rideMinutes(stat: BikeStat): number {
+      return Math.round(stat.totalTime.shiftTo('minutes').minutes)
+    },
+    averageRideMinutes(stat: BikeStat): number {
+      return Math.round(this.rideMinutes(stat) / stat.rides)
+    },
+    sortAverage(a: BikeStat, b: BikeStat, isAsc: boolean) {
+      return (this.averageRideMinutes(a) - this.averageRideMinutes(b)) * (isAsc ? 1 : -1)
+    }
   }
 })
 </script>
