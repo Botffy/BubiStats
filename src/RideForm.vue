@@ -8,6 +8,7 @@
         :timepicker='timepickerProps'
         :datepicker='datepickerProps'
         :datetime-formatter='datetimeFormatter'
+        editable
       />
     </b-field>
     <b-field>
@@ -106,7 +107,7 @@ type FormRide = {
 
 const defaultRide = (): FormRide => {
   return {
-      when: DateTime.now().minus({ minutes: 10 }).toJSDate(),
+      when: null,
       bike: null,
       fromStation: null,
       toStation: null,
@@ -161,7 +162,8 @@ export default Vue.extend({
         toStation: null
       },
       timepickerProps: {
-        hourFormat: '24'
+        hourFormat: '24',
+        enableSeconds: true
       },
       datepickerProps: {
         minDate: DateTime.fromISO("2021-05-24T00:00:00.000+02:00").toJSDate(),
