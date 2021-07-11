@@ -1,7 +1,5 @@
 import * as firebase from "firebase/app";
-import { getAnalytics } from 'firebase/analytics';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, getAdditionalUserInfo } from "firebase/auth";
-import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 
 let firebaseApp: FirebaseApp = null

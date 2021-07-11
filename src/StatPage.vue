@@ -8,7 +8,16 @@
           </div>
         </div>
         <div class="column">
-          <router-view :rides='this.rides'></router-view>
+          <div v-if="rides === null" class="cen">
+            <b-icon
+              pack="fas"
+              icon="spinner"
+              size="is-large"
+              custom-class="fa-spin"
+            />
+          </div>
+          <div v-else-if='rides === 0'>Még nem vettél fel utakat.</div>
+          <router-view :rides='this.rides' v-else></router-view>
         </div>
       </div>
     </div>
@@ -20,7 +29,7 @@
 import Vue from 'vue'
 import RideForm from "./RideForm.vue";
 import InfoPage from "./InfoPage.vue"
-import { subscribe } from "./ride-service"
+import { subscribe, unsubscribe } from "./ride-service"
 
 export default Vue.extend({
   data() {
@@ -34,21 +43,12 @@ export default Vue.extend({
     'ride-form': RideForm
   },
   created() {
-    if (this.$root.isLoggedIn) {
-      this.subscription = subscribe((rides) => {
-        this.rides = rides
-      })
-    }
-
-    this.$eventBus.$on('login', (ev: any) => {
-      this.subscription = subscribe((rides) => {
-        this.rides = rides
-      })
+    this.subscription = subscribe((rides) => {
+      this.rides = rides
     })
-    this.$eventBus.$on('logout', (ev: any) => {
-      this.subscription.unsubscribe()
-      this.rides = []
-    })
+  },
+  destroyed() {
+    unsubscribe(this.subscription)
   }
 });
 </script>

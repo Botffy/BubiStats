@@ -1,8 +1,9 @@
-import { getCurrentUserUid } from "./firebase";
+import { getCurrentUserUid, onUserChange } from "./firebase";
 import { Unsubscribe } from "@firebase/util";
 import { getFirestore, doc, onSnapshot, runTransaction, useFirestoreEmulator } from "firebase/firestore";
 import { Duration, DateTime } from "luxon"
 import { Ride } from './model'
+import { v4 as uuidv4 } from 'uuid';
 
 type FirestoreRide = {
   when: number,
@@ -12,25 +13,32 @@ type FirestoreRide = {
   bike: number
 }
 
-export class Subscription {
-  #unsubscribe: Unsubscribe
-  constructor(unsubscribe: Unsubscribe) {
-    this.#unsubscribe = unsubscribe
-  }
+const subscribers: Map<string, (ride: Ride[]) => void> = new Map()
+let rides: Ride[] | null = null
+let firestoreSubscription: Unsubscribe = null
 
-  public unsubscribe(): void {
-    this.#unsubscribe()
+onUserChange((uid: string) => {
+  if (!uid && firestoreSubscription) {
+    firestoreSubscription()
+    rides = null
   }
+})
+
+const onData = (data: Ride[]) => {
+  rides = data
+  subscribers.forEach((callback) => {
+    callback(rides)
+  })
 }
 
-export const subscribe = (callback: (rides: Ride[]) => void): Subscription => {
+const createFirestoreSubscription = () => {
   const db = getFirestore()
 
   const userDocRef = doc(db, "users", getCurrentUserUid())
-  const subscription = onSnapshot(userDocRef, (doc) => {
+  firestoreSubscription = onSnapshot(userDocRef, (doc) => {
     const data = doc.data()
     if (!data || !data.rides) {
-      callback([])
+      onData([])
       return
     }
 
@@ -43,10 +51,24 @@ export const subscribe = (callback: (rides: Ride[]) => void): Subscription => {
         to: fs.to
       }
     })
-    callback(rides)
+    onData(rides)
   })
+}
 
-  return new Subscription(subscription);
+export const subscribe = (callback: (rides: Ride[]) => void): Object => {
+  if (!firestoreSubscription) {
+    createFirestoreSubscription()
+  }
+
+  const id = uuidv4()
+  subscribers.set(id, callback)
+  callback(rides)
+  return id
+}
+
+export const unsubscribe = (id: string) => {
+  console.log("unsubscribe" + id)
+  subscribers.delete(id)
 }
 
 export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {

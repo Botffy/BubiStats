@@ -23,6 +23,7 @@
         <b-navbar-item tag="router-link" :to="{ path: '/stats' }">
           Statisztikák
         </b-navbar-item>
+        <filter-component></filter-component>
       </template>
 
       <template #end v-if='!loading'>

@@ -11,6 +11,7 @@ import InfoPage from "./InfoPage.vue";
 import PrivacyPage from "./Privacy.vue";
 import BubiRides from "./BubiRides.vue";
 import Bikes from "./Bikes.vue"
+import FilterComponent from "./FilterComponent.vue"
 
 Vue.use(VueRouter)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
@@ -76,6 +77,9 @@ const app = new Vue({
     getUser() {
       return this.user.uid;
     }
+  },
+  components: {
+    'filter-component': FilterComponent
   },
   created() {
     this.loading = true
