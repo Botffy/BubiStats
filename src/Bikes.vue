@@ -16,16 +16,16 @@
       default-sort-direction="desc"
       default-sort="rides"
     >
-      <b-table-column field="bike" label="Bicaj" sortable v-slot="props">
+      <b-table-column field="bike" label="Bicaj" sortable :custom-sort="sortBy((stat) => stat.bike)" v-slot="props">
         {{ props.row.bike }}
       </b-table-column>
-      <b-table-column field="rides" label="Utak" sortable v-slot="props" numeric>
+      <b-table-column field="rides" label="Utak" sortable :custom-sort="sortBy((stat) => stat.rides)" v-slot="props" numeric>
         {{ props.row.rides }}
       </b-table-column>
-      <b-table-column field="totalTime" label="Idő" sortable v-slot="props" numeric>
+      <b-table-column field="totalTime" label="Idő" sortable :custom-sort="sortBy((stat) => stat.totalTime.shiftTo('milliseconds').toMillis())" v-slot="props" numeric>
         {{ rideMinutes(props.row) }} perc
       </b-table-column>
-      <b-table-column label="Átlag idő" sortable :custom-sort="sortAverage" v-slot="props" numeric>
+      <b-table-column label="Átlag idő" sortable :custom-sort="sortBy((stat) => averageRideMinutes(stat))" v-slot="props" numeric>
         {{ averageRideMinutes(props.row) }} perc
       </b-table-column>
     </b-table>
@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import SortingMixin from './SortingMixin'
 import { Ride } from "./model"
 import { Duration } from "luxon"
 
@@ -133,6 +134,7 @@ export default Vue.extend({
       }
     }
   },
+  mixins: [ SortingMixin ],
   methods: {
     rideMinutes(stat: BikeStat): number {
       return Math.round(stat.totalTime.shiftTo('minutes').minutes)
@@ -140,8 +142,11 @@ export default Vue.extend({
     averageRideMinutes(stat: BikeStat): number {
       return Math.round(this.rideMinutes(stat) / stat.rides)
     },
-    sortAverage(a: BikeStat, b: BikeStat, isAsc: boolean) {
-      return (this.averageRideMinutes(a) - this.averageRideMinutes(b)) * (isAsc ? 1 : -1)
+    defaultSorting(a: BikeStat, b: BikeStat) {
+      return b.rides - a.rides
+        || b.totalTime.shiftTo('milliseconds').toMillis() - a.totalTime.shiftTo('milliseconds').toMillis()
+        || this.averageRideMinutes(b) - this.averageRideMinutes(a)
+        || b.bike - a.bike
     }
   }
 })

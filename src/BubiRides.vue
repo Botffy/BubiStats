@@ -7,23 +7,23 @@
       default-sort-direction="desc"
       default-sort="when"
     >
-      <b-table-column field="when" label="Mikor" sortable v-slot="props">
+      <b-table-column field="when" label="Mikor" sortable :custom-sort="sortBy((ride) => ride.when.toMillis())" v-slot="props">
         {{ formatTime(props.row.when) }}
       </b-table-column>
 
-      <b-table-column field="bike" label="Bicaj" sortable v-slot="props">
+      <b-table-column field="bike" label="Bicaj" :custom-sort="sortBy((ride) => ride.bike)" sortable v-slot="props">
         {{ props.row.bike }}
       </b-table-column>
 
-      <b-table-column field="from" label="Honnan" sortable v-slot="props">
+      <b-table-column field="from" label="Honnan" :custom-sort="sortByString((ride) => stationName(ride.from))" sortable v-slot="props">
         {{ stationName(props.row.from) }}
       </b-table-column>
 
-      <b-table-column field="to" label="Hova" sortable v-slot="props">
+      <b-table-column field="to" label="Hova" :custom-sort="sortByString((ride) => stationName(ride.to))" sortable v-slot="props">
         {{ stationName(props.row.to) }}
       </b-table-column>
 
-      <b-table-column field="duration" label="Idő" sortable v-slot="props">
+      <b-table-column field="duration" label="Idő" :custom-sort="sortBy((ride) => ride.duration.shiftTo('milliseconds').toMillis())" sortable v-slot="props">
         {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
       </b-table-column>
 
@@ -86,6 +86,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import SortingMixin from './SortingMixin'
 import RideForm from "./RideForm.vue";
 import { DateTime } from 'luxon';
 import { Ride } from "./model"
@@ -112,9 +113,17 @@ export default Vue.extend({
       editData: null
     }
   },
+  mixins: [ SortingMixin ],
   methods: {
     stationName,
     formatTime,
+    defaultSorting(a: Ride, b: Ride) {
+      return b.when.toMillis() - a.when.toMillis()
+        || b.bike - a.bike
+        || b.duration.shiftTo('milliseconds').toMillis() - a.duration.shiftTo('milliseconds').toMillis()
+        || this.stationName(b.from).localeCompare(this.stationName(a.from))
+        || this.stationName(b.to).localeCompare(this.stationName(a.to))
+    },
     deleteRide(row: any) {
       this.$buefy.dialog.confirm({
         title: 'Bubiút törlése',

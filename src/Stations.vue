@@ -16,16 +16,16 @@
       default-sort-direction="desc"
       default-sort="num"
     >
-      <b-table-column field="station" label="Állomás" sortable v-slot="props">
+      <b-table-column field="station" label="Állomás" sortable :custom-sort="sortByString((a) => a.station)" v-slot="props">
         {{ props.row.station }}
       </b-table-column>
-      <b-table-column field='num' label="Érintve" sortable :custom-sort="sortByAllStops" numeric v-slot="props">
+      <b-table-column field='num' label="Érintve" sortable :custom-sort="sortBy((a) => a.wasDestination + a.wasOrigin)" numeric v-slot="props">
         {{ props.row.wasOrigin + props.row.wasDestination  }}
       </b-table-column>
-      <b-table-column field='wasOrigin' label="Indulás" sortable numeric v-slot="props">
+      <b-table-column field='wasOrigin' label="Indulás" sortable :custom-sort="sortBy((a) => a.wasOrigin)" numeric v-slot="props">
         {{ props.row.wasOrigin }}
       </b-table-column>
-      <b-table-column field='wasDestination' label="Célállomás" sortable numeric v-slot="props">
+      <b-table-column field='wasDestination' label="Célállomás" sortable :custom-sort="sortBy((a) => a.wasDestination)" numeric v-slot="props">
         {{ props.row.wasDestination }}
       </b-table-column>
 
@@ -35,6 +35,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import SortingMixin from './SortingMixin'
 import { Ride } from "./model"
 import { getStationByCode, Station } from './station-service'
 
@@ -152,9 +153,13 @@ export default Vue.extend({
       }
     }
   },
+  mixins: [ SortingMixin ],
   methods: {
-    sortByAllStops(a: StationStat, b: StationStat, isAsc: boolean) {
-      return ((a.wasOrigin + a.wasDestination) - (b.wasOrigin + b.wasDestination)) * (isAsc ? 1 : -1)
+    defaultSorting(a: StationStat, b: StationStat) {
+      return (a.wasOrigin + a.wasDestination) - (b.wasOrigin + b.wasDestination)
+        || b.wasOrigin - a.wasOrigin
+        || b.wasDestination - a.wasDestination
+        || a.station.localeCompare(b.station)
     }
   }
 })
