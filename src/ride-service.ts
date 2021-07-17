@@ -1,6 +1,7 @@
-import { getCurrentUserUid, onUserChange } from "./firebase";
+import { getFirebaseApp, getCurrentUserUid, onUserChange } from "./firebase";
 import { Unsubscribe } from "@firebase/util";
-import { getFirestore, doc, onSnapshot, runTransaction, useFirestoreEmulator } from "firebase/firestore";
+import { getFirestore, doc, onSnapshot, runTransaction } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { Duration, DateTime } from "luxon"
 import { Ride } from './model'
 import { v4 as uuidv4 } from 'uuid';
@@ -11,6 +12,15 @@ type FirestoreRide = {
   from: string,
   to: string,
   bike: number
+}
+
+export enum RideField {
+  when = 'when', sec = 'duration', from = 'from', to = 'to', bike = 'bike'
+}
+
+export type ValidationError = {
+  field: RideField,
+  message: string
 }
 
 const subscribers: Map<string, (ride: Ride[]) => void> = new Map()
@@ -104,7 +114,8 @@ export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> =
 }
 
 export const addRide = (ride: Ride): Promise<void> => {
-  const db = getFirestore()
+  const functions = getFunctions(getFirebaseApp(), "europe-central2")
+  const addRide = httpsCallable(functions, 'addRide');
 
   const mapped: FirestoreRide = {
     when: ride.when.toMillis(),
@@ -114,26 +125,10 @@ export const addRide = (ride: Ride): Promise<void> => {
     to: ride.to
   }
 
-  const userDocRef = doc(db, "users", getCurrentUserUid())
-  return runTransaction(db, async (transaction) => {
-    const userDoc = await transaction.get(userDocRef);
-
-    let docValue;
-    if (!userDoc.exists()) {
-      docValue = {
-        rides: [mapped]
-      }
-    } else {
-      const rides = userDoc.data().rides || [];
-      rides.push(mapped)
-      docValue = {
-        rides: rides
-      }
-    }
-
-    transaction.set(userDocRef, docValue);
-    return Promise.resolve()
-  })
+  return addRide(mapped)
+    .then((result) => {
+      console.log(result)
+    })
 }
 
 export const deleteRide = (userId: string, rideTime: DateTime): Promise<void> => {

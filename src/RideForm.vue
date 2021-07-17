@@ -1,6 +1,9 @@
 <template>
   <form action=''>
-    <b-field>
+    <b-field
+      :type="errors['when'] ? 'is-danger' : ''"
+      :message="errors['when']"
+    >
       <b-datetimepicker
         placeholder='Mikor'
         v-model='model.when'
@@ -8,6 +11,9 @@
         :timepicker='timepickerProps'
         :datepicker='datepickerProps'
         :datetime-formatter='datetimeFormatter'
+        :min-dateTime='minDatetime'
+        :max-datetime='new Date()'
+        @blur='validateWhen'
         editable
       />
     </b-field>
@@ -16,10 +22,10 @@
         placeholder='Bicaj'
         v-model='model.bike'
         icon='bicycle'
-        pattern='86[0-9]{4}'
+        pattern='86[0-1][0-9]{3}'
         maxlength="6"
         :has-counter='false'
-        validation-message='A bicajok kódja 6 számjegyből áll, és 86-tal kezdődik.'
+        validation-message='A bicajok kódja hat számjegyből áll, 860-val vagy 861-gyel kezdődik.'
       />
     </b-field>
     <b-field
@@ -46,7 +52,7 @@
     <b-field label='Perc' label-position='on-border'>
       <b-numberinput
         expanded
-        min='1'
+        min='0'
         v-model='model.minutes'
         controls-position="compact"
         controls-rounded
@@ -91,7 +97,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DateTime, Duration } from 'luxon'
-import { addRide, editRide } from './ride-service'
+import { addRide, editRide, ValidationError } from './ride-service'
 import { getStationByCode, Station } from './station-service'
 import StationSelect from "./StationSelect.vue"
 import { Ride } from './model'
@@ -158,6 +164,7 @@ export default Vue.extend({
       originalRideTime: this.ride?.when,
       model: this.ride == null ? defaultRide() : toFormRide(this.ride),
       errors: {
+        when: null,
         fromStation: null,
         toStation: null
       },
@@ -166,18 +173,18 @@ export default Vue.extend({
         enableSeconds: true
       },
       datepickerProps: {
-        minDate: DateTime.fromISO("2021-05-24T00:00:00.000+02:00").toJSDate(),
-        maxDate: new Date(),
         nearbySelectableMonthDays: true
       },
-      datetimeFormatter: (date: Date) => {
-        return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd HH:mm')
-      }
+      datetimeFormatter: (date: Date) => DateTime.fromJSDate(date).toFormat('yyyy-MM-dd HH:mm:ss'),
+      minDatetime: DateTime.fromISO("2021-05-24T00:00:00.000+02:00").toJSDate()
     }
   },
   methods: {
     isFilled() {
       return !Object.values(this.model).some(x => x === null || x === '')
+    },
+    validateWhen() {
+      this.errors.when = this.model.when ? null : 'Add meg, mikor indult az út'
     },
     addRide() {
       const loading = this.$buefy.loading.open()
@@ -186,6 +193,10 @@ export default Vue.extend({
       addRide(ride)
         .then(() => {
           this.model = defaultRide()
+          this.errors = {
+            fromStation: null,
+            toStation: null
+          }
 
           this.$buefy.toast.open({
             duration: 2000,
@@ -195,6 +206,40 @@ export default Vue.extend({
           })
 
           this.$emit('added', ride)
+          loading.close()
+        })
+        .catch((error) => {
+          let message
+          if (error.details) {
+            console.error(error.details)
+            let validationErrors = error.details as ValidationError[]
+
+            if (validationErrors.length == 1) {
+              message = validationErrors[0].message;
+            }
+            else if (validationErrors.length > 1) {
+              message = 'Nem sikerült felvenni az utat: <ul>'
+                + validationErrors.map((validationError) => '<li>' + validationError.message + '</li>').join('')
+                + '</ul>'
+            } else {
+              message = 'Nem sikerült felvenni az utat. És valami nem stimmel.'
+            }
+          } else {
+            console.error(error)
+            message = 'Nem sikerült felvenni az utat. Ez nem a te hibád, én voltam, bocs. Próbáld meg később.'
+          }
+
+          this.$buefy.dialog.alert({
+            title: 'Hiba',
+            message: message,
+            type: 'is-danger',
+            hasIcon: true,
+            icon: 'times-circle',
+            iconPack: 'fas',
+            ariaRole: 'alertdialog',
+            ariaModal: true
+          })
+
           loading.close()
         })
     },

@@ -8,6 +8,7 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { getFirebaseApp, onUserChange } from "./firebase"
 import { getAnalytics } from 'firebase/analytics';
+import { getFunctions, useFunctionsEmulator } from "firebase/functions";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, getAdditionalUserInfo } from "firebase/auth";
 import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
 import StatPage from "./StatPage.vue";
@@ -29,6 +30,8 @@ const firebaseApp = getFirebaseApp()
 getAnalytics()
 const db = getFirestore()
 useFirestoreEmulator(db, 'localhost', 8080)
+const functions = getFunctions(firebaseApp, "europe-central2")
+useFunctionsEmulator(functions, "localhost", 5001)
 
 const auth = getAuth(firebaseApp)
 auth.useDeviceLanguage()
