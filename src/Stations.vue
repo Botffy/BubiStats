@@ -75,11 +75,11 @@ const groupByStation = (rides: Ride[]): StationStat[] => {
 const stationFrequency = (stationStat: StationStat[]): number[][] => {
   return Array.from(stationStat.reduce((accumulator: Map<number, number>, stat: StationStat): Map<number, number> => {
     return accumulator.set(stat.wasOrigin + stat.wasDestination, (accumulator.get(stat.wasOrigin + stat.wasDestination) || 0) + 1)
-  }, new Map).entries()).sort()
+  }, new Map).entries()).sort((a: number[], b: number[]) => a[0] - b[0])
 }
 
 const stationDependency = (rides: Ride[]): any[] => {
-  const arr = Array.from(rides.reduce((accumulator: Map<string, Map<string, number>>, ride: Ride): Map<string, Map<string, number>> => {
+  return Array.from(rides.reduce((accumulator: Map<string, Map<string, number>>, ride: Ride): Map<string, Map<string, number>> => {
     let val = accumulator.get(ride.from)
     if (!val) {
       val = new Map()
@@ -96,9 +96,6 @@ const stationDependency = (rides: Ride[]): any[] => {
   .sort((a: any[3], b: any[3]) => {
     return a[0].localeCompare(b[0]) || a[1].localeCompare(b[1])
   })
-
-  console.log(arr)
-  return arr
 }
 
 export default Vue.extend({
@@ -129,6 +126,9 @@ export default Vue.extend({
         },
         title: {
           text: 'Kedvenc állomások'
+        },
+        legend: {
+          enabled: false
         }
       }
     },

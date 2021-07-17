@@ -69,7 +69,7 @@ const groupByBikes = (rides: Ride[]): BikeStat[] => {
 const bikeFrequency = (bikeStats: BikeStat[]): number[][] => {
   return Array.from(bikeStats.reduce((accumulator: Map<number, number>, stat: BikeStat): Map<number, number> => {
     return accumulator.set(stat.rides, (accumulator.get(stat.rides) || 0) + 1)
-  }, new Map).entries()).sort()
+  }, new Map).entries()).sort((a: number[], b: number[]) => a[0] - b[0])
 }
 
 const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => {
@@ -77,9 +77,8 @@ const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => 
 
   return Array.from(bikeStats.reduce((accumulator: Map<number, number>, stat: BikeStat): Map<number, number> => {
     return accumulator.set(slot(stat), (accumulator.get(slot(stat)) || 0) + 1)
-  }, new Map).entries()).map((val) => {
-    return [val[0]*5, val[1]]
-  }).sort()
+  }, new Map).entries())
+  .sort((a: number[], b: number[]) => a[0] - b[0])
 }
 
 export default Vue.extend({
@@ -110,14 +109,31 @@ export default Vue.extend({
         },
         title: {
           text: 'Bicajok a velük megtett utak függvényében'
+        },
+        legend: {
+          enabled: false
         }
       }
+    },
+    bikeByTime() {
+      return bikeByTime(this.ridesByBikes)
+    },
+    bikeByTimeCategories() {
+      let maxMin = Duration.fromMillis(0)
+      for (let i = 0; i < this.ridesByBikes.length; ++i) {
+        if (this.ridesByBikes[i].totalTime > maxMin) {
+          maxMin = this.ridesByBikes[i].totalTime
+        }
+      }
+
+      return Array.from(Array(Math.ceil(maxMin.shiftTo('minutes').minutes / 5) + 1).keys())
+        .map((val) => val * 5 + '-' + (val+1) * 5)
     },
     bikeTimeChart() {
       return {
         series: [{
           type: 'column',
-          data: bikeByTime(this.ridesByBikes),
+          data: this.bikeByTime,
           name: 'Bicajok száma'
         }],
         yAxis: {
@@ -125,11 +141,19 @@ export default Vue.extend({
             text: 'Bicajok'
           }
         },
+        xAxis: {
+          categories: this.bikeByTimeCategories,
+          min: 0,
+          max: this.bikeByTimeCategories.length -1
+        },
         credits: {
           enabled: false
         },
         title: {
           text: 'Bicajok a velük töltött idő függvényében'
+        },
+        legend: {
+          enabled: false
         }
       }
     }
