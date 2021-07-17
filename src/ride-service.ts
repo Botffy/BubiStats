@@ -4,24 +4,8 @@ import { getFirestore, doc, onSnapshot, runTransaction } from "firebase/firestor
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { Duration, DateTime } from "luxon"
 import { Ride } from './model'
+import { FirestoreRide } from '../functions/src/dto'
 import { v4 as uuidv4 } from 'uuid';
-
-type FirestoreRide = {
-  when: number,
-  sec: number,
-  from: string,
-  to: string,
-  bike: number
-}
-
-export enum RideField {
-  when = 'when', sec = 'duration', from = 'from', to = 'to', bike = 'bike'
-}
-
-export type ValidationError = {
-  field: RideField,
-  message: string
-}
 
 const subscribers: Map<string, (ride: Ride[]) => void> = new Map()
 let rides: Ride[] | null = null

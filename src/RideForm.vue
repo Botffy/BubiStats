@@ -97,7 +97,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DateTime, Duration } from 'luxon'
-import { addRide, editRide, ValidationError } from './ride-service'
+import { addRide, editRide } from './ride-service'
+import { ValidationError } from '../functions/src/dto'
 import { getStationByCode, Station } from './station-service'
 import StationSelect from "./StationSelect.vue"
 import { Ride } from './model'

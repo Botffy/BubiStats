@@ -1,24 +1,8 @@
 import * as functions from "firebase-functions";
 import * as admin from 'firebase-admin'
+import { FirestoreRide, ValidationError, RideField } from './dto'
 
 admin.initializeApp()
-
-type FirestoreRide = {
-  when: number,
-  sec: number,
-  from: string,
-  to: string,
-  bike: number
-}
-
-enum RideField {
-  when = 'when', sec = 'duration', from = 'from', to = 'to', bike = 'bike'
-}
-
-type ValidationError = {
-  field: RideField,
-  message: string
-}
 
 const validateRide = (ride: FirestoreRide): ValidationError[] => {
   if (!ride.when || !ride.sec || !ride.from || !ride.to || !ride.bike) {
