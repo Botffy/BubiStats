@@ -6,6 +6,11 @@ export type FirestoreRide = {
   bike: number
 }
 
+export type EditRide = {
+  updated: FirestoreRide,
+  original: number
+}
+
 export enum RideField {
   when = 'when', sec = 'duration', from = 'from', to = 'to', bike = 'bike'
 }

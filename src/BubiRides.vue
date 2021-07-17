@@ -133,7 +133,7 @@ export default Vue.extend({
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => {
-          deleteRide(this.$root.$data.user.uid, row.when)
+          deleteRide(row.when)
           .then(() => {
             this.$buefy.toast.open({
               duration: 2000,

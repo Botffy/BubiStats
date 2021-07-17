@@ -65,73 +65,41 @@ export const unsubscribe = (id: string) => {
   subscribers.delete(id)
 }
 
-export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {
-  const db = getFirestore()
-
-  const userDocRef = doc(db, "users", getCurrentUserUid())
-
-  return runTransaction(db, async (transaction) => {
-    const userDoc = await transaction.get(userDocRef);
-
-    if (!userDoc.exists()) {
-      return Promise.reject("User has no rides")
-    }
-    const rides = userDoc.data().rides || [];
-    const matchedRide: FirestoreRide = rides.find((ride: FirestoreRide) => {
-      return ride.when === originalTime.toMillis()
-    })
-
-    if (!matchedRide) {
-      return Promise.reject("Edited ride not found")
-    }
-    matchedRide.when = updated.when.toMillis()
-    matchedRide.sec = updated.duration.shiftTo('seconds').seconds,
-    matchedRide.bike = updated.bike
-    matchedRide.from = updated.from,
-    matchedRide.to = updated.to
-
-    transaction.set(userDocRef, {
-      rides: rides
-    })
-    return Promise.resolve()
-  })
-}
-
-export const addRide = (ride: Ride): Promise<void> => {
-  const functions = getFunctions(getFirebaseApp(), "europe-central2")
-  const addRide = httpsCallable(functions, 'addRide');
-
-  const mapped: FirestoreRide = {
+const map = (ride: Ride): FirestoreRide => {
+  return {
     when: ride.when.toMillis(),
     sec: ride.duration.shiftTo('seconds').seconds,
     bike: ride.bike,
     from: ride.from,
     to: ride.to
   }
+}
 
-  return addRide(mapped)
+export const addRide = (ride: Ride): Promise<void> => {
+  const functions = getFunctions(getFirebaseApp(), "europe-central2")
+  const addRide = httpsCallable(functions, 'addRide');
+
+  return addRide(map(ride))
     .then((result) => {
       console.log(result)
     })
 }
 
-export const deleteRide = (userId: string, rideTime: DateTime): Promise<void> => {
-  const db = getFirestore()
+export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {
+  const functions = getFunctions(getFirebaseApp(), "europe-central2")
+  const editRide = httpsCallable(functions, 'editRide');
+  return editRide({
+    original: originalTime.toMillis(),
+    updated: map(updated)
+  }).then((result) => {
+    console.log(result)
+  })
+}
 
-  const userDocRef = doc(db, "users", userId)
-
-  return runTransaction(db, async (transaction) => {
-    const userDoc = await transaction.get(userDocRef);
-
-    if (!userDoc.exists()) {
-      return Promise.reject("User has no rides")
-    }
-
-    transaction.set(userDocRef, {
-      rides: userDoc.data().rides.filter((ride: FirestoreRide) => {
-        return ride.when !== rideTime.toMillis()
-      })
-    })
-    return Promise.resolve()
+export const deleteRide = (rideTime: DateTime): Promise<void> => {
+  const functions = getFunctions(getFirebaseApp(), "europe-central2")
+  const deleteRide = httpsCallable(functions, 'deleteRide');
+  return deleteRide(rideTime.toMillis()).then((result) => {
+    console.log(result)
   })
 }
