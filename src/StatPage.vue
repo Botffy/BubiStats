@@ -16,7 +16,7 @@
               custom-class="fa-spin"
             />
           </div>
-          <div v-else-if='rides === 0'>Még nem vettél fel utakat.</div>
+          <div v-else-if='rides.length === 0'>Még nem vettél fel utakat.</div>
           <router-view :rides='this.rides' v-else></router-view>
         </div>
       </div>
