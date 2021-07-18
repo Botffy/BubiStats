@@ -16,16 +16,16 @@
       default-sort-direction="desc"
       default-sort="rides"
     >
-      <b-table-column field="bike" label="Bicaj" sortable :custom-sort="sortBy((stat) => stat.bike)" v-slot="props">
+      <b-table-column field="bike" label="Bicaj" sortable :custom-sort="sortBy((stat) => stat.bike, defaultSorting)" v-slot="props">
         {{ props.row.bike }}
       </b-table-column>
-      <b-table-column field="rides" label="Utak" sortable :custom-sort="sortBy((stat) => stat.rides)" v-slot="props" numeric>
+      <b-table-column field="rides" label="Utak" sortable :custom-sort="sortBy((stat) => stat.rides, defaultSorting)" v-slot="props" numeric>
         {{ props.row.rides }}
       </b-table-column>
-      <b-table-column field="totalTime" label="Idő" sortable :custom-sort="sortBy((stat) => stat.totalTime.shiftTo('milliseconds').toMillis())" v-slot="props" numeric>
+      <b-table-column field="totalTime" label="Idő" sortable :custom-sort="sortBy((stat) => stat.totalTime.shiftTo('milliseconds').toMillis(), defaultSorting)" v-slot="props" numeric>
         {{ rideMinutes(props.row) }} perc
       </b-table-column>
-      <b-table-column label="Átlag idő" sortable :custom-sort="sortBy((stat) => averageRideMinutes(stat))" v-slot="props" numeric>
+      <b-table-column label="Átlag idő" sortable :custom-sort="sortBy((stat) => averageRideMinutes(stat), defaultSorting)" v-slot="props" numeric>
         {{ averageRideMinutes(props.row) }} perc
       </b-table-column>
     </b-table>

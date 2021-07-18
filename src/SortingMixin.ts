@@ -1,14 +1,14 @@
 
 export default {
   methods: {
-    sortBy(accessor: (a: object) => number) {
+    sortBy(accessor: (a: object) => number, defaultSorting: (a: object, b: object) => number) {
       return (a: object, b: object, isAsc: boolean) => {
-        return (accessor(a) - accessor(b)) * (isAsc ? 1 : -1) || this.defaultSorting(a, b)
+        return (accessor(a) - accessor(b)) * (isAsc ? 1 : -1) || defaultSorting(a, b)
       }
     },
-    sortByString(accessor: (a: object) => string) {
+    sortByString(accessor: (a: object) => string, defaultSorting: (a: object, b: object) => number) {
       return (a: object, b: object, isAsc: boolean) => {
-        return (accessor(a).localeCompare(accessor(b))) * (isAsc ? 1 : -1) || this.defaultSorting(a, b)
+        return (accessor(a).localeCompare(accessor(b))) * (isAsc ? 1 : -1) || defaultSorting(a, b)
       }
     }
   }

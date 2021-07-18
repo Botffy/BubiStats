@@ -18,6 +18,7 @@ import BubiRides from "./BubiRides.vue";
 import Bikes from "./Bikes.vue"
 import FilterComponent from "./FilterComponent.vue"
 import StationsPage from "./Stations.vue"
+import TimePage from "./TimePage.vue"
 
 HighchartsSankey(Highcharts)
 HighchartsDependencyWheel(Highcharts)
@@ -46,7 +47,8 @@ const router = new VueRouter({ routes: [
     children: [
       { path: '/rides', component: BubiRides },
       { path: '/bikes', component: Bikes },
-      { path: '/stations', component: StationsPage }
+      { path: '/stations', component: StationsPage },
+      { path: '/time', component: TimePage }
     ]
   }
 ]})

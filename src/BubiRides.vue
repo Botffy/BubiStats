@@ -7,23 +7,23 @@
       default-sort-direction="desc"
       default-sort="when"
     >
-      <b-table-column field="when" label="Mikor" sortable :custom-sort="sortBy((ride) => ride.when.toMillis())" v-slot="props">
+      <b-table-column field="when" label="Mikor" sortable :custom-sort="sortBy((ride) => ride.when.toMillis(), defaultSorting)" v-slot="props">
         {{ formatTime(props.row.when) }}
       </b-table-column>
 
-      <b-table-column field="bike" label="Bicaj" :custom-sort="sortBy((ride) => ride.bike)" sortable v-slot="props">
+      <b-table-column field="bike" label="Bicaj" :custom-sort="sortBy((ride) => ride.bike, defaultSorting)" sortable v-slot="props">
         {{ props.row.bike }}
       </b-table-column>
 
-      <b-table-column field="from" label="Honnan" :custom-sort="sortByString((ride) => stationName(ride.from))" sortable v-slot="props">
+      <b-table-column field="from" label="Honnan" :custom-sort="sortByString((ride) => stationName(ride.from), defaultSorting)" sortable v-slot="props">
         {{ stationName(props.row.from) }}
       </b-table-column>
 
-      <b-table-column field="to" label="Hova" :custom-sort="sortByString((ride) => stationName(ride.to))" sortable v-slot="props">
+      <b-table-column field="to" label="Hova" :custom-sort="sortByString((ride) => stationName(ride.to), defaultSorting)" sortable v-slot="props">
         {{ stationName(props.row.to) }}
       </b-table-column>
 
-      <b-table-column field="duration" label="Idő" :custom-sort="sortBy((ride) => ride.duration.shiftTo('milliseconds').toMillis())" sortable v-slot="props">
+      <b-table-column field="duration" label="Idő" :custom-sort="sortBy((ride) => ride.duration.shiftTo('milliseconds').toMillis(), defaultSorting)" sortable v-slot="props">
         {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
       </b-table-column>
 
