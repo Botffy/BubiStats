@@ -49,6 +49,10 @@ const createFirestoreSubscription = () => {
   })
 }
 
+export const getRides = (): readonly Ride[] => {
+  return rides
+}
+
 export const subscribe = (callback: (rides: Ride[]) => void): Object => {
   if (!firestoreSubscription) {
     createFirestoreSubscription()

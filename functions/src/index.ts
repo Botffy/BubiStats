@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as admin from 'firebase-admin'
 import { EditRide, FirestoreRide } from './dto'
-import { addRide as addRideInner, editRide as editRideInner, deleteRide as deleteRideInner } from './rides'
+import { addRide as addRideInner, editRide as editRideInner, deleteRide as deleteRideInner, deleteAllRides } from './rides'
 
 admin.initializeApp()
 
@@ -27,4 +27,8 @@ export const deleteRide = functions.region('europe-central2').https.onCall((data
   }
 
   return deleteRideInner(context.auth.uid, data)
+})
+
+export const deleteUserData = functions.region('europe-central2').auth.user().onDelete((event) => {
+  deleteAllRides(event.uid)
 })

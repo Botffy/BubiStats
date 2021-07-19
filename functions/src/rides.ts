@@ -154,5 +154,11 @@ export const deleteRide = (uid: string, rideTime: number): Promise<any> => {
     })
     return Promise.resolve()
   })
+}
 
+export const deleteAllRides = async (uid: string) => {
+  const db = admin.firestore()
+  const userDocRef = db.collection('users').doc(uid)
+  await userDocRef.delete()
+  return Promise.resolve()
 }

@@ -15,6 +15,7 @@
   "author": "scipiades.armin@gmail.com",
   "license": "ISC",
   "devDependencies": {
+    "@types/file-saver": "^2.0.3",
     "@types/lodash": "^4.14.170",
     "@types/uuid": "^8.3.1",
     "html-webpack-plugin": "^5.3.1",
@@ -30,6 +31,7 @@
   "dependencies": {
     "@types/luxon": "^1.27.0",
     "buefy": "^0.9.8",
+    "file-saver": "^2.0.5",
     "firebase": "^9.0.0-beta.6",
     "highcharts": "^9.1.2",
     "highcharts-vue": "^1.4.0",

@@ -1,5 +1,5 @@
 <template>
-  <div class="section" v-if="this.$root.isLoggedIn">
+  <div v-if="this.$root.isLoggedIn">
     <div class="container">
       <div class="columns">
         <div class='column is-3'>

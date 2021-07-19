@@ -203,7 +203,6 @@ export default Vue.extend({
       for (let i = 0; i < this.rides.length; ++i) {
         hours[this.rides[i].when.hour] += 1
       }
-      console.log(hours)
       return hours
     },
     hourChart() {

@@ -32,7 +32,10 @@
         </b-navbar-item>
 
         <b-navbar-dropdown :label='user.email' v-if='isLoggedIn'>
-          <b-navbar-item tag="div" >
+          <b-navbar-item tag="router-link" :to="{ path: '/settings' }">
+            Beállítások
+          </b-navbar-item>
+          <b-navbar-item tag="div">
             <div class="buttons has-text-right">
               <a class="button is-primary" @click='logout'>
                 <strong>Kilépés</strong>
@@ -50,7 +53,9 @@
       </template>
     </b-navbar>
 
-    <router-view ref='mainview' v-if='!loading'></router-view>
+    <div class="section">
+      <router-view ref='mainview' v-if='!loading'></router-view>
+    </div>
   </div>
 </body>
 

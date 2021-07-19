@@ -14,6 +14,7 @@ import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
 import StatPage from "./StatPage.vue";
 import InfoPage from "./InfoPage.vue";
 import PrivacyPage from "./Privacy.vue";
+import SettingsPage from "./Settings.vue";
 import BubiRides from "./BubiRides.vue";
 import Bikes from "./Bikes.vue"
 import FilterComponent from "./FilterComponent.vue"
@@ -40,6 +41,7 @@ auth.useDeviceLanguage()
 const router = new VueRouter({ routes: [
   { path: '/info', component: InfoPage },
   { path: '/privacy', component: PrivacyPage },
+  { path: '/settings', component: SettingsPage },
   {
     path: '/*',
     component: StatPage,
