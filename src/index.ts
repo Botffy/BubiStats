@@ -20,6 +20,7 @@ import Bikes from "./Bikes.vue"
 import FilterComponent from "./FilterComponent.vue"
 import StationsPage from "./Stations.vue"
 import TimePage from "./TimePage.vue"
+import NotFoundPage from "./NotFound.vue"
 import { subscribe } from "./ride-service";
 
 HighchartsSankey(Highcharts)
@@ -53,7 +54,8 @@ const router = new VueRouter({ routes: [
       { path: '/time', component: TimePage },
       { path: '/', component: BubiRides }
     ]
-  }
+  },
+  { path: '*', component: NotFoundPage },
 ]})
 
 new Vue({
