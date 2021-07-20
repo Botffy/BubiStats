@@ -44,14 +44,14 @@ const router = new VueRouter({ routes: [
   { path: '/privacy', component: PrivacyPage },
   { path: '/settings', component: SettingsPage },
   {
-    path: '/*',
+    path: '/(rides|bikes|stations|time)?',
     component: StatPage,
-    props: true,
     children: [
       { path: '/rides', component: BubiRides },
       { path: '/bikes', component: Bikes },
       { path: '/stations', component: StationsPage },
-      { path: '/time', component: TimePage }
+      { path: '/time', component: TimePage },
+      { path: '/', component: BubiRides }
     ]
   }
 ]})
