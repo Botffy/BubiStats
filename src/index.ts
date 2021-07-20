@@ -56,10 +56,7 @@ const router = new VueRouter({ routes: [
   }
 ]})
 
-const eventBus = new Vue()
-Vue.prototype.$eventBus = eventBus
-
-const app = new Vue({
+new Vue({
   el: '#app',
   router,
   data() {
@@ -121,13 +118,6 @@ const app = new Vue({
         this.loadingScreen = this.$buefy.loading.open()
       } else {
         this.loadingScreen.close()
-      }
-    },
-    async user() {
-      if (!this.user) {
-        this.$eventBus.$emit('logout')
-      } else {
-        this.$eventBus.$emit('login', { uid: this.user.uid })
       }
     }
   }
