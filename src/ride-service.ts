@@ -14,7 +14,16 @@ let firestoreSubscription: Unsubscribe = null
 onUserChange((uid: string) => {
   if (!uid && firestoreSubscription) {
     firestoreSubscription()
+    firestoreSubscription = null
     rides = null
+    return
+  }
+  if (uid) {
+    if (firestoreSubscription) {
+      firestoreSubscription()
+      firestoreSubscription = null
+    }
+    createFirestoreSubscription()
   }
 })
 
@@ -26,6 +35,10 @@ const onData = (data: Ride[]) => {
 }
 
 const createFirestoreSubscription = () => {
+  if (!getCurrentUserUid()) {
+    return
+  }
+
   const db = getFirestore()
 
   const userDocRef = doc(db, "users", getCurrentUserUid())
@@ -65,7 +78,6 @@ export const subscribe = (callback: (rides: Ride[]) => void): Object => {
 }
 
 export const unsubscribe = (id: string) => {
-  console.log("unsubscribe" + id)
   subscribers.delete(id)
 }
 

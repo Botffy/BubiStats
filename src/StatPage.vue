@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="column">
-          <div v-if="rides === null" class="cen">
+          <div v-if="rides === null">
             <b-icon
               pack="fas"
               icon="spinner"
@@ -48,7 +48,9 @@ export default Vue.extend({
     })
   },
   destroyed() {
-    unsubscribe(this.subscription)
+    if (this.subscription) {
+      unsubscribe(this.subscription)
+    }
   }
 });
 </script>

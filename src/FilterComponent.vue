@@ -46,7 +46,7 @@ export default Vue.extend({
     })
   },
   destroyed() {
-    if (subscription) {
+    if (this.subscription) {
       unsubscribe(this.subscription)
     }
   }

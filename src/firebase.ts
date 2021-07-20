@@ -20,7 +20,7 @@ export const getFirebaseApp = (): FirebaseApp => {
   return firebaseApp
 }
 
-export const getCurrentUserUid = (): string => {
+export const getCurrentUserUid = (): string | null => {
   return getAuth(getFirebaseApp()).currentUser?.uid
 }
 
@@ -29,6 +29,6 @@ export const onUserChange = (callback: (uid: string) => void ) => {
   auth.useDeviceLanguage()
 
   onAuthStateChanged(auth, (user) => {
-    callback(user.uid)
+    callback(user?.uid)
   })
 }

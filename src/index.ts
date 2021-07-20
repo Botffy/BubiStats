@@ -65,7 +65,8 @@ const app = new Vue({
     return {
       loadingScreen: null,
       loading: null,
-      user: null
+      user: null,
+      rides: null
     }
   },
   methods: {
