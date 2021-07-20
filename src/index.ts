@@ -20,6 +20,7 @@ import Bikes from "./Bikes.vue"
 import FilterComponent from "./FilterComponent.vue"
 import StationsPage from "./Stations.vue"
 import TimePage from "./TimePage.vue"
+import { subscribe } from "./ride-service";
 
 HighchartsSankey(Highcharts)
 HighchartsDependencyWheel(Highcharts)
@@ -103,7 +104,15 @@ const app = new Vue({
     this.loading = true
     onAuthStateChanged(auth, (user) => {
       this.user = user;
-      this.loading = false
+      if (user) {
+        subscribe(rides => {
+          if (rides != null) {
+            this.loading = false
+          }
+        })
+      } else {
+        this.loading = false
+      }
     })
   },
   watch: {
