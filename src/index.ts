@@ -33,10 +33,15 @@ Vue.use(Buefy, { defaultIconPack: 'fas' })
 
 const firebaseApp = getFirebaseApp()
 getAnalytics()
+
 const db = getFirestore()
-useFirestoreEmulator(db, 'localhost', 8080)
 const functions = getFunctions(firebaseApp, "europe-central2")
-useFunctionsEmulator(functions, "localhost", 5001)
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Using emulators')
+  useFirestoreEmulator(db, 'localhost', 8080)
+  useFunctionsEmulator(functions, "localhost", 5001)
+}
 
 const auth = getAuth(firebaseApp)
 auth.useDeviceLanguage()

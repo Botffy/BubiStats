@@ -7,10 +7,9 @@ const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
 const gitRevisionPlugin = new GitRevisionPlugin()
 
 module.exports = {
-  mode: 'development',
-  devtool: 'source-map',
   output: {
-    filename: 'main.js',
+    filename: '[fullhash].js',
+    chunkFilename: '[chunkhash].js',
     path: path.join(__dirname, "dist")
   },
   entry: {
@@ -56,10 +55,5 @@ module.exports = {
       filename: "index.html",
       chunks: ["index"]
     })
-  ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000,
-  }
+  ]
 };
