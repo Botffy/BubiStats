@@ -1,5 +1,4 @@
-[![Gittens](http://gittens.r15.railsrumble.com//badge/Botffy/BubiStats
-)](http://gittens.r15.railsrumble.com/gitten/Botffy/BubiStats)
+[![Gittens](http://gittens.r15.railsrumble.com//badge/Botffy/BubiStats)](http://gittens.r15.railsrumble.com/gitten/Botffy/BubiStats)
 
 BubiStats is an app that lets you collect stats and data visualizations about your usage of Bubi, the public bike service of Budapest.
 
