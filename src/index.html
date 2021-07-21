@@ -5,58 +5,95 @@
   <title>BubiStats</title>
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+  <style type="text/css" media="screen">
+    #app {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    .content-wrapper {
+      flex: 1;
+    }
+  </style>
 </head>
 
 <body>
   <div id="app">
-    <b-navbar class="is-warning">
-      <template #start v-if='isLoggedIn'>
-        <b-navbar-item tag="router-link" :to="{ path: '/rides' }">
-          Bubiutak
-        </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="{ path: '/bikes' }">
-          Bicajok
-        </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="{ path: '/stations' }">
-          Állomások
-        </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="{ path: '/time' }">
-          Idő
-        </b-navbar-item>
-        <filter-component></filter-component>
-      </template>
-
-      <template #end v-if='!loading'>
-        <b-navbar-item tag="router-link" :to="{ path: '/info' }">
-          Info
-        </b-navbar-item>
-
-        <b-navbar-dropdown :label='user.email' v-if='isLoggedIn'>
-          <b-navbar-item tag="router-link" :to="{ path: '/settings' }">
-            Beállítások
+    <div class="content-wrapper">
+      <b-navbar class="is-warning">
+        <template #start v-if='isLoggedIn'>
+          <b-navbar-item tag="router-link" :to="{ path: '/rides' }">
+            Bubiutak
           </b-navbar-item>
-          <b-navbar-item tag="div">
-            <div class="buttons has-text-right">
-              <a class="button is-primary" @click='logout'>
-                <strong>Kilépés</strong>
+          <b-navbar-item tag="router-link" :to="{ path: '/bikes' }">
+            Bicajok
+          </b-navbar-item>
+          <b-navbar-item tag="router-link" :to="{ path: '/stations' }">
+            Állomások
+          </b-navbar-item>
+          <b-navbar-item tag="router-link" :to="{ path: '/time' }">
+            Idő
+          </b-navbar-item>
+          <filter-component></filter-component>
+        </template>
+
+        <template #end v-if='!loading'>
+          <b-navbar-item tag="router-link" :to="{ path: '/info' }">
+            Info
+          </b-navbar-item>
+
+          <b-navbar-dropdown :label='user.email' v-if='isLoggedIn'>
+            <b-navbar-item tag="router-link" :to="{ path: '/settings' }">
+              Beállítások
+            </b-navbar-item>
+            <b-navbar-item tag="div">
+              <div class="buttons has-text-right">
+                <a class="button is-primary" @click='logout'>
+                  <strong>Kilépés</strong>
+                </a>
+              </div>
+            </b-navbar-item>
+          </b-navbar-dropdown>
+          <b-navbar-item tag="div" v-else>
+            <div class="buttons">
+              <a class="button is-primary" @click='login'>
+                <strong>Belépés</strong>
               </a>
             </div>
           </b-navbar-item>
-        </b-navbar-dropdown>
-        <b-navbar-item tag="div" v-else>
-          <div class="buttons">
-            <a class="button is-primary" @click='login'>
-              <strong>Belépés</strong>
-            </a>
-          </div>
-        </b-navbar-item>
-      </template>
-    </b-navbar>
+        </template>
+      </b-navbar>
 
-    <div class="section">
-      <router-view ref='mainview' v-if='!loading'></router-view>
+      <div class="section">
+        <router-view ref='mainview' v-if='!loading'></router-view>
+      </div>
     </div>
-  </div>
+
+    <footer class="footer">
+      <div class="content">
+        <p>
+          <a href='https://github.com/Botffy/BubiStats' class="has-text-black" target="_blank">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fab fa-github"></i>
+              </span>
+              <span>GitHub</span>
+            </span>
+          </a>
+        </p>
+        <p>
+          <a href='mailto:scipiades.armin@gmail.com' class="has-text-black" target="_blank">
+            <span class="icon-text">
+              <span class="icon">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span>Kapcsolat</span>
+            </span>
+          </a>
+        </p>
+      </div>
+    </footer>
 </body>
 
 </html>
