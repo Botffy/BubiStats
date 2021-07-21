@@ -59,6 +59,10 @@
           :mobile-cards="false"
           default-sort-direction="desc"
           default-sort="len"
+          :paginated="streaks.length > 10"
+          :per-page="10"
+          :pagination-rounded='true'
+          pagination-size="is-small"
         >
           <b-table-column label="Mikor" sortable :custom-sort="sortBy((streak) => streak.interval.start.toMillis(), defaultStreakSorting)" v-slot="props">
             {{ props.row.interval.start.toFormat('yyyy-MM-dd') }} - {{ props.row.interval.end.toFormat('yyyy-MM-dd') }}
@@ -81,9 +85,10 @@
           :hoverable="true"
           :striped="true"
           :mobile-cards="false"
-          :paginated="true"
+          :paginated="ridesByDay.length > 10"
           :per-page="10"
           :pagination-rounded='true'
+          pagination-size="is-small"
           default-sort="rides"
           default-sort-direction="desc"
         >

@@ -9,27 +9,33 @@
       </div>
     </div>
 
-    <b-table
-      :data="ridesByStations"
-      :hoverable="true"
-      :striped="true"
-      default-sort-direction="desc"
-      default-sort="num"
-    >
-      <b-table-column field="station" label="Állomás" sortable :custom-sort="sortByString((a) => a.station, defaultSorting)" v-slot="props">
-        {{ props.row.station }}
-      </b-table-column>
-      <b-table-column field='num' label="Érintve" sortable :custom-sort="sortBy((a) => a.wasDestination + a.wasOrigin, defaultSorting)" numeric v-slot="props">
-        {{ props.row.wasOrigin + props.row.wasDestination  }}
-      </b-table-column>
-      <b-table-column field='wasOrigin' label="Indulás" sortable :custom-sort="sortBy((a) => a.wasOrigin, defaultSorting)" numeric v-slot="props">
-        {{ props.row.wasOrigin }}
-      </b-table-column>
-      <b-table-column field='wasDestination' label="Célállomás" sortable :custom-sort="sortBy((a) => a.wasDestination, defaultSorting)" numeric v-slot="props">
-        {{ props.row.wasDestination }}
-      </b-table-column>
+    <div class="box">
+      <b-table
+        :data="ridesByStations"
+        :hoverable="true"
+        :striped="true"
+        default-sort-direction="desc"
+        default-sort="num"
+        :paginated="ridesByStations.length > 25"
+        :per-page="25"
+        :pagination-rounded='true'
+        pagination-size="is-small"
+      >
+        <b-table-column field="station" label="Állomás" sortable :custom-sort="sortByString((a) => a.station, defaultSorting)" v-slot="props">
+          {{ props.row.station }}
+        </b-table-column>
+        <b-table-column field='num' label="Érintve" sortable :custom-sort="sortBy((a) => a.wasDestination + a.wasOrigin, defaultSorting)" numeric v-slot="props">
+          {{ props.row.wasOrigin + props.row.wasDestination  }}
+        </b-table-column>
+        <b-table-column field='wasOrigin' label="Indulás" sortable :custom-sort="sortBy((a) => a.wasOrigin, defaultSorting)" numeric v-slot="props">
+          {{ props.row.wasOrigin }}
+        </b-table-column>
+        <b-table-column field='wasDestination' label="Célállomás" sortable :custom-sort="sortBy((a) => a.wasDestination, defaultSorting)" numeric v-slot="props">
+          {{ props.row.wasDestination }}
+        </b-table-column>
 
-    </b-table>
+      </b-table>
+    </div>
   </section>
 </template>
 

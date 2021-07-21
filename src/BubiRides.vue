@@ -6,6 +6,10 @@
       :striped="true"
       default-sort-direction="desc"
       default-sort="when"
+      :paginated="rides.length > 25"
+      :per-page="25"
+      :pagination-rounded='true'
+      pagination-size="is-small"
     >
       <b-table-column field="when" label="Mikor" sortable :custom-sort="sortBy((ride) => ride.when.toMillis(), defaultSorting)" v-slot="props">
         {{ formatTime(props.row.when) }}
