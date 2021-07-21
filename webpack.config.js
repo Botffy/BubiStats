@@ -1,7 +1,10 @@
+const webpack = require('webpack')
 const path = require("path");
 const html = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
 
+const gitRevisionPlugin = new GitRevisionPlugin()
 
 module.exports = {
   mode: 'development',
@@ -41,6 +44,12 @@ module.exports = {
     }
   },
   plugins: [
+    gitRevisionPlugin,
+    new webpack.DefinePlugin({
+      BUBISTAT_COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
+      BUBISTAT_LASTCOMMITDATETIME: JSON.stringify(gitRevisionPlugin.lastcommitdatetime()),
+      BUBISTAT_VERSION: JSON.stringify(gitRevisionPlugin.version())
+    }),
     new VueLoaderPlugin(),
     new html({
       template: "src/index.html",

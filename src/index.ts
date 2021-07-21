@@ -22,6 +22,7 @@ import StationsPage from "./Stations.vue"
 import TimePage from "./TimePage.vue"
 import NotFoundPage from "./NotFound.vue"
 import { subscribe } from "./ride-service";
+import { DateTime } from "luxon";
 
 HighchartsSankey(Highcharts)
 HighchartsDependencyWheel(Highcharts)
@@ -66,7 +67,12 @@ new Vue({
       loadingScreen: null,
       loading: null,
       user: null,
-      rides: null
+      rides: null,
+      version: {
+        version: BUBISTAT_VERSION,
+        hash: BUBISTAT_COMMITHASH,
+        date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME)
+      }
     }
   },
   methods: {
