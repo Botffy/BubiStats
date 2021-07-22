@@ -1,5 +1,7 @@
 <template>
   <section>
+    <quote>...amikor a lovak oldalnézetben felsorakoznak...</quote>
+
     <div class='columns'>
       <div class='column'>
         <highcharts :options="bikeFrequencyChart" />
@@ -46,6 +48,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Quote from "./components/Quote.vue"
 import SortingMixin from './SortingMixin'
 import HasRides from './HasRides'
 import BubiRides from "./BubiRides.vue";
@@ -97,7 +100,8 @@ const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => 
 
 export default Vue.extend({
   components: {
-    'ride-list': BubiRides
+    'ride-list': BubiRides,
+    'quote': Quote
   },
   computed: {
     ridesByBikes() {

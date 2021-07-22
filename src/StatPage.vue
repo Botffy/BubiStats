@@ -1,25 +1,16 @@
 <template>
   <div v-if="this.$root.isLoggedIn">
     <div class="container">
-      <div class="columns">
-        <div class='column is-3'>
-          <div class='box'>
-            <ride-form></ride-form>
-          </div>
-        </div>
-        <div class="column">
-          <div v-if="rides === null">
-            <b-icon
-              pack="fas"
-              icon="spinner"
-              size="is-large"
-              custom-class="fa-spin"
-            />
-          </div>
-          <div v-else-if='rides.length === 0'>Még nem vettél fel utakat.</div>
-          <router-view :rides='this.rides' v-else></router-view>
-        </div>
+      <div v-if="rides === null">
+        <b-icon
+          pack="fas"
+          icon="spinner"
+          size="is-large"
+          custom-class="fa-spin"
+        />
       </div>
+      <div v-else-if='rides.length === 0'>Még nem vettél fel utakat.</div>
+      <router-view :rides='this.rides' v-else></router-view>
     </div>
   </div>
   <info-page v-else />

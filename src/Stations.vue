@@ -1,5 +1,7 @@
 <template>
   <section>
+    <quote>De hol a Távol, hol a Közel, s hol vannak köztük Állomások?</quote>
+
     <div class='columns'>
       <div class='column'>
         <highcharts :options="stationFrequencyChart" />
@@ -8,7 +10,6 @@
         <highcharts :options="stationDependencyGraph" />
       </div>
     </div>
-
     <div class="box">
       <b-table
         :data="ridesByStations"
@@ -48,6 +49,7 @@
 import Vue from 'vue'
 import HasRides from './HasRides'
 import SortingMixin from './SortingMixin'
+import Quote from "./components/Quote.vue"
 import BubiRides from "./BubiRides.vue";
 import { Ride } from "./model"
 import { getStationByCode, Station } from './station-service'
@@ -113,7 +115,8 @@ const stationDependency = (rides: Ride[]): any[] => {
 
 export default Vue.extend({
   components: {
-    'ride-list': BubiRides
+    'ride-list': BubiRides,
+    'quote': Quote
   },
   computed: {
     ridesByStations() {

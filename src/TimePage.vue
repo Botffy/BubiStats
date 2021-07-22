@@ -1,5 +1,7 @@
 <template>
   <section>
+    <quote>Idomvas és idus között</quote>
+
     <div class='columns'>
       <div class='column'>
         <highcharts :options="weekdayChart" />
@@ -123,6 +125,7 @@
 import Vue from 'vue'
 import { DateTime, Interval, Duration } from 'luxon'
 import { Ride } from "./model"
+import Quote from "./components/Quote.vue"
 import SortingMixin from "./SortingMixin"
 import HasRides from "./HasRides"
 import BubiRides from "./BubiRides.vue";
@@ -162,6 +165,7 @@ const dayStats = (rides: Ride[]) => {
 
 export default Vue.extend({
   components: {
+    'quote': Quote,
     'ride': RideComponent,
     'time-ago': TimeAgo,
     'ride-list': BubiRides
@@ -312,7 +316,6 @@ export default Vue.extend({
         case 7: return 'vasárnap'
       }
     }
-  },
-
+  }
 })
 </script>

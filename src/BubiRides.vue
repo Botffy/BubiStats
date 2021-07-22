@@ -1,73 +1,82 @@
 <template>
-  <section>
-    <b-table
-      :data="rides"
-      :hoverable="true"
-      :striped="true"
-      default-sort-direction="desc"
-      default-sort="when"
-      :paginated="rides.length > (compact ? 10 : 25)"
-      :per-page="compact ? 10 : 25"
-      :bordered='compact'
-      :narrowed='compact'
-      :pagination-rounded='true'
-      pagination-size="is-small"
-    >
-      <b-table-column field="when" label="Mikor" sortable :custom-sort="sortBy((ride) => ride.when.toMillis(), defaultSorting)" v-slot="props">
-        {{ formatTime(props.row.when) }}
-      </b-table-column>
-
-      <b-table-column field="bike" label="Bicaj" :custom-sort="sortBy((ride) => ride.bike, defaultSorting)" sortable v-slot="props">
-        {{ props.row.bike }}
-      </b-table-column>
-
-      <b-table-column field="from" label="Honnan" :custom-sort="sortByString((ride) => stationName(ride.from), defaultSorting)" sortable v-slot="props">
-        {{ stationName(props.row.from) }}
-      </b-table-column>
-
-      <b-table-column field="to" label="Hova" :custom-sort="sortByString((ride) => stationName(ride.to), defaultSorting)" sortable v-slot="props">
-        {{ stationName(props.row.to) }}
-      </b-table-column>
-
-      <b-table-column field="duration" label="Idő" :custom-sort="sortBy((ride) => ride.duration.shiftTo('milliseconds').toMillis(), defaultSorting)" sortable v-slot="props">
-        {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
-      </b-table-column>
-
-      <b-table-column v-slot="props" v-if="!compact">
-        <div class="buttons">
-        <b-tooltip type="is-info" label="Módosítás" :delay='500'>
-          <b-button
-            size="is-small"
-            type="is-info"
-            outlined
-            v-on:click="editRide(props.row)"
-            icon-left="fas fa-edit"
-          />
-        </b-tooltip>
-        <b-tooltip type='is-danger' label="Törlés" :delay='500'>
-          <b-button
-            size="is-small"
-            type="is-danger"
-            outlined
-            v-on:click="deleteRide(props.row)"
-            icon-left="fas fa-trash"
-          />
-        </b-tooltip>
-        </div>
-      </b-table-column>
-    </b-table>
-
-    <b-modal v-model="isEditModalActive" scroll="keep">
-      <div class="modal-card">
-        <header class='modal-card-head'>
-          <p class='modal-card-title'>Út szerkesztése</p>
-        </header>
-        <section class='modal-card-body'>
-          <ride-form :edit='true' :ride='editData' v-on:edited='doneEditing()' />
-        </section>
+  <div class="columns">
+    <div class='column is-3' v-if="!compact">
+      <div class='box'>
+        <ride-form></ride-form>
       </div>
-    </b-modal>
-  </section>
+    </div>
+    <div class="column">
+      <section>
+        <b-table
+          :data="rides"
+          :hoverable="true"
+          :striped="true"
+          default-sort-direction="desc"
+          default-sort="when"
+          :paginated="rides.length > (compact ? 10 : 25)"
+          :per-page="compact ? 10 : 25"
+          :bordered='compact'
+          :narrowed='compact'
+          :pagination-rounded='true'
+          pagination-size="is-small"
+        >
+          <b-table-column field="when" label="Mikor" sortable :custom-sort="sortBy((ride) => ride.when.toMillis(), defaultSorting)" v-slot="props">
+            {{ formatTime(props.row.when) }}
+          </b-table-column>
+
+          <b-table-column field="bike" label="Bicaj" :custom-sort="sortBy((ride) => ride.bike, defaultSorting)" sortable v-slot="props">
+            {{ props.row.bike }}
+          </b-table-column>
+
+          <b-table-column field="from" label="Honnan" :custom-sort="sortByString((ride) => stationName(ride.from), defaultSorting)" sortable v-slot="props">
+            {{ stationName(props.row.from) }}
+          </b-table-column>
+
+          <b-table-column field="to" label="Hova" :custom-sort="sortByString((ride) => stationName(ride.to), defaultSorting)" sortable v-slot="props">
+            {{ stationName(props.row.to) }}
+          </b-table-column>
+
+          <b-table-column field="duration" label="Idő" :custom-sort="sortBy((ride) => ride.duration.shiftTo('milliseconds').toMillis(), defaultSorting)" sortable v-slot="props">
+            {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
+          </b-table-column>
+
+          <b-table-column v-slot="props" v-if="!compact">
+            <div class="buttons">
+            <b-tooltip type="is-info" label="Módosítás" :delay='500'>
+              <b-button
+                size="is-small"
+                type="is-info"
+                outlined
+                v-on:click="editRide(props.row)"
+                icon-left="fas fa-edit"
+              />
+            </b-tooltip>
+            <b-tooltip type='is-danger' label="Törlés" :delay='500'>
+              <b-button
+                size="is-small"
+                type="is-danger"
+                outlined
+                v-on:click="deleteRide(props.row)"
+                icon-left="fas fa-trash"
+              />
+            </b-tooltip>
+            </div>
+          </b-table-column>
+        </b-table>
+
+        <b-modal v-model="isEditModalActive" scroll="keep">
+          <div class="modal-card">
+            <header class='modal-card-head'>
+              <p class='modal-card-title'>Út szerkesztése</p>
+            </header>
+            <section class='modal-card-body'>
+              <ride-form :edit='true' :ride='editData' v-on:edited='doneEditing()' />
+            </section>
+          </div>
+        </b-modal>
+      </section>
+    </div>
+  </div>
 </template>
 
 <style>
