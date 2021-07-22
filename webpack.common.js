@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const path = require("path");
 const html = require('html-webpack-plugin')
+const favicons = require('favicons-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
 
@@ -44,6 +45,11 @@ module.exports = {
   },
   plugins: [
     gitRevisionPlugin,
+    new favicons({
+      logo: 'assets/bubigraf.png',
+      appName: 'bubistats',
+      appDescription: 'BubiStats'
+    }),
     new webpack.DefinePlugin({
       BUBISTAT_COMMITHASH: JSON.stringify(gitRevisionPlugin.commithash()),
       BUBISTAT_LASTCOMMITDATETIME: JSON.stringify(gitRevisionPlugin.lastcommitdatetime()),
