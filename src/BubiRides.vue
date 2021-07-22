@@ -6,8 +6,10 @@
       :striped="true"
       default-sort-direction="desc"
       default-sort="when"
-      :paginated="rides.length > 25"
-      :per-page="25"
+      :paginated="rides.length > (compact ? 10 : 25)"
+      :per-page="compact ? 10 : 25"
+      :bordered='compact'
+      :narrowed='compact'
       :pagination-rounded='true'
       pagination-size="is-small"
     >
@@ -31,7 +33,7 @@
         {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
       </b-table-column>
 
-      <b-table-column v-slot="props">
+      <b-table-column v-slot="props" v-if="!compact">
         <div class="buttons">
         <b-tooltip type="is-info" label="Módosítás" :delay='500'>
           <b-button
@@ -103,9 +105,14 @@ const formatTime = (time: DateTime): string => {
 
 export default Vue.extend({
   components: {
-    'ride-form': RideForm
+    'ride-form': RideForm,
   },
   props: {
+    compact: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     rides: {
       type: Array as () => Array<Ride>,
       required: true

@@ -20,9 +20,11 @@
         :per-page="25"
         :pagination-rounded='true'
         pagination-size="is-small"
+        detailed
+        detail-key="station"
       >
-        <b-table-column field="station" label="Állomás" sortable :custom-sort="sortByString((a) => a.station, defaultSorting)" v-slot="props">
-          {{ props.row.station }}
+        <b-table-column field="station" label="Állomás" sortable :custom-sort="sortByString((a) => a.station.name, defaultSorting)" v-slot="props">
+          {{ props.row.station.name }}
         </b-table-column>
         <b-table-column field='num' label="Érintve" sortable :custom-sort="sortBy((a) => a.wasDestination + a.wasOrigin, defaultSorting)" numeric v-slot="props">
           {{ props.row.wasOrigin + props.row.wasDestination  }}
@@ -34,6 +36,9 @@
           {{ props.row.wasDestination }}
         </b-table-column>
 
+        <template #detail='props'>
+          <ride-list :rides='props.row.rideIndices.map( n => ride(n))' :compact="true" />
+        </template>
       </b-table>
     </div>
   </section>
@@ -41,12 +46,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import HasRides from './HasRides'
 import SortingMixin from './SortingMixin'
+import BubiRides from "./BubiRides.vue";
 import { Ride } from "./model"
 import { getStationByCode, Station } from './station-service'
 
 type StationStat = {
-  station: string,
+  station: Station,
   wasOrigin: number,
   wasDestination: number,
   rideIndices: number[]
@@ -58,7 +65,7 @@ const groupByStation = (rides: Ride[]): StationStat[] => {
       let val = accumulator.get(station)
       if (!val) {
         val = {
-          station: getStationByCode(station).name,
+          station: getStationByCode(station),
           wasOrigin: 0,
           wasDestination: 0,
           rideIndices: []
@@ -105,11 +112,8 @@ const stationDependency = (rides: Ride[]): any[] => {
 }
 
 export default Vue.extend({
-  props: {
-    rides: {
-      type: Array as () => Array<Ride>,
-      required: true
-    }
+  components: {
+    'ride-list': BubiRides
   },
   computed: {
     ridesByStations() {
@@ -159,13 +163,13 @@ export default Vue.extend({
       }
     }
   },
-  mixins: [ SortingMixin ],
+  mixins: [ HasRides, SortingMixin ],
   methods: {
     defaultSorting(a: StationStat, b: StationStat) {
       return (a.wasOrigin + a.wasDestination) - (b.wasOrigin + b.wasDestination)
         || b.wasOrigin - a.wasOrigin
         || b.wasDestination - a.wasDestination
-        || a.station.localeCompare(b.station)
+        || a.station.name.localeCompare(b.station.name)
     }
   }
 })

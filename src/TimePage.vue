@@ -63,6 +63,8 @@
           :per-page="10"
           :pagination-rounded='true'
           pagination-size="is-small"
+          detailed
+          detail-key="interval"
         >
           <b-table-column label="Mikor" sortable :custom-sort="sortBy((streak) => streak.interval.start.toMillis(), defaultStreakSorting)" v-slot="props">
             {{ props.row.interval.start.toFormat('yyyy-MM-dd') }} - {{ props.row.interval.end.toFormat('yyyy-MM-dd') }}
@@ -73,6 +75,10 @@
           <b-table-column label="Utak" sortable :custom-sort="sortBy((streak) => streak.rideIndices.length, defaultStreakSorting)" v-slot="props" numeric>
             {{ props.row.rideIndices.length }}
           </b-table-column>
+
+          <template #detail='props'>
+            <ride-list :rides='props.row.rideIndices.map(n => ride(n))' :compact="true" />
+          </template>
         </b-table>
       </div>
     </section>
@@ -91,6 +97,8 @@
           pagination-size="is-small"
           default-sort="rides"
           default-sort-direction="desc"
+          detailed
+          detail-key="day"
         >
           <b-table-column label="Nap" field='day' sortable v-slot="props">
             {{ props.row.day.toFormat('yyyy-MM-dd') }} ({{ dayName(props.row.day.weekday) }})
@@ -101,6 +109,10 @@
           <b-table-column label="Perc" v-slot="props" sortable :custom-sort="sortBy((stat) => stat.duration.as('minutes'), defaultDaySorting)" numeric>
             {{ Math.round(props.row.duration.as('minutes')) }}
           </b-table-column>
+
+          <template #detail='props'>
+            <ride-list :rides='props.row.rideIndices.map(n => ride(n))' :compact="true" />
+          </template>
         </b-table>
       </div>
     </section>
@@ -112,9 +124,10 @@ import Vue from 'vue'
 import { DateTime, Interval, Duration } from 'luxon'
 import { Ride } from "./model"
 import SortingMixin from "./SortingMixin"
+import HasRides from "./HasRides"
+import BubiRides from "./BubiRides.vue";
 import RideComponent from "./Ride.vue"
 import TimeAgo from "./TimeAgo.vue"
-import { numberFormat } from 'highcharts'
 
 type DayStat = {
   day: DateTime
@@ -148,17 +161,12 @@ const dayStats = (rides: Ride[]) => {
 }
 
 export default Vue.extend({
-  props: {
-    rides: {
-      type: Array as () => Array<Ride>,
-      required: true
-    }
-  },
   components: {
     'ride': RideComponent,
-    'time-ago': TimeAgo
+    'time-ago': TimeAgo,
+    'ride-list': BubiRides
   },
-  mixins: [ SortingMixin ],
+  mixins: [ HasRides, SortingMixin ],
   computed: {
     ridesByDay(): DayStat[] {
       return dayStats(this.rides)

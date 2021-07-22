@@ -20,6 +20,8 @@
         :per-page="25"
         :pagination-rounded='true'
         pagination-size="is-small"
+        detailed
+        detail-key="bike"
       >
         <b-table-column field="bike" label="Bicaj" sortable :custom-sort="sortBy((stat) => stat.bike, defaultSorting)" v-slot="props">
           {{ props.row.bike }}
@@ -33,6 +35,10 @@
         <b-table-column label="Átlag idő" sortable :custom-sort="sortBy((stat) => averageRideMinutes(stat), defaultSorting)" v-slot="props" numeric>
           {{ averageRideMinutes(props.row) }} perc
         </b-table-column>
+
+        <template #detail='props'>
+          <ride-list :rides='props.row.rideIndices.map(n => ride(n))' :compact='true' />
+        </template>
       </b-table>
     </div>
   </section>
@@ -41,6 +47,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import SortingMixin from './SortingMixin'
+import HasRides from './HasRides'
+import BubiRides from "./BubiRides.vue";
 import { Ride } from "./model"
 import { Duration } from "luxon"
 
@@ -88,11 +96,8 @@ const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => 
 }
 
 export default Vue.extend({
-  props: {
-    rides: {
-      type: Array as () => Array<Ride>,
-      required: true
-    }
+  components: {
+    'ride-list': BubiRides
   },
   computed: {
     ridesByBikes() {
@@ -164,7 +169,7 @@ export default Vue.extend({
       }
     }
   },
-  mixins: [ SortingMixin ],
+  mixins: [ HasRides, SortingMixin ],
   methods: {
     rideMinutes(stat: BikeStat): number {
       return Math.round(stat.totalTime.shiftTo('minutes').minutes)
