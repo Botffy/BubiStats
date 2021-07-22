@@ -8,13 +8,12 @@
         placeholder='Mikor'
         v-model='model.when'
         icon='calendar'
-        :timepicker='timepickerProps'
-        :datepicker='datepickerProps'
+        locale="hu-HU"
+        :timepicker="{ hourFormat: '24', enableSeconds: true }"
+        :datepicker="{ nearbySelectableMonthDays: true }"
+        :datetime-parser="datetimeParser"
         :datetime-formatter='datetimeFormatter'
-        :min-dateTime='minDatetime'
-        :max-datetime='new Date()'
-        @blur='validateWhen'
-        editable
+        @input='validateWhen'
       />
     </b-field>
     <b-field>
@@ -169,14 +168,8 @@ export default Vue.extend({
         fromStation: null,
         toStation: null
       },
-      timepickerProps: {
-        hourFormat: '24',
-        enableSeconds: true
-      },
-      datepickerProps: {
-        nearbySelectableMonthDays: true
-      },
       datetimeFormatter: (date: Date) => DateTime.fromJSDate(date).toFormat('yyyy-MM-dd HH:mm:ss'),
+      datetimeParser: (input: string): Date => DateTime.fromFormat(input, 'yyyy-MM-dd HH:mm:ss').toJSDate(),
       minDatetime: DateTime.fromISO("2021-05-24T00:00:00.000+02:00").toJSDate()
     }
   },

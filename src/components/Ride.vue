@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Ride } from "./model"
-import { getStationByCode, Station } from './station-service'
+import { Ride } from "../model"
+import { getStationByCode, Station } from '../station-service'
 
 export default Vue.extend({
   props: {

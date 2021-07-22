@@ -22,7 +22,10 @@ import StationsPage from "./Stations.vue"
 import TimePage from "./TimePage.vue"
 import NotFoundPage from "./NotFound.vue"
 import { subscribe } from "./ride-service";
-import { DateTime } from "luxon";
+import { DateTime, Settings as LuxonSettings } from "luxon";
+
+LuxonSettings.defaultLocale = 'hu'
+LuxonSettings.defaultZoneName = 'Europe/Budapest'
 
 HighchartsSankey(Highcharts)
 HighchartsDependencyWheel(Highcharts)
@@ -76,7 +79,7 @@ new Vue({
       version: {
         version: BUBISTAT_VERSION,
         hash: BUBISTAT_COMMITHASH,
-        date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME)
+        date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME, { zone: "Europe/Budapest" })
       }
     }
   },

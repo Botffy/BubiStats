@@ -129,8 +129,8 @@ import Quote from "./components/Quote.vue"
 import SortingMixin from "./SortingMixin"
 import HasRides from "./HasRides"
 import BubiRides from "./BubiRides.vue";
-import RideComponent from "./Ride.vue"
-import TimeAgo from "./TimeAgo.vue"
+import RideComponent from "./components/Ride.vue"
+import TimeAgo from "./components/TimeAgo.vue"
 
 type DayStat = {
   day: DateTime
