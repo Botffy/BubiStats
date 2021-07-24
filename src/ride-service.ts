@@ -4,6 +4,7 @@ import { getFirestore, doc, onSnapshot, runTransaction } from "firebase/firestor
 import { getFunctions, httpsCallable } from "firebase/functions";
 import { Duration, DateTime } from "luxon"
 import { Ride } from './model'
+import { calculateCelebrations, Celebration } from './celebration-service'
 import { FirestoreRide } from '../functions/src/dto'
 import { v4 as uuidv4 } from 'uuid';
 
@@ -91,14 +92,12 @@ const map = (ride: Ride): FirestoreRide => {
   }
 }
 
-export const addRide = (ride: Ride): Promise<void> => {
+export const addRide = (ride: Ride): Promise<Celebration[]> => {
   const functions = getFunctions(getFirebaseApp(), "europe-central2")
   const addRide = httpsCallable(functions, 'addRide');
 
   return addRide(map(ride))
-    .then((result) => {
-      console.log(result)
-    })
+    .then(() => calculateCelebrations(ride, rides.filter(r => r.when != ride.when)))
 }
 
 export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {

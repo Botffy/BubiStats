@@ -96,6 +96,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DateTime, Duration } from 'luxon'
+import { Celebration } from './celebration-service'
 import { addRide, editRide } from './ride-service'
 import { ValidationError } from '../functions/src/dto'
 import { getStationByCode, Station } from './station-service'
@@ -185,20 +186,26 @@ export default Vue.extend({
 
       const ride = toRide(this.model)
       addRide(ride)
+        .then((celebrations: Celebration[]) => {
+          celebrations.forEach(celebration => {
+            this.$buefy.notification.open({
+              message: celebration.message,
+              closable: true,
+              position: 'is-bottom-right',
+              hasIcon: true,
+              iconPack: 'fas',
+              icon: celebration.icon,
+              type: 'is-success',
+              duration: 2400,
+            })
+          })
+        })
         .then(() => {
           this.model = defaultRide()
           this.errors = {
             fromStation: null,
             toStation: null
           }
-
-          this.$buefy.toast.open({
-            duration: 2000,
-            message: 'Az utat felvettük',
-            position: 'is-bottom',
-            type: 'is-success'
-          })
-
           this.$emit('added', ride)
           loading.close()
         })
