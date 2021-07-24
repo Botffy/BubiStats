@@ -58,8 +58,8 @@
           A lényeg az, hogy az adataidat titkosítva tároljuk, harmadik félnek nem adjuk át.
         </p>
         <p>
-          A BubiStatot <a href="mailto:scipiades.armin@gmail.com">Scipiades Ármin</a> készítette, mert akart egy ilyent.
-          Ha kérdésed vagy kívánságod van, nyugodtan írj neki, örülni fog.
+          A BubiStatot <a href="https://github.com/Botffy" target="_blank">Scipiades Ármin</a> készítette, mert akart egy ilyent.
+          Ha kérdésed vagy kívánságod van, nyugodtan <a href='mailto:armin@bubistats.hu'>írj neki az armin@bubistats.hu címre</a>, örülni fog.
         </p>
       </div>
     </div>
