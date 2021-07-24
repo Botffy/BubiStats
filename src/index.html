@@ -15,6 +15,8 @@
     .content-wrapper {
       flex: 1;
     }
+
+    [v-cloak] { display: none }
   </style>
 </head>
 
@@ -70,7 +72,7 @@
       </div>
     </div>
 
-    <footer class="footer" v-if='!loading'>
+    <footer class="footer" v-if='!loading' v-cloak>
       <div class="content">
         <p>
           <a href='https://github.com/Botffy/BubiStats' class="has-text-black" target="_blank">
