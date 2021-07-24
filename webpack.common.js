@@ -19,6 +19,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(png)$/i,
+        type: 'asset/resource'
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
       },
@@ -46,7 +50,7 @@ module.exports = {
   plugins: [
     gitRevisionPlugin,
     new favicons({
-      logo: 'assets/bubigraf.png',
+      logo: 'src/assets/bubigraf.png',
       appName: 'bubistats',
       appDescription: 'BubiStats'
     }),

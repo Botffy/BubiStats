@@ -22,6 +22,30 @@
       </div>
     </div>
 
+    <div class="hero-box">
+      <b-carousel-list
+        :data="screenshots"
+        :items-to-show="4"
+        :has-drag="false"
+        icon-size='is-large'
+      >
+        <template slot="item" slot-scope="props">
+          <div class="block">
+            <div class="box">
+              <img :src="props.list.image" @click="enlargeImage(props.list.image)"/>
+            </div>
+          </div>
+        </template>
+      </b-carousel-list>
+      <b-modal v-model="isImageModalActive">
+        <div class='box'>
+          <p class="image">
+            <img :src="selectedImage">
+          </p>
+        </div>
+      </b-modal>
+    </div>
+
     <div class="hero-body">
       <p class="title">
         Hogy működik?
@@ -68,7 +92,42 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import ScreenRides from './assets/screenshots/01_rides.png'
+import ScreenBikes from './assets/screenshots/02_bikes.png'
+import ScreenStations from './assets/screenshots/03_stations.png'
+import ScreenTime1 from './assets/screenshots/04_time_1.png'
+import ScreenTime2 from './assets/screenshots/05_time_2.png'
+
 
 export default Vue.extend({
+  data() {
+    return {
+      'isImageModalActive': false,
+      'selectedImage': null,
+      'screenshots': [
+        {
+          image: ScreenRides
+        },
+        {
+          image: ScreenBikes
+        },
+        {
+          image: ScreenStations
+        },
+        {
+          image: ScreenTime1
+        },
+        {
+          image: ScreenTime2
+        }
+      ]
+    }
+  },
+  methods: {
+    enlargeImage(image: string) {
+      this.selectedImage = image
+      this.isImageModalActive = true
+    }
+  }
 })
 </script>
