@@ -51,6 +51,7 @@
                 icon-left="fas fa-edit"
               />
             </b-tooltip>
+            &nbsp;
             <b-tooltip type='is-danger' label="Törlés" :delay='500'>
               <b-button
                 size="is-small"
