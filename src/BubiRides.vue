@@ -3,6 +3,8 @@
     <div class='column is-3' v-if="!compact">
       <div class='box'>
         <ride-form></ride-form>
+        <hr />
+        <screenshot-upload></screenshot-upload>
       </div>
     </div>
     <div class="column">
@@ -104,6 +106,7 @@
 import Vue from 'vue'
 import SortingMixin from './SortingMixin'
 import RideForm from "./RideForm.vue";
+import AddByScreenshot from "./RideFormByScreenshot.vue";
 import { DateTime } from 'luxon';
 import { Ride } from "./model"
 import { deleteRide } from "./ride-service"
@@ -116,6 +119,7 @@ const formatTime = (time: DateTime): string => {
 export default Vue.extend({
   components: {
     'ride-form': RideForm,
+    'screenshot-upload': AddByScreenshot
   },
   props: {
     compact: {

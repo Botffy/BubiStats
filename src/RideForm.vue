@@ -96,9 +96,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DateTime, Duration } from 'luxon'
-import { Celebration } from './celebration-service'
 import { addRide, editRide } from './ride-service'
-import { ValidationError } from '../functions/src/dto'
+import OnAddRideMixin from './OnAddRideMixin'
 import { getStationByCode, Station } from './station-service'
 import StationSelect from "./StationSelect.vue"
 import { Ride } from './model'
@@ -148,6 +147,7 @@ export default Vue.extend({
   components: {
     'station-select': StationSelect
   },
+  mixins: [ OnAddRideMixin ],
   props: {
     edit: {
       type: Boolean,
@@ -186,20 +186,7 @@ export default Vue.extend({
 
       const ride = toRide(this.model)
       addRide(ride)
-        .then((celebrations: Celebration[]) => {
-          celebrations.forEach(celebration => {
-            this.$buefy.notification.open({
-              message: celebration.message,
-              closable: true,
-              position: 'is-bottom-right',
-              hasIcon: true,
-              iconPack: 'fas',
-              icon: celebration.icon,
-              type: 'is-success',
-              duration: 2400,
-            })
-          })
-        })
+        .then(this.celebrate)
         .then(() => {
           this.model = defaultRide()
           this.errors = {
@@ -210,37 +197,7 @@ export default Vue.extend({
           loading.close()
         })
         .catch((error) => {
-          let message
-          if (error.details) {
-            console.error(error.details)
-            let validationErrors = error.details as ValidationError[]
-
-            if (validationErrors.length == 1) {
-              message = validationErrors[0].message;
-            }
-            else if (validationErrors.length > 1) {
-              message = 'Nem sikerült felvenni az utat: <ul>'
-                + validationErrors.map((validationError) => '<li>' + validationError.message + '</li>').join('')
-                + '</ul>'
-            } else {
-              message = 'Nem sikerült felvenni az utat. És valami nem stimmel.'
-            }
-          } else {
-            console.error(error)
-            message = 'Nem sikerült felvenni az utat. Ez nem a te hibád, én voltam, bocs. Próbáld meg később.'
-          }
-
-          this.$buefy.dialog.alert({
-            title: 'Hiba',
-            message: message,
-            type: 'is-danger',
-            hasIcon: true,
-            icon: 'times-circle',
-            iconPack: 'fas',
-            ariaRole: 'alertdialog',
-            ariaModal: true
-          })
-
+          this.handleError(error)
           loading.close()
         })
     },

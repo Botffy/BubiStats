@@ -52,7 +52,9 @@
       </p>
       <div class="content">
         <p>
-          A BuBi appból nem lehet automatikusan kinyerni a felhasználói előzményeket, ezért neked kell az útjaid adatait kézzel bevinni - de nyugi, ez egész fájdalommentes.
+          A BuBi appból nem lehet automatikusan kinyerni a felhasználói előzményeket, ezért neked kell az útjaid adatait bevinni.
+          Az adatokat megadhatod egy űrlapon, ami persze kicsit kényelmetlen, ezért van egy másik lehetőség is: csinálj a Bubi appban a bérlés adatairól képernyőmentést, és töltsd fel, mi szövegfelismeréssel automatikusan kinyerjük a megfelelő adatokat.
+          Menő, ugye?
         </p>
       </div>
     </div>

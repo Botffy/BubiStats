@@ -12,7 +12,7 @@ export type EditRide = {
 }
 
 export enum RideField {
-  when = 'when', sec = 'duration', from = 'from', to = 'to', bike = 'bike'
+  when = 'when', sec = 'duration', from = 'from', to = 'to', bike = 'bike', image = 'image'
 }
 
 export type ValidationError = {

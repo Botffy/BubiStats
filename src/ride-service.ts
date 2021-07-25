@@ -2,6 +2,7 @@ import { getFirebaseApp, getCurrentUserUid, onUserChange } from "./firebase";
 import { Unsubscribe } from "@firebase/util";
 import { getFirestore, doc, onSnapshot, runTransaction } from "firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Duration, DateTime } from "luxon"
 import { Ride } from './model'
 import { calculateCelebrations, Celebration } from './celebration-service'
@@ -98,6 +99,36 @@ export const addRide = (ride: Ride): Promise<Celebration[]> => {
 
   return addRide(map(ride))
     .then(() => calculateCelebrations(ride, rides.filter(r => r.when != ride.when)))
+}
+
+export const addByScreenshot = (file: File, onStateChange?: (stateMessage: string) => void): Promise<Celebration[]> => {
+  const id = uuidv4()
+  const storageRef = ref(getStorage(), '/user/' + getCurrentUserUid() + '/' + id);
+  const uploadTask = uploadBytesResumable(storageRef, file);
+  return new Promise((resolve, reject) => {
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = Math.ceil((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+        onStateChange(`Feltöltés: ${progress}%`)
+      },
+      (error) => {
+        console.log(error)
+        reject(error)
+      },
+      () => {
+        const functions = getFunctions(getFirebaseApp(), "europe-central2")
+        const addRideByScreenshot = httpsCallable(functions, 'addRideByScreenshot');
+        onStateChange("Feldolgozás")
+        return addRideByScreenshot(id)
+          .then((data) => {
+            console.log(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      }
+    )
+  })
 }
 
 export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {

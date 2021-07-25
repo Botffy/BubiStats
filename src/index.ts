@@ -8,9 +8,10 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { getFirebaseApp, onUserChange } from "./firebase"
 import { getAnalytics } from 'firebase/analytics';
-import { getFunctions, useFunctionsEmulator } from "firebase/functions";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, getAdditionalUserInfo } from "firebase/auth";
-import { getFirestore, useFirestoreEmulator } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 import StatPage from "./StatPage.vue";
 import InfoPage from "./InfoPage.vue";
 import PrivacyPage from "./Privacy.vue";
@@ -42,8 +43,9 @@ const functions = getFunctions(firebaseApp, "europe-central2")
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Using emulators')
-  useFirestoreEmulator(db, 'localhost', 8080)
-  useFunctionsEmulator(functions, "localhost", 5001)
+  connectFirestoreEmulator(db, 'localhost', 8080)
+  connectFunctionsEmulator(functions, "localhost", 5001)
+  connectStorageEmulator(getStorage(), "localhost", 9199)
 }
 
 const auth = getAuth(firebaseApp)

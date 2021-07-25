@@ -1,6 +1,9 @@
+import vision from '@google-cloud/vision'
 import * as functions from "firebase-functions";
 import * as admin from 'firebase-admin'
 import { FirestoreRide, ValidationError, RideField, EditRide } from './dto'
+import { ride_from_ocr } from './ride-from-ocr';
+import { DateTime, Interval } from 'luxon';
 
 const validateRide = (ride: FirestoreRide): ValidationError[] => {
   if (!ride.when || !ride.sec || !ride.from || !ride.to || !ride.bike) {
@@ -43,7 +46,11 @@ const validateNoOverlap = (ride: FirestoreRide, existing: FirestoreRide[], disre
 
     const existingEnd = existing[i].when + existing[i].sec * 1000
     if (ride.when <= existingEnd && ride.when + ride.sec * 1000 >= existing[i].when) {
-      errors.push({ field: RideField.when, message: 'Erre az időpontra már vettél fel bubizást.' })
+      let iAdding = Interval.fromDateTimes(DateTime.fromMillis(ride.when, { zone: "Europe/Budapest" }), DateTime.fromMillis(ride.when + ride.sec * 1000, { zone: "Europe/Budapest" }))
+      let iExisting = Interval.fromDateTimes(DateTime.fromMillis(existing[i].when, { zone: "Europe/Budapest" }), DateTime.fromMillis(existingEnd, { zone: "Europe/Budapest" }))
+      let intersection = iAdding.intersection(iExisting)
+
+      errors.push({ field: RideField.when, message:  `Erre az időpontra (${intersection?.start.toFormat("yyyy-LL-dd HH:mm")}) már vettél fel bubizást.` })
       break
     }
   }
@@ -84,6 +91,36 @@ export const addRide = (uid: string, data: FirestoreRide): Promise<any> => {
 
     await transaction.set(userDocRef, docValue)
     return Promise.resolve()
+  })
+}
+
+export const addRideByScreenshot = async (uid: string, imageId: string): Promise<any> => {
+  const path = `gs://bubistats.appspot.com/user/${uid}/${imageId}`
+
+  const clientOptions = { apiEndpoint: 'eu-vision.googleapis.com' };
+  const client = new vision.ImageAnnotatorClient(clientOptions);
+  const [result] = await client.textDetection(path);
+
+  return new Promise((resolve, reject) => {
+    let text = result.fullTextAnnotation?.text
+    if (!text) {
+      console.log("no text")
+      throw new functions.https.HttpsError('invalid-argument', 'Invalid screenshot', [
+        { field: RideField.image, message: 'Nem sikerült szöveget kinyerni a képernyőképből.' }
+      ])
+    }
+
+    let ride = ride_from_ocr(text)
+    if (!ride) {
+      console.log("failed parsing")
+      throw new functions.https.HttpsError('invalid-argument', 'Invalid screenshot', [
+        { field: RideField.image, message: 'Nem sikerült feldolgozni a képernyőképből kinyert szöveget. Rajta voltak a "Kerékpár", "Kezdés" és "Visszaadás" rovatok?' }
+      ])
+    }
+
+    addRide(uid, ride)
+      .then(resolve)
+      .catch(reject)
   })
 }
 
