@@ -9,7 +9,21 @@
           custom-class="fa-spin"
         />
       </div>
-      <div v-else-if='rides.length === 0'>Még nem vettél fel utakat.</div>
+      <div class="columns" v-else-if='rides.length === 0'>
+        <div class='column is-3' v-if="!compact">
+          <div class='box'>
+            <ride-form></ride-form>
+            <hr />
+            <screenshot-upload></screenshot-upload>
+          </div>
+        </div>
+        <div class="column">
+          <section>
+            Még nem vettél fel utakat.
+            Írd be kézzel az adatokat, vagy tölts fel egy képernyőképet a bérlés részleteiről (a Bubi appban a "Használati előzmények" menüpont alatt keresd)
+          </section>
+        </div>
+      </div>
       <router-view :rides='this.rides' v-else></router-view>
     </div>
   </div>
@@ -19,6 +33,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import RideForm from "./RideForm.vue";
+import AddByScreenshot from "./RideFormByScreenshot.vue";
 import InfoPage from "./InfoPage.vue"
 import { subscribe, unsubscribe } from "./ride-service"
 
@@ -31,7 +46,8 @@ export default Vue.extend({
   },
   components: {
     'info-page': InfoPage,
-    'ride-form': RideForm
+    'ride-form': RideForm,
+    'screenshot-upload': AddByScreenshot
   },
   created() {
     this.subscription = subscribe((rides) => {
