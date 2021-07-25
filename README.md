@@ -7,5 +7,11 @@ PRs, suggestions and ideas are welcome.
 
 # Development
 
+## Prerequisites
+
+`npm install --global firebase-tools` will get you the `firebase` command.
+
+## Dev environment
+
 `npm run dev` starts the development environment, including the Firebase emulators.
-[You will need admin credentials](https://firebase.google.com/docs/functions/local-emulator#set_up_admin_credentials_optional)
+The "Add by screenshot" feature does not work in the dev environment.
