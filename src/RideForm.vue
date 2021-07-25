@@ -21,6 +21,7 @@
         placeholder='Bicaj'
         v-model='model.bike'
         icon='bicycle'
+        inputmode='numeric'
         pattern='86[0-1][0-9]{3}'
         maxlength="6"
         :has-counter='false'
@@ -50,6 +51,7 @@
 
     <b-field label='Perc' label-position='on-border'>
       <b-numberinput
+        inputmode='numeric'
         expanded
         min='0'
         v-model='model.minutes'
@@ -59,6 +61,7 @@
     </b-field>
     <b-field label='Másodperc' label-position='on-border'>
       <b-numberinput
+        inputmode='numeric'
         expanded
         min='0'
         max='59'
