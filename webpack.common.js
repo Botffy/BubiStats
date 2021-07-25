@@ -50,7 +50,7 @@ module.exports = {
   plugins: [
     gitRevisionPlugin,
     new favicons({
-      logo: 'src/assets/bubigraf.png',
+      logo: 'src/assets/logos/favico.png',
       appName: 'bubistats',
       appDescription: 'BubiStats'
     }),
