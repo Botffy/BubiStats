@@ -24,6 +24,7 @@ import TimePage from "./TimePage.vue"
 import NotFoundPage from "./NotFound.vue"
 import { subscribe } from "./ride-service";
 import { DateTime, Settings as LuxonSettings } from "luxon";
+import Logo from './assets/logos/transparent.png'
 
 LuxonSettings.defaultLocale = 'hu'
 LuxonSettings.defaultZoneName = 'Europe/Budapest'
@@ -75,6 +76,7 @@ new Vue({
   router,
   data() {
     return {
+      logo: Logo,
       loadingScreen: null,
       loading: null,
       user: null,
