@@ -23,7 +23,8 @@ describe('celebration', () => {
       from: '0102',
       to: '0103'
     }, generateRides(3, { when: DateTime.now().minus({'days': 2}) }))
-    expect(result).toHaveLength(0)
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('message', 'Az utat felvettük.')
   })
 
   it('celebrates second ride with the same bike', () => {

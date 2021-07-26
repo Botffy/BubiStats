@@ -212,7 +212,16 @@ const celebrations = [
 ]
 
 export const calculateCelebrations = (added: Ride, rides: Ride[]): Celebration[] => {
-  return celebrations
+  let result: Celebration[] = celebrations
     .map(fn => fn.apply(null, [added, rides]))
     .reduce((prev, curr) => prev.concat(curr))
+
+  if (!result.length) {
+    result.push({
+      icon: 'check',
+      message: 'Az utat felvettük.'
+    })
+  }
+
+  return result
 }
