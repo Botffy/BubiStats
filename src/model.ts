@@ -1,4 +1,4 @@
-import { Duration, DateTime } from "luxon"
+import { Duration, DateTime } from 'luxon'
 
 type Ride = {
   when: DateTime,

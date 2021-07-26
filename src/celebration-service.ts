@@ -4,11 +4,11 @@ import { getStationByCode }  from './station-service'
 
 const avsaz = (n: number): string => {
   if (n < 10) {
-    return n == 1 || n == 5 ? "Az" : "A"
+    return n == 1 || n == 5 ? 'Az' : 'A'
   } else if (n < 100) {
-    return Math.ceil(n / 10) == 5 ? "Az" : "A"
+    return Math.ceil(n / 10) == 5 ? 'Az' : 'A'
   }
-  return "A"
+  return 'A'
 }
 
 const avsaz_str = (s: string): string => {
@@ -37,17 +37,17 @@ const es = (n: number): string => {
     }
 
     if (c == '1' || (c == '2' && digit == 1) || c == '4' || c == '7' || c == '9') {
-      return "es"
+      return 'es'
     } else if (c == '3' || c == '8' || (c == '2' && digit == 2)) {
-      return "as"
+      return 'as'
     } else if (c == '5') {
-      return "ös"
+      return 'ös'
     } else if (c == '6') {
-      return "os"
+      return 'os'
     }
   }
 
-  return "as"
+  return 'as'
 }
 
 export type Celebration = {
@@ -169,12 +169,12 @@ const retour_detection = (added: Ride, rides: Ride[]): Celebration[] => {
     if (last.bike == added.bike) {
       return [{
         icon: 'exchange-alt',
-        message: "Retúr ugyanazzal a bicajjal."
+        message: 'Retúr ugyanazzal a bicajjal.'
       }]
     }
     return [{
       icon: 'exchange-alt',
-      message: "Egy jó retúr."
+      message: 'Egy jó retúr.'
     }]
   }
 

@@ -1,29 +1,29 @@
-import Vue from "vue";
+import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
-import HighchartsSankey from "highcharts/modules/sankey";
-import HighchartsDependencyWheel from "highcharts/modules/dependency-wheel";
+import HighchartsSankey from 'highcharts/modules/sankey';
+import HighchartsDependencyWheel from 'highcharts/modules/dependency-wheel';
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
-import { getFirebaseApp, onUserChange } from "./firebase"
+import { getFirebaseApp, onUserChange } from './firebase'
 import { getAnalytics } from 'firebase/analytics';
-import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, connectAuthEmulator } from "firebase/auth";
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-import { getStorage, connectStorageEmulator } from "firebase/storage";
-import StatPage from "./StatPage.vue";
-import InfoPage from "./InfoPage.vue";
-import PrivacyPage from "./Privacy.vue";
-import SettingsPage from "./Settings.vue";
-import BubiRides from "./BubiRides.vue";
-import Bikes from "./Bikes.vue"
-import FilterComponent from "./FilterComponent.vue"
-import StationsPage from "./Stations.vue"
-import TimePage from "./TimePage.vue"
-import NotFoundPage from "./NotFound.vue"
-import { subscribe } from "./ride-service";
-import { DateTime, Settings as LuxonSettings } from "luxon";
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import StatPage from './StatPage.vue';
+import InfoPage from './InfoPage.vue';
+import PrivacyPage from './Privacy.vue';
+import SettingsPage from './Settings.vue';
+import BubiRides from './BubiRides.vue';
+import Bikes from './Bikes.vue'
+import FilterComponent from './FilterComponent.vue'
+import StationsPage from './Stations.vue'
+import TimePage from './TimePage.vue'
+import NotFoundPage from './NotFound.vue'
+import { subscribe } from './ride-service';
+import { DateTime, Settings as LuxonSettings } from 'luxon';
 
 LuxonSettings.defaultLocale = 'hu'
 LuxonSettings.defaultZoneName = 'Europe/Budapest'
@@ -39,14 +39,14 @@ const firebaseApp = getFirebaseApp()
 getAnalytics()
 
 const db = getFirestore()
-const functions = getFunctions(firebaseApp, "europe-central2")
+const functions = getFunctions(firebaseApp, 'europe-central2')
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Using emulators')
   connectAuthEmulator(getAuth(), 'http://localhost:9099')
   connectFirestoreEmulator(db, 'localhost', 8080)
-  connectFunctionsEmulator(functions, "localhost", 5001)
-  connectStorageEmulator(getStorage(), "localhost", 9199)
+  connectFunctionsEmulator(functions, 'localhost', 5001)
+  connectStorageEmulator(getStorage(), 'localhost', 9199)
 }
 
 const auth = getAuth(firebaseApp)
@@ -82,7 +82,7 @@ new Vue({
       version: {
         version: BUBISTAT_VERSION,
         hash: BUBISTAT_COMMITHASH,
-        date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME, { zone: "Europe/Budapest" })
+        date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME, { zone: 'Europe/Budapest' })
       }
     }
   },

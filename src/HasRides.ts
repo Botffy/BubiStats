@@ -1,4 +1,4 @@
-import { Ride } from "./model"
+import { Ride } from './model'
 
 export default {
   props: {
