@@ -24,6 +24,12 @@
   <div id="app">
     <div class="content-wrapper">
       <b-navbar class="is-warning">
+        <template #brand>
+          <b-navbar-item tag="router-link" :to="{ path: '/' }">
+            <img :src="logo">
+        </b-navbar-item>
+        </template>
+
         <template #start v-if='isLoggedIn'>
           <b-navbar-item tag="router-link" :to="{ path: '/rides' }">
             Bérlések
