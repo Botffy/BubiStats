@@ -52,6 +52,32 @@ describe('celebration', () => {
     expect(result[1]).toHaveProperty('message', 'Első látogatásod a Deák tér állomáson!')
   })
 
+  it('celebrates longest ride', () => {
+    let result = calculateCelebrations({
+      when: DateTime.now(),
+      duration: Duration.fromObject({'minutes': 29}),
+      bike: 861020,
+      from: '0102',
+      to: '0103'
+    }, sort(generateRides(5, { when: DateTime.now().minus({'days': 2}) })))
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('message', 'A leghosszabb utad!')
+    expect(result[0]).toHaveProperty('icon', 'hourglass-half')
+  })
+
+  it('celebrates ride you had to pay for', () => {
+    let result = calculateCelebrations({
+      when: DateTime.now(),
+      duration: Duration.fromObject({'minutes': 31}),
+      bike: 861020,
+      from: '0102',
+      to: '0103'
+    }, sort(generateRides(5, { when: DateTime.now().minus({'days': 2}), duration: Duration.fromObject({ 'minutes': 35 }) })))
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('message', 'Fizetős út!')
+    expect(result[0]).toHaveProperty('icon', 'coins')
+  })
+
   it('celebrates the end of a break', () => {
     let result = calculateCelebrations({
       when: DateTime.now(),
