@@ -17,8 +17,8 @@
         :striped="true"
         default-sort-direction="desc"
         default-sort="num"
-        :paginated="ridesByStations.length > 25"
-        :per-page="25"
+        :paginated="ridesByStations.length > 10"
+        :per-page="10"
         :pagination-rounded='true'
         pagination-size="is-small"
         detailed

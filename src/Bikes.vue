@@ -18,8 +18,8 @@
         :striped="true"
         default-sort-direction="desc"
         default-sort="rides"
-        :paginated="ridesByBikes.length > 25"
-        :per-page="25"
+        :paginated="ridesByBikes.length > 10"
+        :per-page="10"
         :pagination-rounded='true'
         pagination-size="is-small"
         detailed

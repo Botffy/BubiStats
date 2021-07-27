@@ -15,8 +15,8 @@
           :striped="true"
           default-sort-direction="desc"
           default-sort="when"
-          :paginated="rides.length > (compact ? 10 : 25)"
-          :per-page="compact ? 10 : 25"
+          :paginated="rides.length > (compact ? 10 : 15)"
+          :per-page="compact ? 10 : 15"
           :bordered='compact'
           :narrowed='compact'
           :pagination-rounded='true'
