@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "buefy": "^0.9.8",
+    "css-loader": "^6.2.0",
     "file-saver": "^2.0.5",
     "firebase": "^9.0.0-beta.6",
     "highcharts": "^9.1.2",

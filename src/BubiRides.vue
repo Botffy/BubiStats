@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="column">
-      <section>
+      <section v-if="rides.length > 0">
         <b-table
           :data="rides"
           :hoverable="true"
@@ -78,11 +78,45 @@
           </div>
         </b-modal>
       </section>
+      <section v-else>
+        <div class="recommendation">
+          <img :src="icons.UndrawIconContent">
+          <h2>Nincs még út hozzáadva</h2>
+          <p>Viszont a bal oldalon található menüben ezt megteheted.</p>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <style>
+.recommendation {
+  padding: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.recommendation img {
+  display: block;
+  max-width: 250px;
+}
+
+h2 {
+  display: block;
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-top: 24px;
+}
+
+p {
+  display: block;
+  font-size: 1em;
+  line-height: 1.5em;
+  margin-top: 12px;
+}
+
 .modal.has-overflow {
   position: fixed !important;
   overflow: auto !important;
@@ -112,6 +146,8 @@ import { Ride } from "./model"
 import { deleteRide } from "./ride-service"
 import { stationName } from './station-service'
 
+import UndrawIconContent from './assets/undraw_icons/content.svg'
+
 const formatTime = (time: DateTime): string => {
   return time.toFormat('yyyy-MM-dd HH:mm')
 }
@@ -135,7 +171,8 @@ export default Vue.extend({
   data: function() {
     return {
       isEditModalActive: false,
-      editData: null
+      editData: null,
+      icons: { UndrawIconContent }
     }
   },
   mixins: [ SortingMixin ],

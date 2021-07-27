@@ -9,7 +9,7 @@
           custom-class="fa-spin"
         />
       </div>
-      <div class="columns" v-else-if='rides.length === 0'>
+      <!-- <div class="columns" v-else-if='rides.length === 0'>
         <div class='column is-3'>
           <div class='box'>
             <ride-form></ride-form>
@@ -23,7 +23,7 @@
             Írd be kézzel az adatokat, vagy tölts fel egy képernyőképet a bérlés részleteiről (a Bubi appban a "Használati előzmények" menüpont alatt keresd)
           </section>
         </div>
-      </div>
+      </div> -->
       <router-view :rides='this.rides' v-else></router-view>
     </div>
   </div>
