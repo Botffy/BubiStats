@@ -1,4 +1,3 @@
-import { add } from 'lodash'
 import { DateTime, Interval } from 'luxon'
 import { Ride } from './model'
 import { getStationByCode }  from './station-service'
@@ -102,7 +101,7 @@ const ride_length = (added: Ride, rides: Ride[]): Celebration[] => {
   return []
 }
 
-const paying_ride = (added: Ride, rides: Ride[]): Celebration[] => {
+const paying_ride = (added: Ride): Celebration[] => {
   if (added.duration.as('minutes') > 30) {
     return [{
       icon: 'coins',

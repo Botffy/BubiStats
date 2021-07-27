@@ -1,10 +1,13 @@
 <template>
   <div class="columns">
-    <div class='column is-3' v-if="!compact">
+    <div
+      v-if="!compact"
+      class='column is-3'
+    >
       <div class='box'>
-        <screenshot-upload></screenshot-upload>
+        <screenshot-upload />
         <hr />
-        <ride-form></ride-form>
+        <ride-form />
       </div>
     </div>
     <div class="column">
@@ -42,38 +45,58 @@
             {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
           </b-table-column>
 
-          <b-table-column v-slot="props" v-if="!compact">
+          <b-table-column
+            v-if="!compact"
+            v-slot="props"
+          >
             <div class="buttons">
-            <b-tooltip type="is-info" label="Módosítás" :delay='500'>
-              <b-button
-                size="is-small"
+              <b-tooltip
                 type="is-info"
-                outlined
-                v-on:click="editRide(props.row)"
-                icon-left="fas fa-edit"
-              />
-            </b-tooltip>
+                label="Módosítás"
+                :delay='500'
+              >
+                <b-button
+                  size="is-small"
+                  type="is-info"
+                  outlined
+                  icon-left="fas fa-edit"
+                  @click="editRide(props.row)"
+                />
+              </b-tooltip>
             &nbsp;
-            <b-tooltip type='is-danger' label="Törlés" :delay='500'>
-              <b-button
-                size="is-small"
-                type="is-danger"
-                outlined
-                v-on:click="deleteRide(props.row)"
-                icon-left="fas fa-trash"
-              />
-            </b-tooltip>
+              <b-tooltip
+                type='is-danger'
+                label="Törlés"
+                :delay='500'
+              >
+                <b-button
+                  size="is-small"
+                  type="is-danger"
+                  outlined
+                  icon-left="fas fa-trash"
+                  @click="deleteRide(props.row)"
+                />
+              </b-tooltip>
             </div>
           </b-table-column>
         </b-table>
 
-        <b-modal v-model="isEditModalActive" scroll="keep">
+        <b-modal
+          v-model="isEditModalActive"
+          scroll="keep"
+        >
           <div class="modal-card">
             <header class='modal-card-head'>
-              <p class='modal-card-title'>Út szerkesztése</p>
+              <p class='modal-card-title'>
+                Út szerkesztése
+              </p>
             </header>
             <section class='modal-card-body'>
-              <ride-form :edit='true' :ride='editData' v-on:edited='doneEditing()' />
+              <ride-form
+                :edit='true'
+                :ride='editData'
+                @edited='doneEditing()'
+              />
             </section>
           </div>
         </b-modal>
@@ -105,11 +128,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import SortingMixin from './SortingMixin'
-import RideForm from "./RideForm.vue";
-import AddByScreenshot from "./RideFormByScreenshot.vue";
-import { DateTime } from 'luxon';
-import { Ride } from "./model"
-import { deleteRide } from "./ride-service"
+import RideForm from './RideForm.vue'
+import AddByScreenshot from './RideFormByScreenshot.vue'
+import { DateTime } from 'luxon'
+import { Ride } from './model'
+import { deleteRide } from './ride-service'
 import { stationName } from './station-service'
 
 const formatTime = (time: DateTime): string => {
@@ -121,6 +144,7 @@ export default Vue.extend({
     'ride-form': RideForm,
     'screenshot-upload': AddByScreenshot
   },
+  mixins: [ SortingMixin ],
   props: {
     compact: {
       type: Boolean,
@@ -138,7 +162,6 @@ export default Vue.extend({
       editData: null
     }
   },
-  mixins: [ SortingMixin ],
   methods: {
     stationName,
     formatTime,

@@ -5,14 +5,14 @@ const stationByCode: Map<string, Station> = stationData
   .reduce((map, station) =>
     (map.set(station.code, station)),
     new Map()
-  );
+  )
 
 type Station = {
   code: string,
   name: string
 }
 
-const listStations = (): readonly Station[] => Object.freeze(stationData);
+const listStations = (): readonly Station[] => Object.freeze(stationData)
 
 const getStationByCode = (code: string): Station | null => {
   return stationByCode.get(code)

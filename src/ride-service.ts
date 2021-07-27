@@ -9,7 +9,7 @@ import { calculateCelebrations, Celebration } from './celebration-service'
 import { FirestoreRide } from '../functions/src/dto'
 import { v4 as uuidv4 } from 'uuid'
 
-const subscribers: Map<string, (ride: Ride[]) => void> = new Map()
+const subscribers: Map<string, ((ride: Ride[]) => void)> = new Map()
 let rides: Ride[] | null = null
 let firestoreSubscription: Unsubscribe = null
 
@@ -59,7 +59,7 @@ export const getRides = (): readonly Ride[] => {
   return rides
 }
 
-export const subscribe = (callback: (rides: Ride[]) => void): Object => {
+export const subscribe = (callback: (rides: Ride[]) => void): unknown => {
   if (!firestoreSubscription) {
     createFirestoreSubscription()
   }
@@ -70,7 +70,7 @@ export const subscribe = (callback: (rides: Ride[]) => void): Object => {
   return id
 }
 
-export const unsubscribe = (id: string) => {
+export const unsubscribe = (id: string): void => {
   subscribers.delete(id)
 }
 
@@ -120,10 +120,10 @@ export const addByScreenshot = (file: File, onStateChange?: (stateMessage: strin
         reject(error)
       },
       () => {
-        const functions = getFunctions(getFirebaseApp(), "europe-central2")
+        const functions = getFunctions(getFirebaseApp(), 'europe-central2')
         const addRideByScreenshot = httpsCallable(functions, 'addRideByScreenshot')
 
-        onStateChange("Feldolgozás")
+        onStateChange('Feldolgozás')
         addRideByScreenshot(id)
           .then(result => result.data as FirestoreRide)
           .then(toRide)

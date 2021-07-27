@@ -1,5 +1,5 @@
 <template>
-  <span>{{ this.ago }}</span>
+  <span>{{ ago }}</span>
 </template>
 
 <script lang="ts">

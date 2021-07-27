@@ -77,6 +77,9 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   router,
+  components: {
+    'filter-component': FilterComponent
+  },
   data() {
     return {
       logo: Logo,
@@ -90,6 +93,38 @@ new Vue({
         date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME, { zone: 'Europe/Budapest' })
       }
     }
+  },
+  computed: {
+    isLoggedIn() {
+      return this.user != null
+    },
+    getUser() {
+      return this.user.uid
+    }
+  },
+  watch: {
+    loading() {
+      if (this.loading) {
+        this.loadingScreen = this.$buefy.loading.open()
+      } else {
+        this.loadingScreen.close()
+      }
+    }
+  },
+  created() {
+    this.loading = true
+    onAuthStateChanged(auth, (user) => {
+      this.user = user
+      if (user) {
+        subscribe(rides => {
+          if (rides != null) {
+            this.loading = false
+          }
+        })
+      } else {
+        this.loading = false
+      }
+    })
   },
   methods: {
     logout() {
@@ -108,41 +143,6 @@ new Vue({
           this.loading = false
           console.error(error)
         })
-    }
-  },
-  computed: {
-    isLoggedIn() {
-      return this.user != null
-    },
-    getUser() {
-      return this.user.uid
-    }
-  },
-  components: {
-    'filter-component': FilterComponent
-  },
-  created() {
-    this.loading = true
-    onAuthStateChanged(auth, (user) => {
-      this.user = user
-      if (user) {
-        subscribe(rides => {
-          if (rides != null) {
-            this.loading = false
-          }
-        })
-      } else {
-        this.loading = false
-      }
-    })
-  },
-  watch: {
-    loading() {
-      if (this.loading) {
-        this.loadingScreen = this.$buefy.loading.open()
-      } else {
-        this.loadingScreen.close()
-      }
     }
   }
 })

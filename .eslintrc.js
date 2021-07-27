@@ -22,9 +22,7 @@ module.exports = {
     'jest'
   ],
   extends: [
-    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'eslint:recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:import/typescript',
@@ -44,6 +42,9 @@ module.exports = {
       },
       'svg': 'always',
       'math': 'always'
+    }],
+    'vue/component-tags-order': ['error', {
+      'order': [ 'template', 'style', 'script',  ]
     }]
   }
 }

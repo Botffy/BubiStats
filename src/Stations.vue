@@ -49,9 +49,9 @@
 import Vue from 'vue'
 import HasRides from './HasRides'
 import SortingMixin from './SortingMixin'
-import Quote from "./components/Quote.vue"
-import BubiRides from "./BubiRides.vue";
-import { Ride } from "./model"
+import Quote from './components/Quote.vue'
+import BubiRides from './BubiRides.vue'
+import { Ride } from './model'
 import { getStationByCode, Station } from './station-service'
 
 type StationStat = {
@@ -81,7 +81,7 @@ const groupByStation = (rides: Ride[]): StationStat[] => {
         ++val.wasDestination
       }
       val.rideIndices.push(rideIndex)
-    });
+    })
 
     return accumulator
   }, new Map()).values())
@@ -118,6 +118,7 @@ export default Vue.extend({
     'ride-list': BubiRides,
     'quote': Quote
   },
+  mixins: [ HasRides, SortingMixin ],
   computed: {
     ridesByStations() {
       return groupByStation(this.rides)
@@ -166,7 +167,6 @@ export default Vue.extend({
       }
     }
   },
-  mixins: [ HasRides, SortingMixin ],
   methods: {
     defaultSorting(a: StationStat, b: StationStat) {
       return (a.wasOrigin + a.wasDestination) - (b.wasOrigin + b.wasDestination)

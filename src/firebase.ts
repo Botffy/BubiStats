@@ -1,11 +1,11 @@
-import * as firebase from 'firebase/app';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { FirebaseApp } from 'firebase/app';
+import * as firebase from 'firebase/app'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { FirebaseApp } from 'firebase/app'
 
 let firebaseApp: FirebaseApp = null
 
 export const getFirebaseApp = (): FirebaseApp => {
-  if (firebaseApp !== null) return firebaseApp;
+  if (firebaseApp !== null) return firebaseApp
 
   firebaseApp = firebase.initializeApp({
     apiKey:            'AIzaSyBxbbNWjnS-2Cq1t9qGe5Fb8tb8_sG4bo0',
@@ -24,7 +24,7 @@ export const getCurrentUserUid = (): string | null => {
   return getAuth(getFirebaseApp()).currentUser?.uid
 }
 
-export const onUserChange = (callback: (uid: string) => void ) => {
+export const onUserChange = (callback: (uid: string) => void ): void => {
   const auth = getAuth(getFirebaseApp())
   auth.useDeviceLanguage()
 

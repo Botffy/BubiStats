@@ -1,5 +1,5 @@
 <template>
-  <div v-if="this.$root.isLoggedIn">
+  <div v-if="$root.isLoggedIn">
     <div class="container">
       <div v-if="rides === null">
         <b-icon
@@ -9,12 +9,15 @@
           custom-class="fa-spin"
         />
       </div>
-      <div class="columns" v-else-if='rides.length === 0'>
+      <div
+        v-else-if='rides.length === 0'
+        class="columns"
+      >
         <div class='column is-3'>
           <div class='box'>
-            <screenshot-upload></screenshot-upload>
+            <screenshot-upload />
             <hr />
-            <ride-form></ride-form>
+            <ride-form />
           </div>
         </div>
         <div class="column">
@@ -24,7 +27,10 @@
           </section>
         </div>
       </div>
-      <router-view :rides='this.rides' v-else></router-view>
+      <router-view
+        v-else
+        :rides='rides'
+      />
     </div>
   </div>
   <info-page v-else />
@@ -32,22 +38,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import RideForm from "./RideForm.vue";
-import AddByScreenshot from "./RideFormByScreenshot.vue";
-import InfoPage from "./InfoPage.vue"
-import { subscribe, unsubscribe } from "./ride-service"
+import RideForm from './RideForm.vue'
+import AddByScreenshot from './RideFormByScreenshot.vue'
+import InfoPage from './InfoPage.vue'
+import { subscribe, unsubscribe } from './ride-service'
 
 export default Vue.extend({
+  components: {
+    'info-page': InfoPage,
+    'ride-form': RideForm,
+    'screenshot-upload': AddByScreenshot
+  },
   data() {
     return {
       subscription: null,
       rides: []
     }
-  },
-  components: {
-    'info-page': InfoPage,
-    'ride-form': RideForm,
-    'screenshot-upload': AddByScreenshot
   },
   created() {
     this.subscription = subscribe((rides) => {
@@ -59,5 +65,5 @@ export default Vue.extend({
       unsubscribe(this.subscription)
     }
   }
-});
+})
 </script>

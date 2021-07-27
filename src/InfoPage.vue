@@ -29,10 +29,16 @@
         :has-drag="false"
         icon-size='is-large'
       >
-        <template slot="item" slot-scope="props">
+        <template
+          slot="item"
+          slot-scope="props"
+        >
           <div class="block">
             <div class="box">
-              <img :src="props.list.image" @click="enlargeImage(props.list.image)"/>
+              <img
+                :src="props.list.image"
+                @click="enlargeImage(props.list.image)"
+              />
             </div>
           </div>
         </template>
@@ -40,7 +46,7 @@
       <b-modal v-model="isImageModalActive">
         <div class='box'>
           <p class="image">
-            <img :src="selectedImage">
+            <img :src="selectedImage" />
           </p>
         </div>
       </b-modal>

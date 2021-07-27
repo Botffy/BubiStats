@@ -6,7 +6,7 @@
         icon="filter"
         size="is-small"
       />
-      <span>{{ this.dropdownLabel() }}</span>
+      <span>{{ dropdownLabel() }}</span>
     </span>
     <span v-else>
       <b-icon
@@ -21,18 +21,13 @@
 
 <script type='ts'>
 import Vue from 'vue'
-import { subscribe, unsubscribe } from "./ride-service"
+import { subscribe, unsubscribe } from './ride-service'
 
 export default Vue.extend({
   data() {
     return {
       subscription: null,
       rideNum: null
-    }
-  },
-  methods: {
-    dropdownLabel() {
-      return this.rideNum + ' út'
     }
   },
   computed: {
@@ -49,6 +44,11 @@ export default Vue.extend({
     if (this.subscription) {
       unsubscribe(this.subscription)
     }
-  }
+  },
+  methods: {
+    dropdownLabel() {
+      return this.rideNum + ' út'
+    }
+  },
 })
 </script>
