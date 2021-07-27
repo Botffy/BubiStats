@@ -53,23 +53,26 @@ if (process.env.NODE_ENV !== 'production') {
 const auth = getAuth(firebaseApp)
 auth.useDeviceLanguage()
 
-const router = new VueRouter({ routes: [
-  { path: '/info', component: InfoPage },
-  { path: '/privacy', component: PrivacyPage },
-  { path: '/settings', component: SettingsPage },
-  {
-    path: '/(rides|bikes|stations|time)?',
-    component: StatPage,
-    children: [
-      { path: '/rides', component: BubiRides },
-      { path: '/bikes', component: Bikes },
-      { path: '/stations', component: StationsPage },
-      { path: '/time', component: TimePage },
-      { path: '/', component: BubiRides }
-    ]
-  },
-  { path: '*', component: NotFoundPage },
-]})
+const router = new VueRouter({
+  linkActiveClass: 'is-active',
+  routes: [
+    { path: '/info', component: InfoPage },
+    { path: '/privacy', component: PrivacyPage },
+    { path: '/settings', component: SettingsPage },
+    {
+      path: '/(rides|bikes|stations|time)?',
+      component: StatPage,
+      children: [
+        { path: '/rides', component: BubiRides },
+        { path: '/bikes', component: Bikes },
+        { path: '/stations', component: StationsPage },
+        { path: '/time', component: TimePage },
+        { path: '/', component: BubiRides }
+      ]
+    },
+    { path: '*', component: NotFoundPage }
+  ]
+})
 
 new Vue({
   el: '#app',
