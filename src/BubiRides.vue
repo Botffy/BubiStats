@@ -172,7 +172,7 @@ export default Vue.extend({
         || this.stationName(b.from).localeCompare(this.stationName(a.from))
         || this.stationName(b.to).localeCompare(this.stationName(a.to))
     },
-    deleteRide(row: any) {
+    deleteRide(row: Ride) {
       this.$buefy.dialog.confirm({
         title: 'Bubiút törlése',
         message: 'Egész biztos, hogy törölni akarod?',
@@ -181,19 +181,35 @@ export default Vue.extend({
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => {
+          let loading = this.$buefy.loading.open()
           deleteRide(row.when)
-          .then(() => {
-            this.$buefy.toast.open({
-              duration: 2000,
-              message: 'Az utat töröltük',
-              position: 'is-bottom',
-              type: 'is-success'
+            .then(() => {
+              this.$buefy.toast.open({
+                duration: 2000,
+                message: 'Az utat töröltük',
+                position: 'is-bottom',
+                type: 'is-success'
+              })
+              loading.close()
             })
-          })
+            .catch((error) => {
+              loading.close()
+              console.log(error)
+              this.$buefy.dialog.alert({
+                title: 'Hiba',
+                message: 'Nem sikerült törölni az utat. Nem a te hibád, én voltam, elnézést. Esetleg próbáld meg később.',
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'times-circle',
+                iconPack: 'fas',
+                ariaRole: 'alertdialog',
+                ariaModal: true
+              })
+            })
         }
       })
     },
-    editRide(row: any) {
+    editRide(row: Ride) {
       this.editData = row
       this.isEditModalActive = true
     },
