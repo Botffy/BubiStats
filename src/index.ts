@@ -1,12 +1,12 @@
-import Vue from 'vue''
-import VueRouter from 'vue-router''
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import HighchartsSankey from 'highcharts/modules/sankey'
 import HighchartsDependencyWheel from 'highcharts/modules/dependency-wheel'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
-import { getFirebaseApp, onUserChange } from './firebase'
+import { getFirebaseApp } from './firebase'
 import { getAnalytics } from 'firebase/analytics'
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, connectAuthEmulator } from 'firebase/auth'
@@ -112,7 +112,7 @@ new Vue({
       return this.user != null
     },
     getUser() {
-      return this.user.uid'
+      return this.user.uid
     }
   },
   components: {
@@ -142,4 +142,4 @@ new Vue({
       }
     }
   }
-})'
+})
