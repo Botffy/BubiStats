@@ -58,7 +58,7 @@ const validateNoOverlap = (ride: FirestoreRide, existing: FirestoreRide[], disre
   return errors
 }
 
-export const addRide = (uid: string, data: FirestoreRide): Promise<any> => {
+export const addRide = (uid: string, data: FirestoreRide): Promise<FirestoreRide> => {
   const errors = validateRide(data)
   if (errors.length) {
     throw new functions.https.HttpsError('invalid-argument', 'Ride is invalid', errors)
@@ -90,11 +90,11 @@ export const addRide = (uid: string, data: FirestoreRide): Promise<any> => {
     }
 
     await transaction.set(userDocRef, docValue)
-    return Promise.resolve()
+    return Promise.resolve(data)
   })
 }
 
-export const addRideByScreenshot = async (uid: string, imageId: string): Promise<any> => {
+export const addRideByScreenshot = async (uid: string, imageId: string): Promise<FirestoreRide> => {
   const path = `gs://bubistats.appspot.com/user/${uid}/${imageId}`
 
   const clientOptions = { apiEndpoint: 'eu-vision.googleapis.com' };
@@ -119,7 +119,7 @@ export const addRideByScreenshot = async (uid: string, imageId: string): Promise
     }
 
     addRide(uid, ride)
-      .then(resolve)
+      .then((added) => resolve(added))
       .catch(reject)
   })
 }
@@ -158,7 +158,7 @@ export const editRide = (uid: string, update: EditRide): Promise<any> => {
     matchedRide.from = update.updated.from,
     matchedRide.to = update.updated.to
 
-    await transaction.set(userDocRef, {
+    transaction.set(userDocRef, {
       rides: rides
     })
     return Promise.resolve()
