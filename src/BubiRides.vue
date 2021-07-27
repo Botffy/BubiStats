@@ -2,9 +2,9 @@
   <div class="columns">
     <div class='column is-3' v-if="!compact">
       <div class='box'>
-        <ride-form></ride-form>
-        <hr />
         <screenshot-upload></screenshot-upload>
+        <hr />
+        <ride-form></ride-form>
       </div>
     </div>
     <div class="column">

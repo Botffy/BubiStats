@@ -12,9 +12,9 @@
       <div class="columns" v-else-if='rides.length === 0'>
         <div class='column is-3'>
           <div class='box'>
-            <ride-form></ride-form>
-            <hr />
             <screenshot-upload></screenshot-upload>
+            <hr />
+            <ride-form></ride-form>
           </div>
         </div>
         <div class="column">
