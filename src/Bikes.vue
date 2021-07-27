@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section v-if="rides && rides.length">
     <quote>...amikor a lovak oldalnézetben felsorakoznak...</quote>
 
     <div class='columns'>

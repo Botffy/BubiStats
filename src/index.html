@@ -30,7 +30,7 @@
         </b-navbar-item>
         </template>
 
-        <template #start v-if='isLoggedIn'>
+        <template #start v-if='isLoggedIn && hasRides'>
           <b-navbar-item tag="router-link" :to="{ path: '/rides' }">
             Bérlések
           </b-navbar-item>

@@ -86,7 +86,7 @@ new Vue({
       loadingScreen: null,
       loading: null,
       user: null,
-      rides: null,
+      hasRides: false,
       version: {
         version: BUBISTAT_VERSION,
         hash: BUBISTAT_COMMITHASH,
@@ -118,7 +118,10 @@ new Vue({
       if (user) {
         subscribe(rides => {
           if (rides != null) {
+            this.hasRides = rides.length > 0
             this.loading = false
+          } else {
+            this.hasRides = false
           }
         })
       } else {
