@@ -79,7 +79,7 @@ export default Vue.extend({
         hasIcon: true,
         onConfirm: () => {
           const user = getAuth()?.currentUser
-          const provider = new GoogleAuthProvider();
+          const provider = new GoogleAuthProvider()
           reauthenticateWithPopup(user, provider)
           .then(() => deleteUser(user))
           .then(() => {

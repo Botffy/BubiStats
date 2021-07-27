@@ -95,7 +95,7 @@ new Vue({
       })
     },
     login() {
-      const provider = new GoogleAuthProvider()'
+      const provider = new GoogleAuthProvider()
       this.loading = true
       signInWithPopup(auth, provider)
         .then((result) => {
@@ -109,7 +109,7 @@ new Vue({
   },
   computed: {
     isLoggedIn() {
-      return this.user != null'
+      return this.user != null
     },
     getUser() {
       return this.user.uid'
@@ -121,7 +121,7 @@ new Vue({
   created() {
     this.loading = true
     onAuthStateChanged(auth, (user) => {
-      this.user = user'
+      this.user = user
       if (user) {
         subscribe(rides => {
           if (rides != null) {
