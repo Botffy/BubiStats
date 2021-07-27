@@ -11,7 +11,7 @@
         </p>
 
         <p>
-          Ebben az appban nyilvántarthatod a bubis útjaidat, hogy érdekes statisztikákat ismerhess meg a bubizásodról.
+          A BubiStats alkalmazásban nyilvántarthatod a bubis útjaidat, hogy érdekes statisztikákat ismerhess meg a bubizásodról.
           <ul>
             <li>Vajon melyik bringát használtad a legtöbbet?</li>
             <li>Melyik állomást érintetted a legtöbbször?</li>
@@ -58,9 +58,15 @@
       </p>
       <div class="content">
         <p>
-          A BuBi appból nem lehet automatikusan kinyerni a felhasználói előzményeket, ezért neked kell az útjaid adatait bevinni.
+          A Bubi appból nem lehet automatikusan kinyerni a felhasználói előzményeket, ezért neked kell az útjaid adatait bevinni.
           Az adatokat megadhatod egy űrlapon, ami persze kicsit kényelmetlen, ezért van egy másik lehetőség is: csinálj a Bubi appban a bérlés adatairól képernyőmentést, és töltsd fel, mi szövegfelismeréssel automatikusan kinyerjük a megfelelő adatokat.
-          Menő, ugye?
+          <a
+            href="https://youtu.be/wZxY_1l9c3I"
+            target="_blank"
+          >
+            Ezen a videón
+          </a>
+          megnézheted, hogyan működik ez mobilon.
         </p>
       </div>
     </div>
@@ -86,11 +92,14 @@
       <div class="content">
         <p>
           Ingyen van és biztonságos.
-          Olvasd el az <router-link :to="{ path: '/privacy' }">adatkezelési tájékoztatónkat</router-link>.
+          Olvasd el az
+          <router-link :to="{ path: '/privacy' }">
+            adatkezelési tájékoztatónkat
+          </router-link>.
           A lényeg az, hogy az adataidat titkosítva tároljuk, harmadik félnek nem adjuk át.
         </p>
         <p>
-          A BubiStatot <a href="https://github.com/Botffy" target="_blank">Scipiades Ármin</a> készítette, mert akart egy ilyent.
+          A BubiStatsot <a href="https://github.com/Botffy" target="_blank">Scipiades Ármin</a> készítette, mert akart egy ilyent.
           Ha kérdésed vagy kívánságod van, nyugodtan <a href='mailto:armin@bubistats.hu'>írj neki az armin@bubistats.hu címre</a>, örülni fog.
         </p>
       </div>

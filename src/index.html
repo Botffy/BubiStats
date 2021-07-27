@@ -47,7 +47,7 @@
         </template>
 
         <template #end v-if='!loading'>
-          <b-navbar-item tag="router-link" :to="{ path: '/info' }">
+          <b-navbar-item v-if='isLoggedIn' tag="router-link" :to="{ path: '/info' }">
             Info
           </b-navbar-item>
 
