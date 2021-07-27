@@ -1,4 +1,4 @@
-import { ValidationError } from "../functions/src/dto";
+import { ValidationError } from '../functions/src/dto'
 import { Celebration } from './celebration-service'
 
 export default {

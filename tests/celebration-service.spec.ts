@@ -1,6 +1,6 @@
-import { Duration, DateTime } from "luxon"
-import { Celebration, calculateCelebrations } from "../src/celebration-service"
-import { Ride } from "../src/model"
+import { Duration, DateTime } from 'luxon'
+import { calculateCelebrations } from '../src/celebration-service'
+import { Ride } from '../src/model'
 
 describe('celebration', () => {
   it('celebrates first ride', () => {
