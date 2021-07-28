@@ -1,24 +1,25 @@
 <template>
-  <div v-if="this.$root.isLoggedIn">
+  <div v-if="$root.isLoggedIn">
     <div class="block">
       <section class="hero is-link">
         <div class="hero-body">
-          <p class="title">Adatok letöltése</p>
+          <p class="title">
+            Adatok letöltése
+          </p>
 
           <p>A BubiStats a te adataidat tárolja. Jogod van ezeket az adatokat letölteni, és azt csinálni velük, amit akarsz.</p>
 
-            <p class="mt-5 has-text-centered	">
-              <b-button
-                size='is-medium'
-                inverted
-                outlined
-                icon-left="download"
-                @click='downloadData'
-              >
-                Letöltés JSON formátumban
-              </b-button>
-            </p>
-
+          <p class="mt-5 has-text-centered	">
+            <b-button
+              size='is-medium'
+              inverted
+              outlined
+              icon-left="download"
+              @click='downloadData'
+            >
+              Letöltés JSON formátumban
+            </b-button>
+          </p>
         </div>
       </section>
     </div>
@@ -26,19 +27,22 @@
     <div class="block">
       <section class="hero is-danger">
         <div class="hero-body">
-          <p class="title">Felhasználói fiók törlése</p>
+          <p class="title">
+            Felhasználói fiók törlése
+          </p>
 
-            <p class="mt-5 has-text-centered	">
-              <b-button
-                size='is-medium'
-                inverted
-                outlined
-                icon-left="ban"
-                @click='deleteAccount'
-              >
-                Törlés
-              </b-button>
-            </p>        </div>
+          <p class="mt-5 has-text-centered	">
+            <b-button
+              size='is-medium'
+              inverted
+              outlined
+              icon-left="ban"
+              @click='deleteAccount'
+            >
+              Törlés
+            </b-button>
+          </p>
+        </div>
       </section>
     </div>
   </div>
@@ -47,11 +51,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getAuth, deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { saveAs } from 'file-saver'
 import { getRides } from './ride-service'
 import { getStationByCode } from './station-service'
-import InfoPage from "./InfoPage.vue"
+import InfoPage from './InfoPage.vue'
 
 export default Vue.extend({
   components: {
@@ -79,7 +83,7 @@ export default Vue.extend({
         hasIcon: true,
         onConfirm: () => {
           const user = getAuth()?.currentUser
-          const provider = new GoogleAuthProvider();
+          const provider = new GoogleAuthProvider()
           reauthenticateWithPopup(user, provider)
           .then(() => deleteUser(user))
           .then(() => {

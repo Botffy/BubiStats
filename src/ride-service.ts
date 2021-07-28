@@ -1,15 +1,15 @@
-import { getFirebaseApp, getCurrentUserUid, onUserChange } from "./firebase";
-import { Unsubscribe } from "@firebase/util";
-import { getFirestore, doc, onSnapshot, runTransaction } from "firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { Duration, DateTime } from "luxon"
+import { getFirebaseApp, getCurrentUserUid, onUserChange } from './firebase'
+import { Unsubscribe } from '@firebase/util'
+import { getFirestore, doc, onSnapshot } from 'firebase/firestore'
+import { getFunctions, httpsCallable } from 'firebase/functions'
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+import { Duration, DateTime } from 'luxon'
 import { Ride } from './model'
 import { calculateCelebrations, Celebration } from './celebration-service'
 import { FirestoreRide } from '../functions/src/dto'
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'
 
-const subscribers: Map<string, (ride: Ride[]) => void> = new Map()
+const subscribers: Map<string, ((ride: Ride[]) => void)> = new Map()
 let rides: Ride[] | null = null
 let firestoreSubscription: Unsubscribe = null
 
@@ -37,15 +37,14 @@ const onData = (data: Ride[]) => {
 }
 
 const createFirestoreSubscription = () => {
-  if (!getCurrentUserUid()) {
-    return
-  }
+  if (!getCurrentUserUid()) return
 
   const db = getFirestore()
+  const userDocRef = doc(db, 'users', getCurrentUserUid())
 
-  const userDocRef = doc(db, "users", getCurrentUserUid())
-  firestoreSubscription = onSnapshot(userDocRef, (doc) => {
+  firestoreSubscription = onSnapshot(userDocRef, doc => {
     const data = doc.data()
+
     if (!data || !data.rides) {
       onData([])
       return
@@ -60,7 +59,7 @@ export const getRides = (): readonly Ride[] => {
   return rides
 }
 
-export const subscribe = (callback: (rides: Ride[]) => void): Object => {
+export const subscribe = (callback: (rides: Ride[]) => void): unknown => {
   if (!firestoreSubscription) {
     createFirestoreSubscription()
   }
@@ -71,7 +70,7 @@ export const subscribe = (callback: (rides: Ride[]) => void): Object => {
   return id
 }
 
-export const unsubscribe = (id: string) => {
+export const unsubscribe = (id: string): void => {
   subscribers.delete(id)
 }
 
@@ -96,8 +95,8 @@ const toRide = (fs: FirestoreRide): Ride => {
 }
 
 export const addRide = (ride: Ride): Promise<Celebration[]> => {
-  const functions = getFunctions(getFirebaseApp(), "europe-central2")
-  const addRide = httpsCallable(functions, 'addRide');
+  const functions = getFunctions(getFirebaseApp(), 'europe-central2')
+  const addRide = httpsCallable(functions, 'addRide')
 
   return addRide(toFirestoreRide(ride))
     .then(result => result.data as FirestoreRide)
@@ -107,22 +106,24 @@ export const addRide = (ride: Ride): Promise<Celebration[]> => {
 
 export const addByScreenshot = (file: File, onStateChange?: (stateMessage: string) => void): Promise<Celebration[]> => {
   const id = uuidv4()
-  const storageRef = ref(getStorage(), '/user/' + getCurrentUserUid() + '/' + id);
-  const uploadTask = uploadBytesResumable(storageRef, file);
+  const storageRef = ref(getStorage(), `/user/${getCurrentUserUid()}/${id}`)
+  const uploadTask = uploadBytesResumable(storageRef, file)
+
   return new Promise((resolve, reject) => {
     uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress = Math.ceil((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+      snapshot => {
+        const progress = Math.ceil((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
         onStateChange(`Feltöltés: ${progress}%`)
       },
-      (error) => {
+      error => {
         console.log(error)
         reject(error)
       },
       () => {
-        const functions = getFunctions(getFirebaseApp(), "europe-central2")
-        const addRideByScreenshot = httpsCallable(functions, 'addRideByScreenshot');
-        onStateChange("Feldolgozás")
+        const functions = getFunctions(getFirebaseApp(), 'europe-central2')
+        const addRideByScreenshot = httpsCallable(functions, 'addRideByScreenshot')
+
+        onStateChange('Feldolgozás')
         addRideByScreenshot(id)
           .then(result => result.data as FirestoreRide)
           .then(toRide)
@@ -137,8 +138,9 @@ export const addByScreenshot = (file: File, onStateChange?: (stateMessage: strin
 }
 
 export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> => {
-  const functions = getFunctions(getFirebaseApp(), "europe-central2")
-  const editRide = httpsCallable(functions, 'editRide');
+  const functions = getFunctions(getFirebaseApp(), 'europe-central2')
+  const editRide = httpsCallable(functions, 'editRide')
+
   return editRide({
     original: originalTime.toMillis(),
     updated: toFirestoreRide(updated)
@@ -148,8 +150,9 @@ export const editRide = (originalTime: DateTime, updated: Ride): Promise<void> =
 }
 
 export const deleteRide = (rideTime: DateTime): Promise<void> => {
-  const functions = getFunctions(getFirebaseApp(), "europe-central2")
-  const deleteRide = httpsCallable(functions, 'deleteRide');
+  const functions = getFunctions(getFirebaseApp(), 'europe-central2')
+  const deleteRide = httpsCallable(functions, 'deleteRide')
+
   return deleteRide(rideTime.toMillis()).then((result) => {
     console.log(result)
   })

@@ -4,7 +4,7 @@
 <head>
   <title>BubiStats</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
   <style type="text/css" media="screen">
     #app {
       display: flex;
@@ -47,7 +47,7 @@
         </template>
 
         <template #end v-if='!loading'>
-          <b-navbar-item tag="router-link" :to="{ path: '/info' }">
+          <b-navbar-item v-if='isLoggedIn' tag="router-link" :to="{ path: '/info' }">
             Info
           </b-navbar-item>
 
@@ -112,7 +112,7 @@
         </p>
       </div>
       <nav class="level">
-        <div class="level-item has-text-centered is-size-7" style="text-color: grey">
+        <div class="level-item has-text-centered is-size-7" style="color: grey">
           verzió: {{ version.version }} ({{ version.date.toFormat('yyyy-MM-dd HH:mm') }})
         </div>
       </nav>

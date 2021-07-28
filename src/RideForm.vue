@@ -5,8 +5,8 @@
       :message="errors['when']"
     >
       <b-datetimepicker
-        placeholder='Mikor'
         v-model='model.when'
+        placeholder='Mikor'
         icon='calendar'
         locale="hu-HU"
         :timepicker="{ hourFormat: '24', enableSeconds: true }"
@@ -18,8 +18,8 @@
     </b-field>
     <b-field>
       <b-input
-        placeholder='Bicaj'
         v-model='model.bike'
+        placeholder='Bicaj'
         icon='bicycle'
         inputmode='numeric'
         pattern='86[0-1][0-9]{3}'
@@ -33,9 +33,9 @@
       :message="errors['fromStation']"
     >
       <station-select
-        placeholder='Honnan'
         v-model='model.fromStation'
-        v-on:error="onError('fromStation', $event)"
+        placeholder='Honnan'
+        @error="onError('fromStation', $event)"
       />
     </b-field>
     <b-field
@@ -43,29 +43,35 @@
       :message="errors['toStation']"
     >
       <station-select
-        placeholder='Hová'
         v-model='model.toStation'
-        v-on:error="onError('toStation', $event)"
+        placeholder='Hová'
+        @error="onError('toStation', $event)"
       />
     </b-field>
 
-    <b-field label='Perc' label-position='on-border'>
+    <b-field
+      label='Perc'
+      label-position='on-border'
+    >
       <b-numberinput
+        v-model='model.minutes'
         inputmode='numeric'
         expanded
         min='0'
-        v-model='model.minutes'
         controls-position="compact"
         controls-rounded
       />
     </b-field>
-    <b-field label='Másodperc' label-position='on-border'>
+    <b-field
+      label='Másodperc'
+      label-position='on-border'
+    >
       <b-numberinput
+        v-model='model.seconds'
         inputmode='numeric'
         expanded
         min='0'
         max='59'
-        v-model='model.seconds'
         controls-position="compact"
         controls-rounded
       />
@@ -76,8 +82,8 @@
         <b-button
           type="button is-success"
           native-type="submit"
-          @click.prevent="addRide"
           :disabled='!isFilled()'
+          @click.prevent="addRide"
         >
           Út hozzáadása
         </b-button>
@@ -86,8 +92,8 @@
         <b-button
           type="button is-success"
           native-type="submit"
-          @click.prevent="editRide"
           :disabled='!isFilled()'
+          @click.prevent="editRide"
         >
           Módosítások mentése
         </b-button>
@@ -102,7 +108,7 @@ import { DateTime, Duration } from 'luxon'
 import { addRide, editRide } from './ride-service'
 import OnAddRideMixin from './OnAddRideMixin'
 import { getStationByCode, Station } from './station-service'
-import StationSelect from "./StationSelect.vue"
+import StationSelect from './StationSelect.vue'
 import { Ride } from './model'
 
 type FormRide = {
@@ -174,7 +180,7 @@ export default Vue.extend({
       },
       datetimeFormatter: (date: Date) => DateTime.fromJSDate(date).toFormat('yyyy-MM-dd HH:mm:ss'),
       datetimeParser: (input: string): Date => DateTime.fromFormat(input, 'yyyy-MM-dd HH:mm:ss').toJSDate(),
-      minDatetime: DateTime.fromISO("2021-05-24T00:00:00.000+02:00").toJSDate()
+      minDatetime: DateTime.fromISO('2021-05-24T00:00:00.000+02:00').toJSDate()
     }
   },
   methods: {
@@ -214,7 +220,7 @@ export default Vue.extend({
         })
     },
     onError(el: string, errorMessage: string) {
-      this.errors[el] = errorMessage;
+      this.errors[el] = errorMessage
     }
   },
 })

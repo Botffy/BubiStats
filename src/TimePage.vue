@@ -51,9 +51,14 @@
       </div>
     </section>
 
-    <section class="block" v-if="streaks.length">
+    <section
+      v-if="streaks.length"
+      class="block"
+    >
       <div class='box'>
-        <h2 class="subtitle">Sorozatok</h2>
+        <h2 class="subtitle">
+          Sorozatok
+        </h2>
         <b-table
           :data="streaks"
           :hoverable="true"
@@ -87,7 +92,9 @@
 
     <section class="block">
       <div class='box'>
-        <h2 class="subtitle">Legbubisabb napok</h2>
+        <h2 class="subtitle">
+          Legbubisabb napok
+        </h2>
         <b-table
           :data="ridesByDay"
           :hoverable="true"
@@ -124,13 +131,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DateTime, Interval, Duration } from 'luxon'
-import { Ride } from "./model"
-import Quote from "./components/Quote.vue"
-import SortingMixin from "./SortingMixin"
-import HasRides from "./HasRides"
-import BubiRides from "./BubiRides.vue";
-import RideComponent from "./components/Ride.vue"
-import TimeAgo from "./components/TimeAgo.vue"
+import { Ride } from './model'
+import Quote from './components/Quote.vue'
+import SortingMixin from './SortingMixin'
+import HasRides from './HasRides'
+import BubiRides from './BubiRides.vue'
+import RideComponent from './components/Ride.vue'
+import TimeAgo from './components/TimeAgo.vue'
 
 type DayStat = {
   day: DateTime

@@ -3,19 +3,20 @@
     v-model="station"
     :data='filteredStationArray'
     field='displayName'
-    @select='option => (selected = option)'
-    @blur='onBlur()'
     :placeholder='placeholder'
     :open-on-focus='true'
+    @select='option => (selected = option)'
+    @blur='onBlur()'
   >
-    <template #empty>Nincs ilyen állomás</template>
+    <template #empty>
+      Nincs ilyen állomás
+    </template>
   </b-autocomplete>
-
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { Station, listStations } from "./station-service"
+import { Station, listStations } from './station-service'
 
 interface DisplayStation extends Station {
   displayName: string
@@ -37,9 +38,15 @@ const matches = (option: DisplayStation, inputValue: string): boolean => {
 
 export default Vue.extend({
   props: {
-    placeholder: String,
+    placeholder: {
+      type: String,
+      required: false,
+      default: ''
+    },
     value: {
-      type: Object as PropType<Station>
+      type: Object as PropType<Station>,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -47,44 +54,6 @@ export default Vue.extend({
       stations: stations,
       station: '',
       selected: null
-    }
-  },
-  methods: {
-    setStation(val: Station) {
-      if (val == null) {
-        this.station = ''
-        this.selected = null
-        return
-      }
-
-      const matching = this.stations.filter((option: DisplayStation) => {
-        return option.code === val.code
-      });
-
-      this.station = matching[0].displayName
-      this.selected = matching[0];
-    },
-    onBlur() {
-      if (this.selected) {
-        return
-      }
-
-      if (!this.station) {
-        this.$emit('error', 'Adj meg egy állomást!')
-        return
-      }
-
-      const matching = this.stations.filter((option: DisplayStation) => {
-        return matches(option, this.station)
-      });
-      if (matching.length == 0) {
-        this.$emit('error', 'Nincs ilyen állomás :(')
-      } else if (matching.length == 1) {
-        this.station = matching[0].displayName
-        this.selected = matching[0];
-      } else {
-        this.$emit('error', 'Több állomás passzol a megadott névhez. Melyikre gondoltál?')
-      }
     }
   },
   computed: {
@@ -105,6 +74,44 @@ export default Vue.extend({
   },
   created() {
     this.setStation(this.value)
+  },
+  methods: {
+    setStation(val: Station) {
+      if (val == null) {
+        this.station = ''
+        this.selected = null
+        return
+      }
+
+      const matching = this.stations.filter((option: DisplayStation) => {
+        return option.code === val.code
+      })
+
+      this.station = matching[0].displayName
+      this.selected = matching[0]
+    },
+    onBlur() {
+      if (this.selected) {
+        return
+      }
+
+      if (!this.station) {
+        this.$emit('error', 'Adj meg egy állomást!')
+        return
+      }
+
+      const matching = this.stations.filter((option: DisplayStation) => {
+        return matches(option, this.station)
+      })
+      if (matching.length == 0) {
+        this.$emit('error', 'Nincs ilyen állomás :(')
+      } else if (matching.length == 1) {
+        this.station = matching[0].displayName
+        this.selected = matching[0]
+      } else {
+        this.$emit('error', 'Több állomás passzol a megadott névhez. Melyikre gondoltál?')
+      }
+    }
   }
 })
 

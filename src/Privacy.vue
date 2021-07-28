@@ -1,7 +1,9 @@
 <template>
   <section class="hero is-small">
     <div class="hero-body">
-      <p class="title">Adatkezelési tájékoztató</p>
+      <p class="title">
+        Adatkezelési tájékoztató
+      </p>
 
       <div class="content">
         <p>
@@ -17,9 +19,6 @@
         </p>
         <p>
           Az alkalmazás forráskódja <a href='https://github.com/Botffy/BubiStats' target="_blank">elérhető a GitHubon</a>.
-        </p>
-        <p>
-
         </p>
       </div>
     </div>

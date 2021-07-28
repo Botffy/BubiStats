@@ -4,11 +4,11 @@ import { getStationByCode }  from './station-service'
 
 const avsaz = (n: number): string => {
   if (n < 10) {
-    return n == 1 || n == 5 ? "Az" : "A"
+    return n == 1 || n == 5 ? 'Az' : 'A'
   } else if (n < 100) {
-    return Math.ceil(n / 10) == 5 ? "Az" : "A"
+    return Math.ceil(n / 10) == 5 ? 'Az' : 'A'
   }
-  return "A"
+  return 'A'
 }
 
 const avsaz_str = (s: string): string => {
@@ -37,17 +37,17 @@ const es = (n: number): string => {
     }
 
     if (c == '1' || (c == '2' && digit == 1) || c == '4' || c == '7' || c == '9') {
-      return "es"
+      return 'es'
     } else if (c == '3' || c == '8' || (c == '2' && digit == 2)) {
-      return "as"
+      return 'as'
     } else if (c == '5') {
-      return "ös"
+      return 'ös'
     } else if (c == '6') {
-      return "os"
+      return 'os'
     }
   }
 
-  return "as"
+  return 'as'
 }
 
 export type Celebration = {
@@ -81,6 +81,35 @@ const bike_ride_number = (added: Ride, rides: Ride[]): Celebration[] => {
     icon: 'bicycle',
     message: `${avsaz(num + 1)} ${num + 1}. utad a ${added.bike}-${es(added.bike)} bicajjal!`
   }]
+}
+
+const ride_length = (added: Ride, rides: Ride[]): Celebration[] => {
+  if (!rides.length) return []
+
+  let longest = rides.reduce((acc: number, curr: Ride): number => {
+    let duration = curr.duration.as('seconds')
+    return duration > acc ? duration : acc
+  }, 0)
+
+  if (added.duration.as('seconds') > longest) {
+    return [{
+      icon: 'hourglass-half',
+      message: 'A leghosszabb utad!'
+    }]
+  }
+
+  return []
+}
+
+const paying_ride = (added: Ride): Celebration[] => {
+  if (added.duration.as('minutes') > 30) {
+    return [{
+      icon: 'coins',
+      message: 'Fizetős út!'
+    }]
+  }
+
+  return []
 }
 
 const station_visit_inner = (station: string, rides: Ride[]): Celebration[] => {
@@ -169,12 +198,12 @@ const retour_detection = (added: Ride, rides: Ride[]): Celebration[] => {
     if (last.bike == added.bike) {
       return [{
         icon: 'exchange-alt',
-        message: "Retúr ugyanazzal a bicajjal."
+        message: 'Retúr ugyanazzal a bicajjal.'
       }]
     }
     return [{
       icon: 'exchange-alt',
-      message: "Egy jó retúr."
+      message: 'Egy jó retúr.'
     }]
   }
 
@@ -208,7 +237,7 @@ const chain_extension = (added: Ride, rides: Ride[]): Celebration[] => {
 }
 
 const celebrations = [
-  retour_detection, ride_number, bike_ride_number, station_visit, break_end, streak_extension, chain_extension
+  paying_ride, retour_detection, ride_number, bike_ride_number, ride_length, station_visit, break_end, streak_extension, chain_extension
 ]
 
 export const calculateCelebrations = (added: Ride, rides: Ride[]): Celebration[] => {

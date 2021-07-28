@@ -18,8 +18,8 @@
         :striped="true"
         default-sort-direction="desc"
         default-sort="rides"
-        :paginated="ridesByBikes.length > 25"
-        :per-page="25"
+        :paginated="ridesByBikes.length > 10"
+        :per-page="10"
         :pagination-rounded='true'
         pagination-size="is-small"
         detailed
@@ -39,7 +39,10 @@
         </b-table-column>
 
         <template #detail='props'>
-          <ride-list :rides='props.row.rideIndices.map(n => ride(n))' :compact='true' />
+          <ride-list
+            :rides='props.row.rideIndices.map(n => ride(n))'
+            :compact='true'
+          />
         </template>
       </b-table>
     </div>
@@ -48,12 +51,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Quote from "./components/Quote.vue"
+import Quote from './components/Quote.vue'
 import SortingMixin from './SortingMixin'
 import HasRides from './HasRides'
-import BubiRides from "./BubiRides.vue";
-import { Ride } from "./model"
-import { Duration } from "luxon"
+import BubiRides from './BubiRides.vue'
+import { Ride } from './model'
+import { Duration } from 'luxon'
 
 type BikeStat = {
   bike: number,
@@ -89,7 +92,7 @@ const bikeFrequency = (bikeStats: BikeStat[]): number[][] => {
   }, new Map).entries()).sort((a: number[], b: number[]) => a[0] - b[0])
 }
 
-const bikeByTime = (bikeStats: BikeStat[], slotSize: number = 5): number[][] => {
+const bikeByTime = (bikeStats: BikeStat[], slotSize = 5): number[][] => {
   const slot = (stat: BikeStat) => Math.floor(stat.totalTime.shiftTo('minutes').minutes / slotSize)
 
   return Array.from(bikeStats.reduce((accumulator: Map<number, number>, stat: BikeStat): Map<number, number> => {
@@ -103,6 +106,7 @@ export default Vue.extend({
     'ride-list': BubiRides,
     'quote': Quote
   },
+  mixins: [ HasRides, SortingMixin ],
   computed: {
     ridesByBikes() {
       return groupByBikes(this.rides)
@@ -173,7 +177,6 @@ export default Vue.extend({
       }
     }
   },
-  mixins: [ HasRides, SortingMixin ],
   methods: {
     rideMinutes(stat: BikeStat): number {
       return Math.round(stat.totalTime.shiftTo('minutes').minutes)

@@ -1,10 +1,13 @@
 <template>
   <div class="columns">
-    <div class='column is-3' v-if="!compact">
+    <div
+      v-if="!compact"
+      class='column is-3'
+    >
       <div class='box'>
-        <ride-form></ride-form>
+        <screenshot-upload />
         <hr />
-        <screenshot-upload></screenshot-upload>
+        <ride-form />
       </div>
     </div>
     <div class="column">
@@ -15,8 +18,8 @@
           :striped="true"
           default-sort-direction="desc"
           default-sort="when"
-          :paginated="rides.length > (compact ? 10 : 25)"
-          :per-page="compact ? 10 : 25"
+          :paginated="rides.length > (compact ? 10 : 15)"
+          :per-page="compact ? 10 : 15"
           :bordered='compact'
           :narrowed='compact'
           :pagination-rounded='true'
@@ -42,38 +45,58 @@
             {{ props.row.duration.shiftTo('minutes', 'seconds').minutes }} perc
           </b-table-column>
 
-          <b-table-column v-slot="props" v-if="!compact">
+          <b-table-column
+            v-if="!compact"
+            v-slot="props"
+          >
             <div class="buttons">
-            <b-tooltip type="is-info" label="Módosítás" :delay='500'>
-              <b-button
-                size="is-small"
+              <b-tooltip
                 type="is-info"
-                outlined
-                v-on:click="editRide(props.row)"
-                icon-left="fas fa-edit"
-              />
-            </b-tooltip>
+                label="Módosítás"
+                :delay='500'
+              >
+                <b-button
+                  size="is-small"
+                  type="is-info"
+                  outlined
+                  icon-left="fas fa-edit"
+                  @click="editRide(props.row)"
+                />
+              </b-tooltip>
             &nbsp;
-            <b-tooltip type='is-danger' label="Törlés" :delay='500'>
-              <b-button
-                size="is-small"
-                type="is-danger"
-                outlined
-                v-on:click="deleteRide(props.row)"
-                icon-left="fas fa-trash"
-              />
-            </b-tooltip>
+              <b-tooltip
+                type='is-danger'
+                label="Törlés"
+                :delay='500'
+              >
+                <b-button
+                  size="is-small"
+                  type="is-danger"
+                  outlined
+                  icon-left="fas fa-trash"
+                  @click="deleteRide(props.row)"
+                />
+              </b-tooltip>
             </div>
           </b-table-column>
         </b-table>
 
-        <b-modal v-model="isEditModalActive" scroll="keep">
+        <b-modal
+          v-model="isEditModalActive"
+          scroll="keep"
+        >
           <div class="modal-card">
             <header class='modal-card-head'>
-              <p class='modal-card-title'>Út szerkesztése</p>
+              <p class='modal-card-title'>
+                Út szerkesztése
+              </p>
             </header>
             <section class='modal-card-body'>
-              <ride-form :edit='true' :ride='editData' v-on:edited='doneEditing()' />
+              <ride-form
+                :edit='true'
+                :ride='editData'
+                @edited='doneEditing()'
+              />
             </section>
           </div>
         </b-modal>
@@ -139,11 +162,11 @@ p {
 <script lang="ts">
 import Vue from 'vue'
 import SortingMixin from './SortingMixin'
-import RideForm from "./RideForm.vue";
-import AddByScreenshot from "./RideFormByScreenshot.vue";
-import { DateTime } from 'luxon';
-import { Ride } from "./model"
-import { deleteRide } from "./ride-service"
+import RideForm from './RideForm.vue'
+import AddByScreenshot from './RideFormByScreenshot.vue'
+import { DateTime } from 'luxon'
+import { Ride } from './model'
+import { deleteRide } from './ride-service'
 import { stationName } from './station-service'
 
 import UndrawIconContent from './assets/undraw_icons/content.svg'
@@ -157,6 +180,7 @@ export default Vue.extend({
     'ride-form': RideForm,
     'screenshot-upload': AddByScreenshot
   },
+  mixins: [ SortingMixin ],
   props: {
     compact: {
       type: Boolean,
@@ -175,7 +199,6 @@ export default Vue.extend({
       icons: { UndrawIconContent }
     }
   },
-  mixins: [ SortingMixin ],
   methods: {
     stationName,
     formatTime,
@@ -186,7 +209,7 @@ export default Vue.extend({
         || this.stationName(b.from).localeCompare(this.stationName(a.from))
         || this.stationName(b.to).localeCompare(this.stationName(a.to))
     },
-    deleteRide(row: any) {
+    deleteRide(row: Ride) {
       this.$buefy.dialog.confirm({
         title: 'Bubiút törlése',
         message: 'Egész biztos, hogy törölni akarod?',
@@ -195,19 +218,35 @@ export default Vue.extend({
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => {
+          let loading = this.$buefy.loading.open()
           deleteRide(row.when)
-          .then(() => {
-            this.$buefy.toast.open({
-              duration: 2000,
-              message: 'Az utat töröltük',
-              position: 'is-bottom',
-              type: 'is-success'
+            .then(() => {
+              this.$buefy.toast.open({
+                duration: 2000,
+                message: 'Az utat töröltük',
+                position: 'is-bottom',
+                type: 'is-success'
+              })
+              loading.close()
             })
-          })
+            .catch((error) => {
+              loading.close()
+              console.log(error)
+              this.$buefy.dialog.alert({
+                title: 'Hiba',
+                message: 'Nem sikerült törölni az utat. Nem a te hibád, én voltam, elnézést. Esetleg próbáld meg később.',
+                type: 'is-danger',
+                hasIcon: true,
+                icon: 'times-circle',
+                iconPack: 'fas',
+                ariaRole: 'alertdialog',
+                ariaModal: true
+              })
+            })
         }
       })
     },
-    editRide(row: any) {
+    editRide(row: Ride) {
       this.editData = row
       this.isEditModalActive = true
     },

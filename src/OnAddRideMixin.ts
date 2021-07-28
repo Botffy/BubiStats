@@ -1,4 +1,4 @@
-import { ValidationError } from "../functions/src/dto";
+import { ValidationError } from '../functions/src/dto'
 import { Celebration } from './celebration-service'
 
 export default {
@@ -24,7 +24,7 @@ export default {
         let validationErrors = error.details as ValidationError[]
 
         if (validationErrors.length == 1) {
-          message = validationErrors[0].message;
+          message = validationErrors[0].message
         }
         else if (validationErrors.length > 1) {
           message = 'Nem sikerült felvenni az utat: <ul>'

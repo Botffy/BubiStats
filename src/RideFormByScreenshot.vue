@@ -1,39 +1,55 @@
 <template>
   <form action=''>
-      <b-tooltip
-        class="is-pulled-right"
-        type="is-info"
-        label="Készíts képernyőképet a bérlésről a Bubi app 'használati előzmények' oldalán. Legyen rajta a képen a kerékpár, a kezdés és a visszaadás rovat."
-        multilined
-      >
-        <b-icon type='is-info' size="is-medium" icon="info-circle" custom-class="" />
-      </b-tooltip>
+    <b-tooltip
+      class="is-pulled-right"
+      type="is-info"
+      label="Készíts képernyőképet a bérlésről a Bubi app 'használati előzmények' oldalán. Legyen rajta a képen a kerékpár, a kezdés és a visszaadás rovat."
+      multilined
+    >
+      <b-icon
+        type='is-info'
+        size="is-medium"
+        icon="info-circle"
+        custom-class=""
+      />
+    </b-tooltip>
 
-      <b-field class="file" v-if="!file">
-        <b-upload
-          v-model="file"
-          @input="onFile"
-          accept="image/*"
-        >
-          <a class="button is-primary ">
-            <b-icon icon="upload"></b-icon>
-            <span>Képernyőkép</span>
-          </a>
-        </b-upload>
-      </b-field>
-      <b-field v-else>
-        <a class="button is-primary" disabled>
-          <b-icon icon="spinner" custom-class="fa-spin"></b-icon>
-          <span>{{ stateMessage }}</span>
+    <b-field
+      v-if="!file"
+      class="file"
+    >
+      <b-upload
+        v-model="file"
+        accept="image/*"
+        @input="onFile"
+      >
+        <a class="button is-primary ">
+          <b-icon
+            icon="upload"
+          />
+          <span>Képernyőkép</span>
         </a>
-      </b-field>
+      </b-upload>
+    </b-field>
+    <b-field v-else>
+      <a
+        class="button is-primary"
+        disabled
+      >
+        <b-icon
+          icon="spinner"
+          custom-class="fa-spin"
+        />
+        <span>{{ stateMessage }}</span>
+      </a>
+    </b-field>
   </form>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import OnAddRideMixin from "./OnAddRideMixin"
-import { addByScreenshot } from "./ride-service"
+import OnAddRideMixin from './OnAddRideMixin'
+import { addByScreenshot } from './ride-service'
 
 export default Vue.extend({
   mixins: [ OnAddRideMixin ],

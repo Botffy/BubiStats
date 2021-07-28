@@ -1,6 +1,6 @@
 <template>
   <div class="block is-size-7 is-italic has-text-weight-light	">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
