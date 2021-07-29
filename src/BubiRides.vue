@@ -122,6 +122,22 @@
             />
             Vedd fel a Bubi bérlésed adatait a fenti űrlapon.
           </p>
+
+          <p>
+            A legkényelmesebben a bérlés adatairól készített képernyőkép feltöltésével tudsz adatot felvinni.
+            Hogy azt hogyan kell?
+            <a
+              href='https://youtu.be/wZxY_1l9c3I'
+              target="_blank"
+            >
+              Nézd meg ezt a videót!
+            </a>
+          </p>
+
+          <p>
+            A képernyőképes megadás helyett kézzel is megadhatod a bérlés adatait.
+            Add meg, mikor indultál, melyik bicajjal mentél honnan hova, írd be a bérlés hosszát.
+          </p>
         </div>
       </section>
     </div>
