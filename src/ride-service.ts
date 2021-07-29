@@ -101,7 +101,7 @@ export const addRide = (ride: Ride): Promise<Celebration[]> => {
   return addRide(toFirestoreRide(ride))
     .then(result => result.data as FirestoreRide)
     .then(toRide)
-    .then((added) => calculateCelebrations(added, rides.filter(r => r.when != added.when)))
+    .then((added) => calculateCelebrations(added, rides))
 }
 
 export const addByScreenshot = (file: File, onStateChange?: (stateMessage: string) => void): Promise<Celebration[]> => {
@@ -127,7 +127,7 @@ export const addByScreenshot = (file: File, onStateChange?: (stateMessage: strin
         addRideByScreenshot(id)
           .then(result => result.data as FirestoreRide)
           .then(toRide)
-          .then((added) => calculateCelebrations(added, rides.filter(r => r.when != added.when)))
+          .then((added) => calculateCelebrations(added, rides))
           .then(celebrations => resolve(celebrations))
           .catch((error) => {
             reject(error)

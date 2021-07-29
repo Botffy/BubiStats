@@ -15,6 +15,24 @@ describe('celebration', () => {
     expect(result[0]).toHaveProperty('message', 'Az első utad!')
   })
 
+  it('filters out the added ride from the given list', () => {
+    let result = calculateCelebrations({
+      when: DateTime.now(),
+      duration: Duration.fromObject({'minutes': 3}),
+      bike: 860001,
+      from: '0102',
+      to: '0103'
+    }, [{
+      when: DateTime.now(),
+      duration: Duration.fromObject({'minutes': 3}),
+      bike: 860001,
+      from: '0102',
+      to: '0103'
+    }])
+    expect(result).toHaveLength(1)
+    expect(result[0]).toHaveProperty('message', 'Az első utad!')
+  })
+
   it('does not celebrate second ride (with no matching stuff)', () => {
     let result = calculateCelebrations({
       when: DateTime.now(),

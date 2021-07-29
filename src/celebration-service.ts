@@ -241,6 +241,8 @@ const celebrations = [
 ]
 
 export const calculateCelebrations = (added: Ride, rides: Ride[]): Celebration[] => {
+  rides = rides.filter(ride => ride.when.toMillis() != added.when.toMillis())
+
   let result: Celebration[] = celebrations
     .map(fn => fn.apply(null, [added, rides]))
     .reduce((prev, curr) => prev.concat(curr))
