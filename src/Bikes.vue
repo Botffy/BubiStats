@@ -123,6 +123,17 @@ export default Vue.extend({
             text: 'Bicajok'
           }
         },
+        xAxis: {
+          title: {
+            text: 'A bicajjal megtett utak száma'
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key} út</span><table>',
+          pointFormat: '<tr><td style="padding:0"><b>{point.y:.0f} bicaj</b></td></tr>',
+          footerFormat: '</table>',
+          useHTML: true
+        },
         credits: {
           enabled: false
         },
@@ -163,7 +174,16 @@ export default Vue.extend({
         xAxis: {
           categories: this.bikeByTimeCategories,
           min: 0,
-          max: this.bikeByTimeCategories.length -1
+          max: this.bikeByTimeCategories.length - 1,
+          title: {
+            text: 'A bicajjal töltött percek'
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key} perc</span><table>',
+          pointFormat: '<tr><td style="padding:0"><b>{point.y:.0f} bicaj</b></td></tr>',
+          footerFormat: '</table>',
+          useHTML: true
         },
         credits: {
           enabled: false

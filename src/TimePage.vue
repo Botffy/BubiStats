@@ -208,7 +208,7 @@ export default Vue.extend({
         },
         series: [{
           type: 'pie',
-          name: 'Utak',
+          name: 'Út',
           data: this.statsByWeekdays
         }],
         credits: {
@@ -238,13 +238,16 @@ export default Vue.extend({
         }],
         yAxis: {
           title: {
-            text: 'Utak'
+            text: 'Utak száma'
           }
         },
         xAxis: {
           categories: new Array<number>(24).fill(0).map((val, idx) => idx),
           min: 0,
-          max: 23
+          max: 23,
+          title: {
+            text: 'Óra'
+          }
         },
         tooltip: {
           headerFormat: '<span style="font-size:10px">{point.key}:00</span><table>',

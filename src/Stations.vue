@@ -132,8 +132,19 @@ export default Vue.extend({
         }],
         yAxis: {
           title: {
-            text: null
+            text: 'Állomás'
           }
+        },
+        xAxis: {
+          title: {
+            text: 'Látogatások száma'
+          }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key} látogatás</span><table>',
+          pointFormat: '<tr><td style="padding:0"><b>{point.y:.0f} állomás</b></td></tr>',
+          footerFormat: '</table>',
+          useHTML: true
         },
         credits: {
           enabled: false
