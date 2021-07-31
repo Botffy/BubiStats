@@ -102,6 +102,9 @@ const bikeByTime = (bikeStats: BikeStat[], slotSize = 5): number[][] => {
 }
 
 export default Vue.extend({
+  metaInfo: {
+    title: 'Bicajok'
+  },
   components: {
     'ride-list': BubiRides,
     'quote': Quote

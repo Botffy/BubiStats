@@ -208,6 +208,9 @@ const formatTime = (time: DateTime): string => {
 }
 
 export default Vue.extend({
+  metaInfo: {
+    title: 'Bérlések'
+  },
   components: {
     'ride-form': RideForm,
     'screenshot-upload': AddByScreenshot

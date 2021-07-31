@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueMeta from 'vue-meta'
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import HighchartsSankey from 'highcharts/modules/sankey'
@@ -33,6 +34,7 @@ HighchartsSankey(Highcharts)
 HighchartsDependencyWheel(Highcharts)
 
 Vue.use(VueRouter)
+Vue.use(VueMeta)
 Vue.use(HighchartsVue, Highcharts, HighchartsSankey, HighchartsDependencyWheel)
 Vue.use(Buefy, { defaultIconPack: 'fas' })
 
@@ -77,6 +79,12 @@ const router = new VueRouter({
 new Vue({
   el: '#app',
   router,
+  metaInfo: {
+    title: null,
+    titleTemplate: (titleChunk: string): string => {
+      return titleChunk ? `BubiStats: ${titleChunk}` : 'BubiStats'
+    }
+  },
   components: {
     'filter-component': FilterComponent
   },

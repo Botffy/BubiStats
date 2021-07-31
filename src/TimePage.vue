@@ -171,6 +171,9 @@ const dayStats = (rides: Ride[]) => {
 }
 
 export default Vue.extend({
+  metaInfo: {
+    title: 'Idő'
+  },
   components: {
     'quote': Quote,
     'ride': RideComponent,

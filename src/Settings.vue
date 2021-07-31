@@ -58,6 +58,9 @@ import { getStationByCode } from './station-service'
 import InfoPage from './InfoPage.vue'
 
 export default Vue.extend({
+  metaInfo: {
+    title: 'Beállítások'
+  },
   components: {
     'info-page': InfoPage
   },

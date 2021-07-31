@@ -114,6 +114,9 @@ const stationDependency = (rides: Ride[]): any[] => {
 }
 
 export default Vue.extend({
+  metaInfo: {
+    title: 'Állomások'
+  },
   components: {
     'ride-list': BubiRides,
     'quote': Quote
