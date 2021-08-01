@@ -6,6 +6,11 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  metaInfo() {
+    return {
+      title: this.$root.isLoggedIn ? 'Bérlések' : null
+    }
+  },
   components: {
     'rides': () => import('./BubiRides.vue'),
     'info-page': () => import('./InfoPage.vue')

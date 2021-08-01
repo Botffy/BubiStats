@@ -16,8 +16,10 @@ import { getStorage, connectStorageEmulator } from 'firebase/storage'
 import router from './router'
 import FilterComponent from './FilterComponent.vue'
 import { subscribe } from './ride-service'
+import { canonicalUrl } from './meta'
 import { DateTime, Settings as LuxonSettings } from 'luxon'
 import Logo from './assets/logos/transparent.png'
+import ShareImage from './assets/logos/hun.png'
 
 LuxonSettings.defaultLocale = 'hu'
 LuxonSettings.defaultZoneName = 'Europe/Budapest'
@@ -50,10 +52,16 @@ auth.useDeviceLanguage()
 new Vue({
   el: '#app',
   router,
-  metaInfo: {
-    title: null,
-    titleTemplate: (titleChunk: string): string => {
-      return titleChunk ? `BubiStats: ${titleChunk}` : 'BubiStats'
+  metaInfo() {
+    return {
+      title: null,
+      titleTemplate: (titleChunk: string): string => {
+        return titleChunk ? `BubiStats: ${titleChunk}` : 'BubiStats'
+      },
+      link: [ canonicalUrl('') ],
+      meta: [
+        { name: 'og:image', content: ShareImage }
+      ]
     }
   },
   components: {

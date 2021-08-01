@@ -27,6 +27,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { canonicalUrl } from './meta'
 
-export default Vue.extend({})
+export default Vue.extend({
+  metaInfo() {
+    return {
+      title: 'Adatkezelési tájékoztató',
+      link: [ canonicalUrl('privacy') ],
+    }
+  }
+})
 </script>
