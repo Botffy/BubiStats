@@ -19,7 +19,6 @@ import { subscribe } from './ride-service'
 import { canonicalUrl } from './meta'
 import { DateTime, Settings as LuxonSettings } from 'luxon'
 import Logo from './assets/logos/transparent.png'
-import ShareImage from './assets/logos/hun.png'
 
 LuxonSettings.defaultLocale = 'hu'
 LuxonSettings.defaultZoneName = 'Europe/Budapest'
@@ -49,6 +48,9 @@ if (process.env.NODE_ENV !== 'production') {
 const auth = getAuth(firebaseApp)
 auth.useDeviceLanguage()
 
+document.querySelector('head link[rel="canonical"]').remove()
+document.querySelector('head meta[property="og:url"]').remove()
+
 new Vue({
   el: '#app',
   router,
@@ -59,9 +61,6 @@ new Vue({
         return titleChunk ? `BubiStats: ${titleChunk}` : 'BubiStats'
       },
       link: [ canonicalUrl('') ],
-      meta: [
-        { name: 'og:image', content: ShareImage }
-      ]
     }
   },
   components: {
