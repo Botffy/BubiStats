@@ -3,12 +3,11 @@ import { getStableCurrentUserUid } from './firebase'
 import NotFoundPage from './NotFound.vue'
 
 const router = new VueRouter({
-  linkActiveClass: 'is-active',
+  linkExactActiveClass: 'is-active',
   routes: [
-    { path: '/', component: () => import('./InfoPage.vue') },
+    { path: '/', component: () => import('./Main.vue') },
     { path: '/privacy', component: () => import('./Privacy.vue') },
     { path: '/settings', component: () => import('./Settings.vue'), meta: { requiresAuth: true } },
-    { path: '/rides', component: () => import('./BubiRides.vue'), meta: { requiresAuth: true } },
     { path: '/bikes', component: () => import('./Bikes.vue'), meta: { requiresAuth: true } },
     { path: '/stations', component: () => import('./Stations.vue'), meta: { requiresAuth: true } },
     { path: '/time', component: () => import('./TimePage.vue'), meta: { requiresAuth: true } },

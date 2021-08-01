@@ -125,7 +125,7 @@ new Vue({
       signInWithPopup(auth, provider)
         .then((result) => {
           this.user = result.user
-          this.$router.push('/rides')
+          this.$router.push('/')
         })
         .catch((error) => {
           this.loading = false
