@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$root.isLoggedIn">
+  <div>
     <div class="block">
       <section class="hero is-link">
         <div class="hero-body">
@@ -46,7 +46,6 @@
       </section>
     </div>
   </div>
-  <info-page v-else />
 </template>
 
 <script lang="ts">
@@ -55,14 +54,10 @@ import { getAuth, deleteUser, reauthenticateWithPopup, GoogleAuthProvider } from
 import { saveAs } from 'file-saver'
 import { getRides } from './ride-service'
 import { getStationByCode } from './station-service'
-import InfoPage from './InfoPage.vue'
 
 export default Vue.extend({
   metaInfo: {
     title: 'Beállítások'
-  },
-  components: {
-    'info-page': InfoPage
   },
   methods: {
     downloadData() {

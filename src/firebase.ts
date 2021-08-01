@@ -32,3 +32,20 @@ export const onUserChange = (callback: (uid: string) => void ): void => {
     callback(user?.uid)
   })
 }
+
+let authHasStabilized = false
+onUserChange(() => {
+  authHasStabilized = true
+})
+
+export const getStableCurrentUserUid = (): Promise<string | null> => {
+  return new Promise((resolve) => {
+    if (authHasStabilized) {
+      resolve(getCurrentUserUid())
+    } else {
+      onUserChange((uid) => resolve(uid))
+    }
+  })
+}
+
+

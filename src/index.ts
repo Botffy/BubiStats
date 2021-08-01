@@ -13,16 +13,8 @@ import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, connectAuthEmulator } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
-import StatPage from './StatPage.vue'
-import InfoPage from './InfoPage.vue'
-import PrivacyPage from './Privacy.vue'
-import SettingsPage from './Settings.vue'
-import BubiRides from './BubiRides.vue'
-import Bikes from './Bikes.vue'
+import router from './router'
 import FilterComponent from './FilterComponent.vue'
-import StationsPage from './Stations.vue'
-import TimePage from './TimePage.vue'
-import NotFoundPage from './NotFound.vue'
 import { subscribe } from './ride-service'
 import { DateTime, Settings as LuxonSettings } from 'luxon'
 import Logo from './assets/logos/transparent.png'
@@ -55,27 +47,6 @@ if (process.env.NODE_ENV !== 'production') {
 const auth = getAuth(firebaseApp)
 auth.useDeviceLanguage()
 
-const router = new VueRouter({
-  linkActiveClass: 'is-active',
-  routes: [
-    { path: '/info', component: InfoPage },
-    { path: '/privacy', component: PrivacyPage },
-    { path: '/settings', component: SettingsPage },
-    {
-      path: '/(rides|bikes|stations|time)?',
-      component: StatPage,
-      children: [
-        { path: '/rides', component: BubiRides },
-        { path: '/bikes', component: Bikes },
-        { path: '/stations', component: StationsPage },
-        { path: '/time', component: TimePage },
-        { path: '/', component: BubiRides }
-      ]
-    },
-    { path: '*', component: NotFoundPage }
-  ]
-})
-
 new Vue({
   el: '#app',
   router,
@@ -93,6 +64,7 @@ new Vue({
       logo: Logo,
       loadingScreen: null,
       loading: null,
+      loginModalActive: false,
       user: null,
       hasRides: false,
       version: {
@@ -139,9 +111,13 @@ new Vue({
   },
   methods: {
     logout() {
-      signOut(auth).catch((error) => {
-        console.error(error)
-      })
+      signOut(auth)
+        .then(() => {
+          this.$router.push('/')
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     },
     login() {
       const provider = new GoogleAuthProvider()
@@ -149,6 +125,7 @@ new Vue({
       signInWithPopup(auth, provider)
         .then((result) => {
           this.user = result.user
+          this.$router.push('/rides')
         })
         .catch((error) => {
           this.loading = false
