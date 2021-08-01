@@ -8,17 +8,10 @@ const router = new VueRouter({
     { path: '/', component: () => import('./InfoPage.vue') },
     { path: '/privacy', component: () => import('./Privacy.vue') },
     { path: '/settings', component: () => import('./Settings.vue'), meta: { requiresAuth: true } },
-    {
-      path: '/(rides|bikes|stations|time)',
-      component: () => import('./StatPage.vue'),
-      meta: { requiresAuth: true },
-      children: [
-        { path: '/rides', component: () => import('./BubiRides.vue') },
-        { path: '/bikes', component: () => import('./Bikes.vue') },
-        { path: '/stations', component: () => import('./Stations.vue') },
-        { path: '/time', component: () => import('./TimePage.vue') },
-      ]
-    },
+    { path: '/rides', component: () => import('./BubiRides.vue'), meta: { requiresAuth: true } },
+    { path: '/bikes', component: () => import('./Bikes.vue'), meta: { requiresAuth: true } },
+    { path: '/stations', component: () => import('./Stations.vue'), meta: { requiresAuth: true } },
+    { path: '/time', component: () => import('./TimePage.vue'), meta: { requiresAuth: true } },
     { path: '*', component: NotFoundPage }
   ]
 })

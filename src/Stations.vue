@@ -50,7 +50,6 @@ import Vue from 'vue'
 import HasRides from './HasRides'
 import SortingMixin from './SortingMixin'
 import Quote from './components/Quote.vue'
-import BubiRides from './BubiRides.vue'
 import { Ride } from './model'
 import { getStationByCode, Station } from './station-service'
 
@@ -118,7 +117,7 @@ export default Vue.extend({
     title: 'Állomások'
   },
   components: {
-    'ride-list': BubiRides,
+    'ride-list': () => import('./RidesListing.vue'),
     'quote': Quote
   },
   mixins: [ HasRides, SortingMixin ],
