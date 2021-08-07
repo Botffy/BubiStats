@@ -9,7 +9,7 @@
     </div>
     <div class="column">
       <ride-list
-        v-if="rides.length > 0"
+        v-if="hasRides"
         :rides='rides'
       />
       <section v-else>

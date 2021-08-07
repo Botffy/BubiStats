@@ -1,5 +1,5 @@
 <template>
-  <section v-if="rides && rides.length">
+  <section v-if="hasRides">
     <quote>De hol a Távol, hol a Közel, s hol vannak köztük Állomások?</quote>
 
     <div class='columns'>

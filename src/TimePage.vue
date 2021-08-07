@@ -1,5 +1,5 @@
 <template>
-  <section v-if="rides && rides.length">
+  <section v-if="hasRides">
     <quote>Idomvas és idus között</quote>
 
     <div class='columns'>
