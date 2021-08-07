@@ -100,7 +100,9 @@ export default Vue.extend({
     logout() {
       signOut(getAuth())
         .then(() => {
-          this.$router.push('/')
+          if (this.$route.path != '/') {
+            this.$router.push('/')
+          }
         })
         .catch((error) => {
           console.error(error)
@@ -111,7 +113,9 @@ export default Vue.extend({
       let loadingScreen = this.$buefy.loading.open()
       signInWithPopup(getAuth(), provider)
         .then(() => {
-          this.$router.push('/')
+          if (this.$route.path != '/') {
+            this.$router.push('/')
+          }
           loadingScreen.close()
         })
         .catch((error) => {
