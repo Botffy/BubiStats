@@ -36,96 +36,15 @@
 <body>
   <div id="app">
     <div class="content-wrapper">
-      <b-navbar class="is-warning">
-        <template #brand>
-          <b-navbar-item tag="router-link" :to="{ path: '/' }">
-            <img :src="logo">
-        </b-navbar-item>
-        </template>
-
-        <template #start v-if='isLoggedIn && hasRides'>
-          <b-navbar-item tag="router-link" :to="{ path: '/' }">
-            Bérlések
-          </b-navbar-item>
-          <b-navbar-item tag="router-link" :to="{ path: '/bikes' }">
-            Bicajok
-          </b-navbar-item>
-          <b-navbar-item tag="router-link" :to="{ path: '/stations' }">
-            Állomások
-          </b-navbar-item>
-          <b-navbar-item tag="router-link" :to="{ path: '/time' }">
-            Idő
-          </b-navbar-item>
-          <filter-component></filter-component>
-        </template>
-
-        <template #end v-if='!loading'>
-          <b-navbar-dropdown :label='user.email' v-if='isLoggedIn'>
-            <b-navbar-item tag="router-link" :to="{ path: '/settings' }">
-              Beállítások
-            </b-navbar-item>
-            <b-navbar-item tag="div">
-              <div class="buttons has-text-right">
-                <a class="button is-primary" @click='logout'>
-                  <strong>Kilépés</strong>
-                </a>
-              </div>
-            </b-navbar-item>
-          </b-navbar-dropdown>
-          <b-navbar-item tag="div" v-else>
-            <div class="buttons">
-              <a class="button is-primary" @click='login'>
-                <strong>Belépés</strong>
-              </a>
-            </div>
-          </b-navbar-item>
-        </template>
-      </b-navbar>
+      <bubistats-navbar></bubistats-navbar>
 
       <div class="section">
         <router-view ref='mainview' v-if='!loading'></router-view>
       </div>
     </div>
 
-    <footer class="footer" v-if='!loading' v-cloak>
-      <div class="content">
-        <p>
-          <a href='https://github.com/Botffy/BubiStats' class="has-text-black" target="_blank">
-            <span class="icon-text">
-              <span class="icon">
-                <i class="fab fa-github"></i>
-              </span>
-              <span>GitHub</span>
-            </span>
-          </a>
-        </p>
-        <p>
-          <a href='https://www.instagram.com/bubistats/' class="has-text-black" target="_blank">
-            <span class="icon-text">
-              <span class="icon">
-                <i class="fab fa-instagram"></i>
-              </span>
-              <span>Instagram</span>
-            </span>
-          </a>
-        </p>
-        <p>
-          <a href='mailto:info@bubistats.hu' class="has-text-black" target="_blank">
-            <span class="icon-text">
-              <span class="icon">
-                <i class="fas fa-envelope"></i>
-              </span>
-              <span>Kapcsolat</span>
-            </span>
-          </a>
-        </p>
-      </div>
-      <nav class="level">
-        <div class="level-item has-text-centered is-size-7" style="color: grey">
-          verzió: {{ version.version }} ({{ version.date.toFormat('yyyy-MM-dd HH:mm') }})
-        </div>
-      </nav>
-    </footer>
+    <bubistats-footer v-if='!loading' v-cloak></bubistats-footer>
+  </div>
 </body>
 
 </html>

@@ -10,15 +10,13 @@ import 'buefy/dist/buefy.css'
 import { getFirebaseApp } from './firebase'
 import { getAnalytics } from 'firebase/analytics'
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions'
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, connectAuthEmulator } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, connectAuthEmulator } from 'firebase/auth'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { getStorage, connectStorageEmulator } from 'firebase/storage'
 import router from './router'
-import FilterComponent from './FilterComponent.vue'
 import { subscribe } from './ride-service'
 import { canonicalUrl } from './meta'
-import { DateTime, Settings as LuxonSettings } from 'luxon'
-import Logo from './assets/logos/transparent.png'
+import { Settings as LuxonSettings } from 'luxon'
 
 LuxonSettings.defaultLocale = 'hu'
 LuxonSettings.defaultZoneName = 'Europe/Budapest'
@@ -64,21 +62,16 @@ new Vue({
     }
   },
   components: {
-    'filter-component': FilterComponent
+    'bubistats-footer': () => import('./Footer.vue'),
+    'bubistats-navbar': () => import('./Navbar.vue')
   },
   data() {
     return {
-      logo: Logo,
       loadingScreen: null,
       loading: null,
       loginModalActive: false,
       user: null,
-      hasRides: false,
-      version: {
-        version: BUBISTAT_VERSION,
-        hash: BUBISTAT_COMMITHASH,
-        date: DateTime.fromISO(BUBISTAT_LASTCOMMITDATETIME, { zone: 'Europe/Budapest' })
-      }
+      hasRides: false
     }
   },
   computed: {
@@ -116,28 +109,4 @@ new Vue({
       }
     })
   },
-  methods: {
-    logout() {
-      signOut(auth)
-        .then(() => {
-          this.$router.push('/')
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    },
-    login() {
-      const provider = new GoogleAuthProvider()
-      this.loading = true
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          this.user = result.user
-          this.$router.push('/')
-        })
-        .catch((error) => {
-          this.loading = false
-          console.error(error)
-        })
-    }
-  }
 })
