@@ -100,6 +100,9 @@ import { deleteRide } from './ride-service'
 import { stationName } from './station-service'
 
 export default Vue.extend({
+  components: {
+    'ride-form': () => import('./RideForm.vue')
+  },
   mixins: [ SortingMixin ],
   props: {
     compact: {
