@@ -82,24 +82,6 @@
   line-height: 1.5em;
   margin-top: 12px;
 }
-
-.modal.has-overflow {
-  position: fixed !important;
-  overflow: auto !important;
-}
-
-.modal .modal-background {
-  position: fixed !important;
-}
-.modal .modal-content {
-  overflow: visible !important;
-}
-.modal .modal-card {
-  overflow: visible !important;
-}
-.modal .modal-card-body {
-  overflow: visible !important;
-}
 </style>
 
 <script lang="ts">

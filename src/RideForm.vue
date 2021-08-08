@@ -9,6 +9,7 @@
         placeholder='Mikor'
         icon='calendar'
         locale="hu-HU"
+        append-to-body
         :timepicker="{ hourFormat: '24', enableSeconds: true }"
         :datepicker="{ nearbySelectableMonthDays: true }"
         :datetime-parser="datetimeParser"
