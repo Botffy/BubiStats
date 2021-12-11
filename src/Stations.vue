@@ -51,7 +51,7 @@ import HasRides from './HasRides'
 import SortingMixin from './SortingMixin'
 import Quote from './components/Quote.vue'
 import { Ride } from './model'
-import { getStationByCode, Station } from './station-service'
+import { stationName, getStationByCode, Station } from './station-service'
 
 type StationStat = {
   station: Station,
@@ -104,7 +104,7 @@ const stationDependency = (rides: Ride[]): any[] => {
     return accumulator
   }, new Map).entries())
   .map((a: any[2]) => {
-    return Array.from(a[1]).map((val: any[2]) => [ getStationByCode(a[0]).name, getStationByCode(val[0]).name, val[1] ])
+    return Array.from(a[1]).map((val: any[2]) => [ stationName(a[0]), stationName(val[0]), val[1] ])
   })
   .reduce((memo, it) => memo.concat(it))
   .sort((a: any[3], b: any[3]) => {

@@ -15,18 +15,14 @@ type Station = {
 const listStations = (): readonly Station[] => Object.freeze(stationData)
 
 const getStationByCode = (code: string): Station | null => {
-  return stationByCode.get(code)
+  return stationByCode.get(code) || {
+    code: code,
+    name: code
+  }
 }
 
 const stationName = (code: string): string => {
-  let result = getStationByCode(code)
-
-  if (!result) {
-    console.warn(`Unknown station: ${code}`)
-    return code
-  }
-
-  return result.name
+  return getStationByCode(code).name
 }
 
 export { Station, getStationByCode, listStations, stationName }
